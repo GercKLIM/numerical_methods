@@ -1,7 +1,11 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <cmath>
+
+
 using namespace std;
+
 
 
 /* Функция импорта матрицы из текстового файла*/
@@ -12,9 +16,8 @@ vector<vector<T>> importSLAU(const string& filename) {
     ifstream file(filename);
 
     if (!file.is_open()) {
-
-        cout << "error with open file" << filename << endl;
-        return matrix;
+        printf("Error: not open file \n" );
+        exit(1);
     }
 
     int size;
@@ -58,7 +61,6 @@ void print(vector<T> vec) {
     }
     cout << endl;
 }
-
 
 /* Функция для получения матрицы из СЛАУ */
 template <typename T>
@@ -145,4 +147,126 @@ vector<vector<T>> inverseMatrix(vector<vector<T>> matrix) {
     }
 
     return inverse;
+}
+
+
+/* Функция для умножения матриц */
+template <typename T>
+vector<vector<T>> MatrixMultiply(vector<vector<T>> A, vector<vector<T>> B){
+    int m = A.size();    // Количество строк в матрице A
+    int n = A[0].size(); // Количество столбцов в матрице A
+    int p = B[0].size(); // Количество столбцов в матрице B
+
+    if (n != B.size()) {
+        printf("Error: impossible multiply matrix");
+        exit(1);
+    }
+
+    vector<vector<T>> result(m, vector<T>(p, 0.0));
+
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < p; j++) {
+            for (int k = 0; k < n; k++) {
+                result[i][j] += A[i][k] * B[k][j];
+            }
+        }
+    }
+    return result;
+}
+
+
+/* Функция округления чисел в матрицах */
+template <typename T>
+vector<vector<T>> Matrix_round(vector<vector<T>> A, double eps){
+    vector<vector<T>> roundA = A;
+    int size = A.size();
+
+    for (int i = 0; i < size; ++i) {
+        for (int j = 0; j < size; ++j) {
+            roundA[i][j] = (round(A[i][j]) >= 0)? round(abs(A[i][j]) * (1 / eps)) / (1 / eps): -1 * round(abs(A[i][j]) * (1 / eps)) / (1 / eps);
+        }
+    }
+    return roundA;
+}
+
+
+/* Функция для вычисления 1-нормы матрицы */
+template <typename T>
+T norm_1(vector<vector<T>> matrix){
+    int rows = matrix.size();
+    int cols = matrix[0].size();
+    T norm = 0;
+
+    for (int j = 0; j < cols; j++) {
+        T columnSum = 0;
+        for (int i = 0; i < rows; i++) {
+            columnSum += std::abs(matrix[i][j]);
+        }
+        if (columnSum > norm) {
+            norm = columnSum;
+        }
+    }
+
+    return norm;
+}
+
+/* Функция для вычисления оо-нормы матрицы */
+template <typename T>
+T norm_oo(vector<vector<T>> matrix){
+    int rows = matrix.size();
+    int cols = matrix[0].size();
+    T norm = 0;
+
+    for (int i = 0; i < rows; i++) {
+        T rowSum = 0;
+        for (int j = 0; j < cols; j++) {
+            rowSum += std::abs(matrix[i][j]);
+        }
+        if (rowSum > norm) {
+            norm = rowSum;
+        }
+    }
+
+    return norm;
+}
+
+
+/* Функция для вычисления числа обусловленности матрицы */
+template <typename T>
+T cond(vector<vector<T>> matrix){
+    T n_1 = norm_1(matrix);
+    if (n_1 == 0) {
+        printf("Error: Det(A) = 0  =>  cond(A) = oo");
+        return numeric_limits<T>::infinity();
+    }
+    vector<vector<T>> inverse_matrix = inverseMatrix(matrix);
+    T n_2 = norm_1(inverse_matrix);
+    T cond = n_1 * n_2;
+    return cond;
+}
+
+
+/* Функция для вычисления нормы вектора невязки */
+template <typename T>
+T norm_vector_nevazki(vector<T> true_solve, vector<T> numerical_solve){
+    vector<T> vec_nev = true_solve;
+    for (int i = 0; i < true_solve.size(); ++i) {
+        vec_nev[i] = abs(true_solve[i] - numerical_solve[i]);
+    }
+    T n_vn = 0;
+    for (int i = 0; i < vec_nev.size(); i++) {
+        n_vn += vec_nev[i] * vec_nev[i];
+    }
+    return n_vn;
+}
+
+
+/* Функция для сложения векторов */
+template <typename T>
+vector<T> vec_sum(vector<T> vec1, vector<T> vec2) {
+    vector<T> pert_vec = vec1;
+    for (int i = 0; i < vec1.size(); i++) {
+        pert_vec[i] += vec2[i];
+    }
+    return pert_vec;
 }
