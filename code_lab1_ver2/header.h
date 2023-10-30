@@ -3,7 +3,7 @@
 #include <fstream>
 #include <vector>
 #include <sstream>
-#include <math.h>
+#include <cmath>
 #include "source.cpp"
 #include "method_gaussa.cpp"
 #include "method_QR.cpp"
@@ -66,12 +66,12 @@ vector<T> gramSchmidt(const vector<T>& v, const vector<vector<T>>& basis);
 
 /* Функция для QR-разложения матрицы */
 template <typename T>
-void qrDecomposition(const vector<vector<T>>& A, vector<vector<T>>& Q, vector<vector<T>>& R);
+void qrDecomposition(vector<vector<T>>& A, vector<vector<T>>& Q, vector<vector<T>>& R);
 
 
 /* Функция для решения СЛАУ методом QR-разложения */
 template <typename T>
-vector<T> method_QR(const vector<vector<T>>& A, const vector<T>& b);
+vector<T> method_QR(vector<vector<T>> A, vector<T> b);
 
 
 /* Функция для вывода погрешности решения СЛАУ для определенного варианта
@@ -111,4 +111,4 @@ vector<T> vec_sum(vector<T> vec1, vector<T> vec2);
 /* Функция для оценки изменения числа обуcловленности от возмущения вектора правой части */
 
 template <typename T>
-T evaluate_change_cond(vector<vector<T>> A, vector<T> mod_vec);
+T evaluate_change_cond(vector<vector<T>> matrix, vector<T> vec, vector<T> mod);

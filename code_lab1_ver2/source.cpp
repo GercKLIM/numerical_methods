@@ -122,7 +122,7 @@ vector<vector<T>> inverseMatrix(vector<vector<T>> matrix) {
     for (int i = 0; i < n; i++) {
         double pivot = augmentedMatrix[i][i];
         if (pivot == 0) {
-            cout << "Определитель матрицы ноль" << std::endl;
+            cout << "Error: Det(A) = 0" << std::endl;
             exit(1);
         }
         for (int j = 0; j < 2 * n; j++) {
