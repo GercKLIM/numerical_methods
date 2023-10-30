@@ -4,35 +4,38 @@
 
 using namespace std;
 
-int main() {
+/* Тест программы */
+template <typename T>
+void test_programm(){
     const string filename = "input_data/TEST/D1.txt";              // Путь к файлу
 
     // Базовые функции
-    vector<vector<double>> SLAU = importSLAU<double>(filename);    // Импорт СЛАУ из текстового файла
-    vector<vector<double>> matrix = SLAU_to_matrix(SLAU);          // Получение матрицы из СЛАУ
-    vector<double> vec = SLAU_to_vec(SLAU);                        // Получение вектора из СЛАУ
-    vector<vector<double>> trans_matrix = transpon(matrix);        // Транспонирование матрицы
-    vector<vector<double>> inverse_matrix = inverseMatrix(matrix); // Обратная матрица
+    vector<vector<T>> SLAU = importSLAU<T>(filename);    // Импорт СЛАУ из текстового файла
+    vector<vector<T>> matrix = SLAU_to_matrix(SLAU);          // Получение матрицы из СЛАУ
+    vector<T> vec = SLAU_to_vec(SLAU);                        // Получение вектора из СЛАУ
+    vector<vector<T>> trans_matrix = transpon(matrix);        // Транспонирование матрицы
+    vector<vector<T>> inverse_matrix = inverseMatrix(matrix); // Обратная матрица
 
-    printf("Input matrix: \n");
+    printf("Input matrix: \nA = \n");
     print(matrix);
-    printf("Input vec: \n");
+    printf("Input vec: \nb = ");
     print(vec);
 
     // Решение СЛАУ методом Гаусса (прямым)
-    vector<double> solve = method_Gaussa(matrix, vec);
-    printf("Solve SLAU = \n");
+    vector<T> solve = method_Gaussa(matrix, vec);
+    printf("Gauss Solve SLAU = ");
     print(solve);
 
 
     // Решение СЛАУ методом QR-разложения
-    vector<double> sol = method_QR(matrix, vec);
-    vector<vector<double>> Q = Q_decomposition(matrix);
+    vector<T> sol = method_QR(matrix, vec);
+    vector<vector<T>> Q = Q_decomposition(matrix);
     cout << "Q = \n";
     print(Q);
-    vector<vector<double>> R = R_decomposition(matrix);
+    vector<vector<T>> R = R_decomposition(matrix);
     cout << "R = \n";
     print(Q);
+    cout << "QR solve SLAU= ";
     print(sol);
 
     //vector<vector<double>> E = MatrixMultiply(matrix, inverse_matrix); //
@@ -51,18 +54,14 @@ int main() {
     //double n_nev = norm_vector_nevazki(solve, true_solve_sys3);        // Норма вектора незязки
     //cout << "Norm(b - b1) = " << n_nev << endl;
 
-    vector <double> mod = {0.01, 0.01, 0.01, 0.01};                     // число модификаций
-    double min_cond = evaluate_change_cond(matrix, vec, mod);           // Оценка числа обусловленности
+    vector <T> mod = {0.01, 0.01, 0.01, 0.01};                     // число модификаций
+    T min_cond = evaluate_change_cond(matrix, vec, mod);           // Оценка числа обусловленности
     cout << "Cond(A) ~ " << min_cond << endl;                           // через изменение вектора правой части
 
     cout << "Cond(A) = " << cond(matrix) << endl;                       // Число обусловленности через определение
+}
 
-
-
-
-
-
-
-
+int main() {
+    test_programm<double>();
     return 0;
 }

@@ -17,9 +17,8 @@ template <typename T>
 vector<vector<T>> importSLAU(const string& filename);
 
 
-/* Функция вывода матрицы на экран
- * (работает вне зависимости от размера матрицы)
- * */
+/* Функция вывода матрицы на экран */
+
 template <typename T>
 void print(vector<vector<T>> matrix);
 
@@ -64,20 +63,19 @@ template <typename T>
 vector<T> gramSchmidt(const vector<T>& v, const vector<vector<T>>& basis);
 
 
-/* Функция для QR-разложения матрицы */
+/* Функция для Q-разложения матрицы */
 template <typename T>
-void qrDecomposition(vector<vector<T>>& A, vector<vector<T>>& Q, vector<vector<T>>& R);
+vector<vector<T>> Q_decomposition(vector<vector<T>> A);
+
+
+/* Функция для R-разложения матрицы */
+template <typename T>
+vector<vector<T>> R_decomposition(vector<vector<T>> A);
 
 
 /* Функция для решения СЛАУ методом QR-разложения */
 template <typename T>
 vector<T> method_QR(vector<vector<T>> A, vector<T> b);
-
-
-/* Функция для вывода погрешности решения СЛАУ для определенного варианта
-template <typename T>
-T eval_eps(vector<T> true_solve, vector<T> numerical_solve);
-*/
 
 /* Функция для умножения матриц */
 template <typename T>
@@ -112,3 +110,8 @@ vector<T> vec_sum(vector<T> vec1, vector<T> vec2);
 
 template <typename T>
 T evaluate_change_cond(vector<vector<T>> matrix, vector<T> vec, vector<T> mod);
+
+/* Функция для вывода погрешности решения СЛАУ для определенного варианта
+template <typename T>
+T eval_eps(vector<T> true_solve, vector<T> numerical_solve);
+*/

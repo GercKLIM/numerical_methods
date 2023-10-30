@@ -2,6 +2,8 @@
 #include <vector>
 #include <cmath>
 
+
+/* Функция для Q-разложения матрицы */
 template <typename T>
 vector<vector<T>> Q_decomposition(vector<vector<T>> A) {
     int n = A.size();
@@ -33,6 +35,8 @@ vector<vector<T>> Q_decomposition(vector<vector<T>> A) {
     return Q;
 }
 
+
+/* Функция для R-разложения матрицы */
 template <typename T>
 vector<vector<T>> R_decomposition(vector<vector<T>> A) {
     int n = A.size();
