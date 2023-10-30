@@ -62,6 +62,6 @@ T evaluate_change_cond(vector<vector<T>> matrix, vector<T> vec, vector<T> mod){
     }
     delta = delta / 0.01; // Если оценка возмущения близка к 1, это говорить о хорошей устойчивости системы
 
-    T min_cond = delta * cond(matrix) ;
+    T min_cond = delta * cond_1(matrix) ;
     return min_cond;
 }

@@ -56,9 +56,10 @@ void test_programm(){
 
     vector <T> mod = {0.01, 0.01, 0.01, 0.01};                     // число модификаций
     T min_cond = evaluate_change_cond(matrix, vec, mod);           // Оценка числа обусловленности
-    cout << "Cond(A) ~ " << min_cond << endl;                           // через изменение вектора правой части
+    cout << "Cond_1(A) ~ " << min_cond << endl;                           // через изменение вектора правой части
 
-    cout << "Cond(A) = " << cond(matrix) << endl;                       // Число обусловленности через определение
+    cout << "Cond_1(A) = " << cond_1(matrix) << endl;                       // Число обусловленности через определение
+    cout << "Cond_oo(A) = " << cond_oo(matrix) << endl;                       // Число обусловленности через определение
 }
 
 int main() {

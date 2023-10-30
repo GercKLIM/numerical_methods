@@ -231,9 +231,9 @@ T norm_oo(vector<vector<T>> matrix){
 }
 
 
-/* Функция для вычисления числа обусловленности матрицы */
+/* Функция для вычисления числа обусловленности матрицы c нормой 1*/
 template <typename T>
-T cond(vector<vector<T>> matrix){
+T cond_1(vector<vector<T>> matrix){
     T n_1 = norm_1(matrix);
     if (n_1 == 0) {
         printf("Error: Det(A) = 0  =>  cond(A) = oo");
@@ -241,6 +241,21 @@ T cond(vector<vector<T>> matrix){
     }
     vector<vector<T>> inverse_matrix = inverseMatrix(matrix);
     T n_2 = norm_1(inverse_matrix);
+    T cond = n_1 * n_2;
+    return cond;
+}
+
+
+/* Функция для вычисления числа обусловленности матрицы с нормой oo*/
+template <typename T>
+T cond_oo(vector<vector<T>> matrix){
+    T n_1 = norm_1(matrix);
+    if (n_1 == 0) {
+        printf("Error: Det(A) = 0  =>  cond(A) = oo");
+        return numeric_limits<T>::infinity();
+    }
+    vector<vector<T>> inverse_matrix = inverseMatrix(matrix);
+    T n_2 = norm_oo(inverse_matrix);
     T cond = n_1 * n_2;
     return cond;
 }

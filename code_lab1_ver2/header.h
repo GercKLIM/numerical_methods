@@ -94,9 +94,13 @@ template <typename T>
 T norm_oo(vector<vector<T>> A);
 
 
-/* Функция для вычисления числа обусловленности матрицы */
+/* Функция для вычисления числа обусловленности матрицы c нормой 1*/
 template <typename T>
-T cond(vector<vector<T>> A);
+T cond_1(vector<vector<T>> matrix);
+
+/* Функция для вычисления числа обусловленности матрицы c нормой oo*/
+template <typename T>
+T cond_oo(vector<vector<T>> matrix);
 
 /* Функция для вычисления нормы вектора невязки */
 template <typename T>
