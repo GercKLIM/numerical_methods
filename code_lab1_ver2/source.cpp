@@ -103,52 +103,93 @@ vector<vector<T>> transpon(vector<vector<T>> matrix){
     return TMatrix;
 }
 
-
-/* Функция для вычисления обратной матрицы методом Гаусса-Жордана */
+// Функция для создания единичной матрицы размера n x n
 template <typename T>
-vector<vector<T>> inverseMatrix(vector<vector<T>> matrix) {
-    int n = matrix.size();
-
-    // Создаем расширенную матрицу, объединяя исходную матрицу с единичной матрицей
-    vector<vector<T>> augmentedMatrix(n, vector<T>(2 * n, 0));
+vector<vector<T>> create_identity_matrix(int n) {
+    vector<vector<T>> identity(n, vector<T>(n, 0));
     for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            augmentedMatrix[i][j] = matrix[i][j];
-        }
-        augmentedMatrix[i][i + n] = 1;
+        identity[i][i] = 1;
     }
-
-    // Приведение к диагональному виду
-    for (int i = 0; i < n; i++) {
-        T pivot = augmentedMatrix[i][i];
-        if (pivot == 0) {
-            cout << "Error: Det(A) = 0" << std::endl;
-            exit(1);
-        }
-        for (int j = 0; j < 2 * n; j++) {
-            augmentedMatrix[i][j] /= pivot;
-        }
-        for (int k = 0; k < n; k++) {
-            if (k != i) {
-                T factor = augmentedMatrix[k][i];
-                for (int j = 0; j < 2 * n; j++) {
-                    augmentedMatrix[k][j] -= factor * augmentedMatrix[i][j];
-                }
-            }
-        }
-    }
-
-    // Извлечение обратной матрицы из расширенной
-    vector<vector<T>> inverse(n, vector<T>(n, 0));
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            inverse[i][j] = augmentedMatrix[i][j + n];
-        }
-    }
-
-    return inverse;
+    return identity;
 }
 
+// Функция для LU-разложения с частичным выбором
+template <typename T>
+void lu_decomposition(vector<vector<T>>& A, vector<vector<T>>& L, vector<vector<T>>& U) {
+    int n = A.size();
+    for (int i = 0; i < n; i++) {
+        int pivot_row = i;
+        T max_val = 0;
+        for (int k = i; k < n; k++) {
+            if (abs(A[k][i]) > max_val) {
+                max_val = abs(A[k][i]);
+                pivot_row = k;
+            }
+        }
+
+        if (pivot_row != i) {
+            swap(A[i], A[pivot_row]);
+            swap(L[i], L[pivot_row]);
+            swap(U[i], U[pivot_row]);
+        }
+
+        for (int j = i; j < n; j++) {
+            U[i][j] = A[i][j];
+            L[i][j] = i == j ? 1 : 0;
+            for (int k = 0; k < i; k++) {
+                U[i][j] -= L[i][k] * U[k][j];
+            }
+        }
+
+        for (int j = i + 1; j < n; j++) {
+            L[j][i] = A[j][i];
+            for (int k = 0; k < i; k++) {
+                L[j][i] -= L[j][k] * U[k][i];
+            }
+            L[j][i] /= U[i][i];
+        }
+    }
+}
+
+// Функция для обратной матрицы с проверкой на вырожденность
+template <typename T>
+vector<vector<T>> inverseMatrix(vector<vector<T>> A) {
+    int n = A.size();
+    vector<vector<T>> L(n, vector<T>(n, 0));
+    vector<vector<T>> U(n, vector<T>(n, 0));
+
+    // Выполняем LU-разложение с частичным выбором
+    lu_decomposition(A, L, U);
+
+    // Создаем векторы для решения системы
+    vector<vector<T>> identity = create_identity_matrix<T>(n);
+    vector<vector<T>> A_inv(n, vector<T>(n, 0));
+
+    // Решаем системы уравнений Ly = I и Ux = y для каждой строки I
+    for (int i = 0; i < n; i++) {
+        vector<T> y(n, 0);
+        vector<T> x(n, 0);
+
+        for (int j = 0; j < n; j++) {
+            T sum = 0;
+            for (int k = 0; k < j; k++) {
+                sum += L[j][k] * y[k];
+            }
+            y[j] = (identity[i][j] - sum) / L[j][j];
+        }
+
+        for (int j = n - 1; j >= 0; j--) {
+            T sum = 0;
+            for (int k = j + 1; k < n; k++) {
+                sum += U[j][k] * x[k];
+            }
+            x[j] = (y[j] - sum) / U[j][j];
+        }
+
+        A_inv[i] = x;
+    }
+    return A_inv;
+}
 
 /* Функция для умножения матриц */
 template <typename T>
@@ -251,7 +292,7 @@ template <typename T>
 T cond_1(vector<vector<T>> matrix){
     T n_1 = norm_1(matrix);
     if (n_1 == 0) {
-        printf("Error: Det(A) = 0  =>  cond(A) = oo");
+        printf("Error: Det(A) = 0  =>  cond_1(A) = oo");
         return numeric_limits<T>::infinity();
     }
     vector<vector<T>> inverse_matrix = inverseMatrix(matrix);
@@ -265,7 +306,7 @@ template <typename T>
 T cond_2(vector<vector<T>> matrix){
     T n_1 = norm_2(matrix);
     if (n_1 == 0) {
-        printf("Error: Det(A) = 0  =>  cond(A) = oo");
+        printf("Error: Det(A) = 0  =>  cond_2(A) = oo");
         return numeric_limits<T>::infinity();
     }
     vector<vector<T>> inverse_matrix = inverseMatrix(matrix);
@@ -279,7 +320,7 @@ template <typename T>
 T cond_oo(vector<vector<T>> matrix){
     T n_1 = norm_oo(matrix);
     if (n_1 == 0) {
-        printf("Error: Det(A) = 0  =>  cond(A) = oo");
+        printf("Error: Det(A) = 0  =>  cond_oo(A) = oo");
         return numeric_limits<T>::infinity();
     }
     vector<vector<T>> inverse_matrix = inverseMatrix(matrix);

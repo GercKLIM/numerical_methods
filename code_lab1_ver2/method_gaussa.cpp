@@ -8,18 +8,35 @@ template <typename T>
 vector<T> method_Gaussa(vector<vector<T>>& matrix, vector<T>& vec){
     int n = matrix.size();
 
+    // Создаем копии матрицы и вектора
     vector<vector<T>> A(matrix);
     vector<T> b(vec);
 
     // Прямой ход
     for (int i = 0; i < n; i++) {
-        T a = A[i][i];
-        if (a == 0) {
-            printf("Error: Det(matrix) = 0 \n" );
+        // Поиск максимального элемента в текущем столбце и его индекса
+        int maxRow = i;
+        T maxVal = abs(A[i][i]);
+        for (int k = i + 1; k < n; k++) {
+            if (abs(A[k][i]) > maxVal) {
+                maxVal = abs(A[k][i]);
+                maxRow = k;
+            }
+        }
+
+        if (maxVal < numeric_limits<T>::epsilon()) {
+            printf("Error: Det(matrix) = 0 \n");
             exit(1);
         }
 
+        // Обмен строк, если необходимо
+        if (maxRow != i) {
+            swap(A[i], A[maxRow]);
+            swap(b[i], b[maxRow]);
+        }
+
         // Делаем текущий диагональный элемент равным 1
+        T a = A[i][i];
         for (int j = i; j < n; j++) {
             A[i][j] /= a;
         }
@@ -45,6 +62,7 @@ vector<T> method_Gaussa(vector<vector<T>>& matrix, vector<T>& vec){
     }
 
     return x;
+
 }
 
 
@@ -99,55 +117,15 @@ void min_change_cond(vector<vector<T>> matrix, vector<T> vec, vector<T> mod) {
 
     int n = matrix.size();
 
-    vector<vector<T>> U = matrix;
+    vector<vector<T>> U(matrix);
+    vector<vector<T>> L(matrix);
 
-    for (int i = 0; i < n; i++) {
-        T a = U[i][i];
-        if (a == 0) {
-            printf("Error: Det(matrix) = 0 \n" );
-            exit(1);
-        }
+    lu_decomposition(matrix, L, U);
 
-        // Делаем текущий диагональный элемент равным 1
-        for (int j = i; j < n; j++) {
-            U[i][j] /= a;
-        }
-
-        // Обнуляем элементы под текущим диагональным элементом
-        for (int k = i + 1; k < n; k++) {
-            T factor = U[k][i];
-            for (int j = i; j < n; j++) {
-                U[k][j] -= factor * U[i][j];
-            }
-        }
-    }
-
-    vector<vector<T>> L = transpon(matrix);
-    for (int i = 0; i < n; i++) {
-        T a = L[i][i];
-        if (a == 0) {
-            printf("Error: Det(matrix) = 0 \n" );
-            exit(1);
-        }
-
-        // Делаем текущий диагональный элемент равным 1
-        for (int j = i; j < n; j++) {
-            L[i][j] /= a;
-        }
-
-        // Обнуляем элементы под текущим диагональным элементом
-        for (int k = i + 1; k < n; k++) {
-            T factor = L[k][i];
-            for (int j = i; j < n; j++) {
-                L[k][j] -= factor * L[i][j];
-            }
-        }
-    }
     L = transpon(L);
     T max_cond_1 = cond_1(L) * cond_1(U);
     T max_cond_2 = cond_2(L) * cond_2(U);
     T max_cond_oo = cond_oo(L) * cond_oo(U);
-
 
 
     cout << endl;

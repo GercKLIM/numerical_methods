@@ -40,6 +40,14 @@ vector<T> SLAU_to_vec(vector<vector<T>> SLAU);
 template <typename T>
 vector<vector<T>> transpon(vector<vector<T>> matrix);
 
+/* Функция для создания единичной матрицы размера n x n */
+template <typename T>
+vector<vector<T>> create_identity_matrix(int n);
+
+/* Функция для LU-разложения с частичным выбором */
+template <typename T>
+void lu_decomposition(vector<vector<T>>& A, vector<vector<T>>& L, vector<vector<T>>& U);
+
 
 /* Функция для вычисления обратной матрицы методом Гаусса-Жордана */
 template <typename T>

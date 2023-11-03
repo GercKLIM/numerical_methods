@@ -19,7 +19,7 @@ void test_programm() {
     vector<vector<T>> inverse_matrix = inverseMatrix(matrix); // Обратная матрица
 
 
-    //cout << "Precision: DOUBLE \n \n";
+    cout << "Precision: FLOAT \n \n";
     printf("Input matrix: \nA = \n");
     print(matrix);
     printf("Input vec: \nb = ");
@@ -75,6 +75,6 @@ void test_programm() {
 }
 
 int main() {
-    test_programm<double>();
+    test_programm<float>();
     return 0;
 }
