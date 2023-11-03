@@ -46,36 +46,10 @@ template <typename T>
 vector<vector<T>> inverseMatrix(vector<vector<double>> matrix);
 
 
-/* Функция для решения СЛАУ прямым методом Гаусса */
-template <typename T>
-vector<double> method_Gaussa(const vector<vector<T>>& A, const vector<T>& b);
-
-/* Функция для вычисления скалярного произведения векторов */
-template <typename T>
-T dotProduct(const vector<T>& a, const vector<T>& b);
-
-/* Функция для получения длины вектора */
-template <typename T>
-double vectorLength(vector<T> v);
-
-/* Функция для ортогонализации векторов методом Грама-Шмидта */
-template <typename T>
-vector<T> gramSchmidt(const vector<T>& v, const vector<vector<T>>& basis);
-
-
-/* Функция для Q-разложения матрицы */
-template <typename T>
-vector<vector<T>> Q_decomposition(vector<vector<T>> A);
-
-
-/* Функция для R-разложения матрицы */
-template <typename T>
-vector<vector<T>> R_decomposition(vector<vector<T>> A);
-
-
-/* Функция для решения СЛАУ методом QR-разложения */
+/* Функция для решения СЛАУ методом QR-разложения
 template <typename T>
 vector<T> method_QR(vector<vector<T>> A, vector<T> b);
+*/
 
 /* Функция для умножения матриц */
 template <typename T>
@@ -89,6 +63,10 @@ vector<vector<T>> Matrix_round(vector<vector<T>> A, double eps);
 template <typename T>
 T norm_1(vector<vector<T>> A);
 
+/* Функция для вычисления 2-нормы матрицы */
+template <typename T>
+T norm_2(vector<vector<T>> A);
+
 /* Функция для вычисления оо-нормы матрицы */
 template <typename T>
 T norm_oo(vector<vector<T>> A);
@@ -98,24 +76,37 @@ T norm_oo(vector<vector<T>> A);
 template <typename T>
 T cond_1(vector<vector<T>> matrix);
 
+/* Функция для вычисления числа обусловленности матрицы c нормой 2*/
+template <typename T>
+T cond_2(vector<vector<T>> matrix);
+
 /* Функция для вычисления числа обусловленности матрицы c нормой oo*/
 template <typename T>
 T cond_oo(vector<vector<T>> matrix);
 
-/* Функция для вычисления нормы вектора невязки */
+
+/* Функция для вычисления нормы-1 вектора невязки */
 template <typename T>
-T norm_vector_nevazki(vector<T> true_solve, vector<T> numerical_solve);
+T norm_vector_nevazki(vector<vector<T>> A, vector<T> b, vector<T> x, const int n);
+
+
+/* Функция для скалярного умножения векторов */
+template <typename T>
+T dot_vec(vector<T> a, vector<T> b);
+
+/* Функция для нормы-1 вектора */
+template <typename T>
+T norm_1(vector<T> vec);
+
+/* Функция для нормы-2 вектора */
+template <typename T>
+T norm_2(vector<T> vec);
+
+/* Функция для нормы-oo вектора */
+template <typename T>
+T norm_oo(vector<T> vec);
+
 
 /* Функция для cложения векторов */
 template <typename T>
 vector<T> vec_sum(vector<T> vec1, vector<T> vec2);
-
-/* Функция для оценки изменения числа обуcловленности от возмущения вектора правой части */
-
-template <typename T>
-T evaluate_change_cond(vector<vector<T>> matrix, vector<T> vec, vector<T> mod);
-
-/* Функция для вывода погрешности решения СЛАУ для определенного варианта
-template <typename T>
-T eval_eps(vector<T> true_solve, vector<T> numerical_solve);
-*/

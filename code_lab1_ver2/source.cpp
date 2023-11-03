@@ -120,7 +120,7 @@ vector<vector<T>> inverseMatrix(vector<vector<T>> matrix) {
 
     // Приведение к диагональному виду
     for (int i = 0; i < n; i++) {
-        double pivot = augmentedMatrix[i][i];
+        T pivot = augmentedMatrix[i][i];
         if (pivot == 0) {
             cout << "Error: Det(A) = 0" << std::endl;
             exit(1);
@@ -130,7 +130,7 @@ vector<vector<T>> inverseMatrix(vector<vector<T>> matrix) {
         }
         for (int k = 0; k < n; k++) {
             if (k != i) {
-                double factor = augmentedMatrix[k][i];
+                T factor = augmentedMatrix[k][i];
                 for (int j = 0; j < 2 * n; j++) {
                     augmentedMatrix[k][j] -= factor * augmentedMatrix[i][j];
                 }
@@ -139,7 +139,7 @@ vector<vector<T>> inverseMatrix(vector<vector<T>> matrix) {
     }
 
     // Извлечение обратной матрицы из расширенной
-    vector<vector<double>> inverse(n, vector<double>(n, 0));
+    vector<vector<T>> inverse(n, vector<T>(n, 0));
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             inverse[i][j] = augmentedMatrix[i][j + n];
@@ -210,6 +210,21 @@ T norm_1(vector<vector<T>> matrix){
     return norm;
 }
 
+/* Функция для вычисления 2-нормы матрицы */
+template <typename T>
+T norm_2(vector<vector<T>> matrix){
+    int n = matrix.size();
+    T norm = 0;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            T abs_value = std::abs(matrix[i][j]);
+            norm += abs_value * abs_value;
+        }
+    }
+    norm = sqrt(norm);
+    return norm;
+}
+
 /* Функция для вычисления оо-нормы матрицы */
 template <typename T>
 T norm_oo(vector<vector<T>> matrix){
@@ -245,11 +260,24 @@ T cond_1(vector<vector<T>> matrix){
     return cond;
 }
 
+/* Функция для вычисления числа обусловленности матрицы c нормой 2*/
+template <typename T>
+T cond_2(vector<vector<T>> matrix){
+    T n_1 = norm_2(matrix);
+    if (n_1 == 0) {
+        printf("Error: Det(A) = 0  =>  cond(A) = oo");
+        return numeric_limits<T>::infinity();
+    }
+    vector<vector<T>> inverse_matrix = inverseMatrix(matrix);
+    T n_2 = norm_2(inverse_matrix);
+    T cond = n_1 * n_2;
+    return cond;
+}
 
 /* Функция для вычисления числа обусловленности матрицы с нормой oo*/
 template <typename T>
 T cond_oo(vector<vector<T>> matrix){
-    T n_1 = norm_1(matrix);
+    T n_1 = norm_oo(matrix);
     if (n_1 == 0) {
         printf("Error: Det(A) = 0  =>  cond(A) = oo");
         return numeric_limits<T>::infinity();
@@ -260,22 +288,6 @@ T cond_oo(vector<vector<T>> matrix){
     return cond;
 }
 
-
-/* Функция для вычисления нормы вектора невязки */
-template <typename T>
-T norm_vector_nevazki(vector<T> true_solve, vector<T> numerical_solve){
-    vector<T> vec_nev = true_solve;
-    for (int i = 0; i < true_solve.size(); ++i) {
-        vec_nev[i] = abs(true_solve[i] - numerical_solve[i]);
-    }
-    T n_vn = 0;
-    for (int i = 0; i < vec_nev.size(); i++) {
-        n_vn += vec_nev[i] * vec_nev[i];
-    }
-    return n_vn;
-}
-
-
 /* Функция для сложения векторов */
 template <typename T>
 vector<T> vec_sum(vector<T> vec1, vector<T> vec2) {
@@ -285,3 +297,85 @@ vector<T> vec_sum(vector<T> vec1, vector<T> vec2) {
     }
     return pert_vec;
 }
+
+
+/* Функция для скалярного умножения векторов */
+template <typename T>
+T dot_vec(vector<T> a, vector<T> b){
+    if (a.size != b.size()) {
+        cout << "Error: different lenght of vectors" << endl;
+        exit(1);
+    }
+    T sum = 0;
+    for (int i = 0; i < a.size(); i++){
+        sum += a[i] * b[i];
+    }
+    return sum;
+}
+
+/* Функция для нормы-1 вектора */
+template <typename T>
+T norm_1(vector<T> vec) {
+    T norm = 0;
+    for (const T& value : vec) {
+        norm += abs(value);
+    }
+    return norm;
+}
+
+/* Функция для нормы-2 вектора */
+template <typename T>
+T norm_2(vector<T> a){
+    T sum = 0;
+    for (int i = 0; i < a.size(); i++){
+        sum += a[i] * a[i];
+    }
+    return sum;
+}
+
+/* Функция для нормы-оо вектора */
+template <typename T>
+T norm_oo(vector<T> vec) {
+    T norm = 0;
+    for (const T& value : vec) {
+        T abs_value = std::abs(value);
+        if (abs_value > norm) {
+            norm = abs_value;
+        }
+    }
+    return norm;
+}
+
+/* Функция для вычисления нормы вектора невязки */
+template <typename T>
+T norm_vector_nevazki(vector<vector<T>> A, vector<T> b, vector<T> x, const int n) {
+    int s = A.size();
+    vector<T> residual(s, 0);
+
+
+    for (int i = 0; i < s; i++) {
+        for (int j = 0; j < s; j++) {
+            residual[i] += A[i][j] * x[j];
+        }
+        residual[i] = b[i] - residual[i];
+    }
+    T residual_norm;
+    if (n == 1) {
+        residual_norm = norm_1(residual);
+        return residual_norm;
+    }
+    if (n == 2) {
+        residual_norm = norm_2(residual);
+        return residual_norm;
+    }
+    if (n == 0) {
+        residual_norm = norm_oo(residual);
+        return residual_norm;
+    } else {
+        cout << "Error: U stupid" << n << endl;
+        exit(1);
+    }
+
+}
+
+

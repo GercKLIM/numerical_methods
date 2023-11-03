@@ -3,83 +3,95 @@
 #include <cmath>
 
 
-/* Функция для Q-разложения матрицы */
+using namespace std;
+
+
 template <typename T>
-vector<vector<T>> Q_decomposition(vector<vector<T>> A) {
+vector<vector<T>> transpose(const vector<vector<T>>& A) {
+    int rows = A.size();
+    int cols = A[0].size();
+    vector<vector<T>> result(cols, vector<T>(rows));
+
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            result[j][i] = A[i][j];
+        }
+    }
+
+    return result;
+}
+
+template <typename T>
+vector<vector<T>> multiply(const vector<vector<T>>& A, const vector<vector<T>>& B) {
+    int rowsA = A.size();
+    int colsA = A[0].size();
+    int colsB = B[0].size();
+    vector<vector<T>> result(rowsA, vector<T>(colsB, 0));
+
+    for (int i = 0; i < rowsA; i++) {
+        for (int j = 0; j < colsB; j++) {
+            for (int k = 0; k < colsA; k++) {
+                result[i][j] += A[i][k] * B[k][j];
+            }
+        }
+    }
+
+    return result;
+}
+
+template <typename T>
+void QR_decomposition(const vector<vector<T>>& A, vector<vector<T>>& Q, vector<vector<T>>& R) {
     int n = A.size();
-    vector<vector<T>> Q = A;
+    Q = A;
+    R = vector<vector<T>>(n, vector<T>(n, 0));
 
     for (int j = 0; j < n; j++) {
-        // Нормализация j-го столбца
-        T length = 0;
-        for (int i = 0; i < n; i++) {
-            length += Q[i][j] * Q[i][j];
-        }
-        length = std::sqrt(length);
-
-        for (int i = 0; i < n; i++) {
-            Q[i][j] /= length;
-        }
-
-        // Ортогонализация оставшихся столбцов
-        for (int k = j + 1; k < n; k++) {
+        for (int i = 0; i < j; i++) {
             T dotProduct = 0;
-            for (int i = 0; i < A.size(); i++) {
-                dotProduct += Q[i][j] * Q[i][k];
+            for (int k = 0; k < n; k++) {
+                dotProduct += Q[k][i] * A[k][j];
             }
-            for (int i = 0; i < A.size(); i++) {
-                Q[i][k] -= dotProduct * Q[i][j];
+            R[i][j] = dotProduct;
+            for (int k = 0; k < n; k++) {
+                Q[k][j] -= R[i][j] * Q[k][i];
             }
         }
+
+        T norm = 0;
+        for (int i = 0; i < n; i++) {
+            norm += Q[i][j] * Q[i][j];
+        }
+        R[j][j] = sqrt(norm);
+        for (int i = 0; i < n; i++) {
+            Q[i][j] /= R[j][j];
+        }
     }
-    return Q;
 }
 
-
-/* Функция для R-разложения матрицы */
 template <typename T>
-vector<vector<T>> R_decomposition(vector<vector<T>> A) {
+vector<T> method_QR(vector<vector<T>>& A, vector<T>& b) {
     int n = A.size();
+    vector<vector<T>> Q, R;
+    QR_decomposition(A, Q, R);
 
-    // Создаем копии матрицы и вектора
-    vector<vector<T>> R = A;
-
+    // Решение системы Q^T * y = b
+    vector<T> y(n, 0);
     for (int i = 0; i < n; i++) {
-        T a = R[i][i];
-        if (a == 0) {
-            printf("Error: Det(matrix) = 0 \n" );
-            exit(1);
+        T dotProduct = 0;
+        for (int j = 0; j < n; j++) {
+            dotProduct += Q[j][i] * b[j];
         }
-
-        // Делаем текущий диагональный элемент равным 1
-        for (int j = i; j < n; j++) {
-            R[i][j] /= a;
-        }
-
-        // Обнуляем элементы под текущим диагональным элементом
-        for (int k = i + 1; k < n; k++) {
-            T factor = R[k][i];
-            for (int j = i; j < n; j++) {
-                R[k][j] -= factor * R[i][j];
-            }
-        }
+        y[i] = dotProduct;
     }
-    return R;
-}
 
-template <typename T>
-vector<T> method_QR(vector<vector<T>> A, vector<T> b) {
-    vector<vector<T>> Q = Q_decomposition(A);
-    vector<vector<T>> R = R_decomposition(A);
-
-    int n = Q.size();
+    // Решение системы R * x = y методом обратной подстановки
     vector<T> x(n, 0);
     for (int i = n - 1; i >= 0; i--) {
-        T sum = 0;
+        x[i] = y[i];
         for (int j = i + 1; j < n; j++) {
-            sum += R[i][j] * x[j];
+            x[i] -= R[i][j] * x[j];
         }
-        x[i] = (b[i] - sum) / R[i][i];
+        x[i] /= R[i][i];
     }
 
     return x;

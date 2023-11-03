@@ -5,6 +5,6 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_executable(code_lab1 main.cpp
         source.cpp
-        origin.cpp
-        header.h
+        method_QR.cpp
+        method_gaussa.cpp
         header.h)
