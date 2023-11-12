@@ -268,147 +268,183 @@ vector<T> method_QR(vector<vector<T>>& A, vector<T>& b) {
 
 /* ### Функций лабы 2 ### */
 
-
-
-
-/* Функция решения СЛАУ методом Простой Итерации */
-template <typename T>
-vector<T> My_Solve_Simple_Iter(vector<vector<T>> A, vector<T> b, T eps, T tau, T MaxIterations) {
-
-    vector<T> bufM(b.size());                                         // Вектор-обменник
-    vector<vector<T>> E = create_identity_matrix<T>(A.size());     // Единичная матрица
-    vector<vector<T>> BUF = MatrixMultiply(A, tau);                   // BUF = tau * A
-    vector<vector<T>>  C = Matrix_plus(E, BUF);                 // C = E - BUF
-    vector<T> bufX = b;                                               // bufX = b       (Вектор-обменник)
-    vector<T> y = vecMultiply(bufX, tau);                    // y = tau * bufX (Вектор итерации)
-
-    T normN = 0;                                                      // Норма вектора невязки
-    T normC1 = norm_1(A);                                             // Норма матрицы С
-    T p0 = 0;                                                         // Расстояние от x0 до x1
-    T q = normC1;
-    vector<T> x(b.size()); // x
-    int counter = 0;                                                   // Счётчик итераций
-
-    T CmpEps = (1 - normC1) * eps / normC1;                            // Сравнительная точность
-
-    int Kest = 10;
-    p0 = normN;
-    Kest = round(log((1 - q) * eps / p0) / log(q));
-
-    for (int i = 0; i < MaxIterations; i++){
-
-        bufX = x;                                                // bufX = x(k)
-        bufM = MatrixMultiply(C, x);                             // bufM = C * x(k)
-        x = vec_sum(bufM, y);                         // x(k + 1) = bufM + y
-
-        bufM = vec_minus(x, bufX);                         // bufM = x - bufX
-
-        normN = norm_1(bufM);
-
-        if (normN > eps){
-            break;
-        }
-    }
-
-    cout << "||C|| = " << normC1 << endl;
-
-    cout << "K(est) = " << Kest << endl;
-
-    cout << "Number of iterations: " << counter << endl;
-
-    cout << "Error: " << norm_1(bufM) << endl;
-
-    return x;
-
-};
-
-/* Функция решения СЛАУ методом Якоби */
-
-template <typename T>
-vector<T> method_Yacobi(vector<vector<T>> A, vector<T>& b, T tolerance, T maxIterations) {
+/* Функция представления матрицы С в виде: C = C_l + C_d + D_u (Нижнетреугольной, Диагональной, Верхнетреугольной) */
+template<typename T>
+void LDU_decomposotion(vector<vector<T>> A, vector<vector<T>> &L, vector<vector<T>> &D, vector<vector<T>> &U){
     int n = A.size();
-    vector<double> x(n, 0.0);  // начальное приближение
 
-    for (int k = 0; k < maxIterations; ++k) {
-        vector<double> newX(n, 0.0);
-
-        for (int i = 0; i < n; ++i) {
-            double sum = 0.0;
-            for (int j = 0; j < n; ++j) {
-                if (j != i) {
-                    sum += A[i][j] * x[j];
-                }
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (i < j) {
+                U[i][j] = A[i][j];
+            } else if (i > j) {
+                L[i][j] = A[i][j];
+            } else {
+                D[i][j] = A[i][j];
             }
-            newX[i] = (b[i] - sum) / A[i][i];
         }
-
-        // Проверка на сходимость
-        double error = 0.0;
-        for (int i = 0; i < n; ++i) {
-            error += abs(newX[i] - x[i]);
-        }
-
-        if (error < tolerance) {
-            return newX;  // Возвращаем результат, если достигнута сходимость
-        }
-
-        x = newX;
     }
-
-    // Возвращаем последнее найденное решение (может быть неточным)
-    return x;
 }
 
 
-/* Функция решения СЛАУ методом Зейделя */
-template <typename T>
-vector<T> method_Zeidela(vector<vector<T>> A, vector<T> b, T tolerance, T maxIterations = 1000) {
-    int n = A.size();
-    vector<T> x(n, 0.0);  // начальное приближение
 
-    for (int k = 0; k < maxIterations; ++k) {
-        vector<T> newX(n, 0.0);
+template<typename T>
+vector<T> method_SimpleIteration(vector<vector<T>> A, vector<T> b, vector<T> x0, T tau, T eps, int MaxIter) {
+
+    vector<vector<T>> E = create_identity_matrix<T>(A.size()); // Единичный вектор
+    vector<vector<T>> C = -1.0 * (tau * A - E);                   // Матрица С
+    vector<T> y = tau * b;                                        // Вектор y
+
+    vector<T> xk = x0;
+    vector<T> xk_new = xk;
+    T C_norm = norm_2(C);
+    cout << "Tau = " <<  tau << endl;
+    cout << "norm(C) = " <<  C_norm << endl;
+
+    for (int i = 0; i < MaxIter; ++i){
+
+        xk_new = C * xk + y;
+
+        // Критерий останова итерационного процесса
+        vector<T> delta_stop = xk_new - xk;
+        if (norm_2(delta_stop) <= ((1 - norm_2(C)) / norm_2(C)) * eps) {
+            break;
+        }
+        xk = xk_new;
+    }
+    return xk;
+
+}
+
+
+/* Функция решения СЛАУ методом Якоби */
+template<typename T>
+vector<T> method_Yacobi(vector<vector<T>> A, vector<T> b, vector<T> x0, T eps, int MaxIter){
+
+    vector<vector<T>> L(A.size(), vector<T>(A.size(), 0)),D(A.size(), vector<T>(A.size(), 0)), U(A.size(), vector<T>(A.size(), 0));
+    LDU_decomposotion(A, L, D, U);
+
+    vector<vector<T>> D_inv = inverseMatrix(D);
+
+    vector<vector<T>> C = -1.0 * D_inv * (L + U);
+    vector<T> y = D_inv * b;
+
+    vector<T> xk = x0;
+    vector<T> xk_new = xk;
+    T C_norm = norm_2(C);
+    cout << "norm(C) = " <<  C_norm << endl;
+
+    for (int i = 0; i < MaxIter; ++i){
+
+        xk_new = C * xk + y;
+
+        // Критерий останова итерационного процесса
+        vector<T> delta_stop = xk_new - xk;
+        if (norm_2(delta_stop) <= ((1 - norm_2(C)) / norm_2(C)) * eps) {
+            break;
+        }
+        xk = xk_new;
+    }
+    return xk;
+
+}
+
+/* Функция решения СЛАУ методом Релаксации */
+template<typename T>
+vector<T> method_Relax(vector<vector<T>> A, vector<T> b, vector<T> x0, T w, T eps, int MaxIter){
+    int n = A.size();
+    vector<T> x(n, 0);  // Начальное приближение
+    cout << "W = " << w << endl;
+    for (int k = 0; k < MaxIter; ++k) {
+        std::vector<T> x_new(n, 0);
 
         for (int i = 0; i < n; ++i) {
-            T sum1 = 0.0;
+            T sum1 = 0;
+            T sum2 = 0;
+
             for (int j = 0; j < i; ++j) {
-                sum1 += A[i][j] * newX[j];
+                sum1 += A[i][j] * x_new[j];
             }
 
-            T sum2 = 0.0;
             for (int j = i + 1; j < n; ++j) {
                 sum2 += A[i][j] * x[j];
             }
 
-            newX[i] = (b[i] - sum1 - sum2) / A[i][i];
+            x_new[i] = (1 - w) * x[i] + (w / A[i][i]) * (b[i] - sum1 - sum2);
         }
 
         // Проверка на сходимость
-        T error = 0.0;
+        T max_error = 0;
         for (int i = 0; i < n; ++i) {
-            error += abs(newX[i] - x[i]);
+            T error = abs(x_new[i] - x[i]);
+            if (error > max_error) {
+                max_error = error;
+            }
         }
 
-        if (error < tolerance) {
-            return newX;  // Возвращаем результат, если достигнута сходимость
+        // Если достигнута необходимая точность, завершаем итерации
+        if (max_error < eps) {
+            return x_new;
         }
 
-        x = newX;
+        x = x_new;
     }
 
-    // Возвращаем последнее найденное решение (может быть неточным)
+    // Если не достигнута необходимая точность за максимальное число итераций
+    cout << "Error: Relax don't converge :(" << endl;
     return x;
 }
 
-
-
-/* Функция решения СЛАУ методом Релаксации */
+/* Функция решения СЛАУ методом Зейделя */
+template<typename T>
+vector<T> method_Zeidel(vector<vector<T>> A, vector<T> b, vector<T> x0, T eps, int MaxIter){
+    vector<T> x = method_Relax(A, b, x0, 1.0, eps, MaxIter);
+    return x;
+}
 
 /* Функция решения трехдиагональной СЛАУ большой размерности методом Зейделя */
-
+* Функция решения трехдиагональной СЛАУ большой размерности методом Зейделя */
+template <typename T>
+vector<T> method_Zeidel_diag(vector<T> A, vector<T> B, vector<T> C, vector<T> b, vector<T> x0, T w, T eps, int MaxIter){
+    vector<T> x = method_Relax_diag(A, B, C, b, x0, 1.0, eps, MaxIter);
+    return x;
+}
 /* Функция решения трехдиагональной СЛАУ большой размерности методом Релаксации */
+template <typename T>
+vector<T> method_Relax_diag(vector<T> A, vector<T> B, vector<T> C, vector<T> b, vector<T> x0, T w, T eps, int MaxIter){
+    size_t n = A.size();
+    vector<T> x = x0; // Начальное приближение
 
-/* Функция представления матрицы С в виде: C = C_l + C_d + D_u */
+    // Итерации метода релаксации
+    for (int iter = 0; iter < MaxIter; ++iter) {
+        T max_diff = 0;
+
+        for (size_t i = 0; i < n; ++i) {
+            T sum = 0;
+
+            if (i > 0) {
+                sum += A[i] * x[i - 1];
+            }
+
+            if (i < n - 1) {
+                sum += C[i] * x[i + 1];
+            }
+
+            T new_x_i = (1 - w) * x[i] + (w / B[i]) * (b[i] - sum);
+
+            max_diff = max(max_diff, abs(new_x_i - x[i]));
+
+            x[i] = new_x_i;
+        }
+
+        // Проверка на достижение необходимой точности
+        if (max_diff < eps) {
+            cout << "Converged after " << iter + 1 << " iterations\n";
+            break;
+        }
+    }
+    return x;
+}
 
 /* Функция исследования итерационного параметра */
 

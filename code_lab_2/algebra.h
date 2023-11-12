@@ -89,6 +89,34 @@ T norm_oo(vector<T> vec);
 
 /* *** Функции математики матриц *** */
 
+/* Матричное умножение */
+template <typename T>
+vector<vector<T>> operator*(vector<vector<T>> A, vector<vector<T>> B);
+
+/* Операция для умножения матрицы на число */
+template <typename T>
+vector<vector<T>> operator*(vector<vector<T>> A,  T scalar);
+
+template <typename T>
+vector<vector<T>> operator*(T scalar, vector<vector<T>>);
+
+template <typename T>
+vector<vector<T>> operator*(vector<vector<T>> A,  const T scalar);
+
+/* Функция поэлементного сложения матриц */
+template <typename T>
+vector<vector<T>> operator+(vector<vector<T>> A, vector<vector<T>> B);
+
+
+/* Функция поэлементного вычитания матриц */
+template <typename T>
+vector<vector<T>> operator-(vector<vector<T>> A, vector<vector<T>> B);
+
+
+/* Функция для умножения матрицы на вектор */
+template <typename T>
+vector<T> operator*(vector<vector<T>> matrix, vector<T> vec);
+
 /* Функция для транспонирования матрицы */
 template <typename T>
 vector<vector<T>> transpose(const vector<vector<T>>& A);
@@ -99,9 +127,9 @@ template <typename T>
 vector<vector<T>> create_identity_matrix(int n);
 
 
-/* Функция для умножения матриц */
+/* Функция для поэлементного умножения матриц */
 template <typename T>
-vector<vector<T>> MatrixMultiply(vector<vector<T>> A, vector<vector<T>> B);
+vector<vector<T>> Multyply(vector<vector<T>> A, vector<vector<T>> B);
 
 
 /* Функция округления чисел в матрицах */
@@ -152,26 +180,4 @@ vector<vector<T>> RotateLeft(vector<vector<T>> A);
 // Функция для обратной матрицы с проверкой на вырожденность
 template <typename T>
 vector<vector<T>> inverseMatrix(vector<vector<T>> A);
-
-
-/* Функция для умножения матрицы на число */
-template <typename T>
-vector<vector<T>> operator*(vector<vector<T>> A,  T c);
-
-template <typename T>
-vector<vector<T>> operator*(T c, vector<vector<T>>);
-
-/* Функция поэлементного сложения матриц */
-template <typename T>
-vector<vector<T>> operator+(vector<vector<T>> A, vector<vector<T>> B);
-
-
-/* Функция поэлементного вычитания матриц */
-template <typename T>
-vector<vector<T>> operator-(vector<vector<T>> A, vector<vector<T>> B);
-
-
-/* Функция для умножения матрицы на вектор */
-template <typename T>
-vector<T> operator*(vector<vector<T>> matrix, vector<T> vec);
 

@@ -3,7 +3,7 @@
 
 using namespace std;
 
-
+/* *** Начальные функции для испорта/экспорта данных *** */
 
 /* Функция импорта матрицы из текстового файла*/
 template <typename T>
@@ -51,6 +51,7 @@ void print(vector<vector<T>> matrix) {
     cout << endl;
 }
 
+/* Функция вывода вектора на экран */
 template <typename T>
 void print(vector<T> vec) {
     for (T value : vec) {
@@ -84,6 +85,19 @@ vector<T> SLAU_to_vec(vector<vector<T>> SLAU){
         vec[i] = SLAU[i][s];
     }
     return vec;
+}
+
+
+/* *** Функции математики векторов *** */
+
+/* Функция для сложения векторов */
+template <typename T>
+vector<T> operator+(vector<T> vec1, vector<T> vec2){
+    vector<T> pert_vec = vec1;
+    for (int i = 0; i < vec1.size(); i++) {
+        pert_vec[i] += vec2[i];
+    }
+    return pert_vec;
 }
 
 
@@ -168,7 +182,139 @@ T dot(vector<T> vec1, vector<T> vec2){
     return result;
 }
 
-/* Функция для умножения матриц */
+/* Функция для нормы-1 вектора */
+template <typename T>
+T norm_1(vector<T> vec) {
+    T norm = 0;
+    for (const T& value : vec) {
+        norm += abs(value);
+    }
+    return norm;
+}
+
+/* Функция для нормы-2 вектора */
+template <typename T>
+T norm_2(vector<T> vec){
+    T sum = 0;
+    for (int i = 0; i < vec.size(); i++){
+        sum += vec[i] * vec[i];
+    }
+    return sum;
+}
+
+/* Функция для нормы-оо вектора */
+template <typename T>
+T norm_oo(vector<T> vec) {
+    T norm = 0;
+    for (const T& value : vec) {
+        T abs_value = std::abs(value);
+        if (abs_value > norm) {
+            norm = abs_value;
+        }
+    }
+    return norm;
+}
+
+
+
+/* *** Функции математики матриц *** */
+
+/* Операция для умножения матрицы на число */
+template <typename T>
+vector<vector<T>> operator*(vector<vector<T>> A,  T scalar){
+    // Создание результирующей матрицы с теми же размерами
+    vector<vector<T>> result(A.size(), vector<T>(A[0].size(), 0));
+
+    // Умножение каждого элемента матрицы на число
+    for (size_t i = 0; i < A.size(); ++i) {
+        for (size_t j = 0; j < A[0].size(); ++j) {
+            result[i][j] = A[i][j] * scalar;
+        }
+    }
+
+    return result;
+}
+
+template <typename T>
+vector<vector<T>> operator*(T scalar, vector<vector<T>> A){
+    // Создание результирующей матрицы с теми же размерами
+    vector<vector<T>> result(A.size(), vector<T>(A[0].size(), 0));
+
+    // Умножение каждого элемента матрицы на число
+    for (size_t i = 0; i < A.size(); ++i) {
+        for (size_t j = 0; j < A[0].size(); ++j) {
+            result[i][j] = A[i][j] * scalar;
+        }
+    }
+
+    return result;
+}
+
+/* Операция поэлементного сложения матриц */
+template <typename T>
+vector<vector<T>> operator+(vector<vector<T>> A, vector<vector<T>> B){
+    // Проверка на совпадение размеров матриц
+    if (A.size() != B.size() || A[0].size() != B[0].size()) {
+        cout << "Error: size A != size B in addition matrix." << endl;
+        exit(1);
+    }
+
+    // Создание результирующей матрицы с теми же размерами
+    vector<vector<T>> result(A.size(), vector<T>(A[0].size(), 0));
+
+    // Поэлементное сложение
+    for (size_t i = 0; i < A.size(); ++i) {
+        for (size_t j = 0; j < A[0].size(); ++j) {
+            result[i][j] = A[i][j] + B[i][j];
+        }
+    }
+
+    return result;
+}
+
+/* Операция поэлементного вычитания матриц */
+template <typename T>
+vector<vector<T>> operator-(vector<vector<T>> A, vector<vector<T>> B){
+    // Проверка на совпадение размеров матриц
+    if (A.size() != B.size() || A[0].size() != B[0].size()) {
+        cout << "Error: size A != size B in substraction matrix." << endl;
+        exit(1);
+    }
+
+    // Создание результирующей матрицы с теми же размерами
+    vector<vector<T>> result(A.size(), vector<T>(A[0].size(), 0));
+
+    // Поэлементное сложение
+    for (size_t i = 0; i < A.size(); ++i) {
+        for (size_t j = 0; j < A[0].size(); ++j) {
+            result[i][j] = A[i][j] - B[i][j];
+        }
+    }
+    return result;
+}
+
+/* Операция умножения матрицы на вектор */
+template <typename T>
+vector<T> operator*(vector<vector<T>> matrix, vector<T> vec) {
+    // Проверка на возможность умножения
+    if (matrix[0].size() != vec.size()) {
+        cout << "Error: size A != size b in multiply Matrix By Vector." << endl;
+        exit(1);
+    }
+    // Создание результирующего вектора
+    vector<T> result(matrix.size(), 0);
+
+    // Умножение матрицы на вектор
+    for (int i = 0; i < matrix.size(); ++i) {
+        for (size_t j = 0; j < matrix[0].size(); ++j) {
+            result[i] += matrix[i][j] * vec[j];
+        }
+    }
+    return result;
+}
+
+
+/* Матричное умножение */
 template <typename T>
 vector<vector<T>> operator*(vector<vector<T>> A, vector<vector<T>> B){
     int m = A.size();    // Количество строк в матрице A
@@ -187,6 +333,28 @@ vector<vector<T>> operator*(vector<vector<T>> A, vector<vector<T>> B){
             for (int k = 0; k < n; k++) {
                 result[i][j] += A[i][k] * B[k][j];
             }
+        }
+    }
+    return result;
+}
+
+/* Функция для поэлементного умножения матриц */
+template <typename T>
+vector<vector<T>> Multyply(vector<vector<T>> A, vector<vector<T>> B){
+    int m = A.size();    // Количество строк в матрице A
+    int n = A[0].size(); // Количество столбцов в матрице A
+    int p = B[0].size(); // Количество столбцов в матрице B
+
+    if (n != B.size()) {
+        printf("Error: impossible multiply matrix");
+        exit(1);
+    }
+
+    vector<vector<T>> result(m, vector<T>(p, 0.0));
+
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < p; j++) {
+            result[i][j] = A[i][j] * B[i][j];
         }
     }
     return result;
@@ -260,52 +428,6 @@ T norm_oo(vector<vector<T>> matrix){
         }
     }
 
-    return norm;
-}
-
-
-
-
-/* Функция для сложения векторов */
-template <typename T>
-vector<T> operator+(vector<T> vec1, vector<T> vec2){
-    vector<T> pert_vec = vec1;
-    for (int i = 0; i < vec1.size(); i++) {
-        pert_vec[i] += vec2[i];
-    }
-    return pert_vec;
-}
-
-/* Функция для нормы-1 вектора */
-template <typename T>
-T norm_1(vector<T> vec) {
-    T norm = 0;
-    for (const T& value : vec) {
-        norm += abs(value);
-    }
-    return norm;
-}
-
-/* Функция для нормы-2 вектора */
-template <typename T>
-T norm_2(vector<T> a){
-    T sum = 0;
-    for (int i = 0; i < a.size(); i++){
-        sum += a[i] * a[i];
-    }
-    return sum;
-}
-
-/* Функция для нормы-оо вектора */
-template <typename T>
-T norm_oo(vector<T> vec) {
-    T norm = 0;
-    for (const T& value : vec) {
-        T abs_value = std::abs(value);
-        if (abs_value > norm) {
-            norm = abs_value;
-        }
-    }
     return norm;
 }
 
@@ -424,86 +546,5 @@ vector<vector<T>> transpose(const vector<vector<T>>& A) {
         }
     }
 
-    return result;
-}
-
-
-/* Операция для умножения матрицы на число */
-template <typename T>
-vector<vector<T>> operator*(vector<vector<T>> A,  T scalar){
-    // Создание результирующей матрицы с теми же размерами
-    vector<vector<T>> result(A.size(), vector<T>(A[0].size(), 0));
-
-    // Умножение каждого элемента матрицы на число
-    for (size_t i = 0; i < A.size(); ++i) {
-        for (size_t j = 0; j < A[0].size(); ++j) {
-            result[i][j] = A[i][j] * scalar;
-        }
-    }
-
-    return result;
-}
-
-
-/* Функция поэлементного сложения матриц */
-template <typename T>
-vector<vector<T>> operator+(vector<vector<T>> A, vector<vector<T>> B){
-    // Проверка на совпадение размеров матриц
-    if (A.size() != B.size() || A[0].size() != B[0].size()) {
-        cout << "Error: size A != size B in addition matrix." << endl;
-        exit(1);
-    }
-
-    // Создание результирующей матрицы с теми же размерами
-    vector<vector<T>> result(A.size(), vector<T>(A[0].size(), 0));
-
-    // Поэлементное сложение
-    for (size_t i = 0; i < A.size(); ++i) {
-        for (size_t j = 0; j < A[0].size(); ++j) {
-            result[i][j] = A[i][j] + B[i][j];
-        }
-    }
-
-    return result;
-}
-
-/* Функция поэлементного вычитания матриц */
-template <typename T>
-vector<vector<T>> operator-(vector<vector<T>> A, vector<vector<T>> B){
-    // Проверка на совпадение размеров матриц
-    if (A.size() != B.size() || A[0].size() != B[0].size()) {
-        cout << "Error: size A != size B in substraction matrix." << endl;
-        exit(1);
-    }
-
-    // Создание результирующей матрицы с теми же размерами
-    vector<vector<T>> result(A.size(), vector<T>(A[0].size(), 0));
-
-    // Поэлементное сложение
-    for (size_t i = 0; i < A.size(); ++i) {
-        for (size_t j = 0; j < A[0].size(); ++j) {
-            result[i][j] = A[i][j] - B[i][j];
-        }
-    }
-    return result;
-}
-
-/* Функция для умножения матрицы на вектор */
-template <typename T>
-vector<T> operator*(vector<vector<T>> matrix, vector<T> vec) {
-    // Проверка на возможность умножения
-    if (matrix[0].size() != vec.size()) {
-        cout << "Error: size A != size b in multiply Matrix By Vector." << endl;
-        exit(1);
-    }
-    // Создание результирующего вектора
-    vector<T> result(matrix.size(), 0);
-
-    // Умножение матрицы на вектор
-    for (int i = 0; i < matrix.size(); ++i) {
-        for (size_t j = 0; j < matrix[0].size(); ++j) {
-            result[i] += matrix[i][j] * vec[j];
-        }
-    }
     return result;
 }
