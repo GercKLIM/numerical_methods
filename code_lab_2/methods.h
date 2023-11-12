@@ -74,7 +74,7 @@ vector<T> method_Relax(vector<vector<T>> A, vector<T> b, vector<T> x0, T w, T ep
 
 /* Функция решения трехдиагональной СЛАУ большой размерности методом Зейделя */
 template <typename T>
-vector<T> method_Zeidel_diag(vector<T> A, vector<T> B, vector<T> C, vector<T> b, vector<T> x0, T w, T eps, int MaxIter);
+vector<T> method_Zeidel_diag(vector<T> A, vector<T> B, vector<T> C, vector<T> b, vector<T> x0, T eps, int maxIterations);
 
 /* Функция решения трехдиагональной СЛАУ большой размерности методом Релаксации */
 template <typename T>

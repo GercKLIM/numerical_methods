@@ -29,7 +29,7 @@ void test_programm() {
     cout << endl;
 
     /* Параметры методов */
-    vector<T> x0 = {0, 0, 0, 0};
+    vector<T> x0(vec.size(), 0);
     T Tau = 0.01;
     T EPS = 10e-9;
     int MaxIteration = 10000;
@@ -79,10 +79,35 @@ void test_programm() {
     */
 
     /* Функции для трехдиагональных матриц реализованы, но не протестированы */
+    // зададим 3-диагональную матрицу через векторы диагоналей
+    int n = 210;
+    vector<T> A(n, 1), B(n, 4), C(n, 1);
+    vector<T> D(n, 0), x(n, 0), x0_diag(n, 0);
+
+    T W = 10e-11;
+    D[0] = 6;
+    for (int i = 0; i <= n; ++i){
+        D[i] = 10 - 2 * (i / 2);
+        x0_diag[i] = 2 - (i % 2);
+    }
+
+    vector<T> sol5 = method_Relax_diag(A, B, C, D, x0_diag, W, EPS, MaxIteration);
+    cout << "Method Relaxation 3-diag:" << endl;
+    cout << "x = ";
+    print(sol5);
+
+    vector<T> sol6 = method_Zeidel_diag(A, B, C, D, x0_diag, EPS, MaxIteration + 10e20);
+    cout << "Method Zeidela 3-diag:" << endl;
+    cout << "x = ";
+    print(sol6);
+    cout << endl;
+
+    cout << "True x = ";
+    print(x0_diag);
+    cout << endl;
 }
 
 int main() {
-    //test_programm<double>();
     test_programm<double>();
     return 0;
 }

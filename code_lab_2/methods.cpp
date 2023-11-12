@@ -403,12 +403,41 @@ vector<T> method_Zeidel(vector<vector<T>> A, vector<T> b, vector<T> x0, T eps, i
 }
 
 /* Функция решения трехдиагональной СЛАУ большой размерности методом Зейделя */
-* Функция решения трехдиагональной СЛАУ большой размерности методом Зейделя */
 template <typename T>
-vector<T> method_Zeidel_diag(vector<T> A, vector<T> B, vector<T> C, vector<T> b, vector<T> x0, T w, T eps, int MaxIter){
-    vector<T> x = method_Relax_diag(A, B, C, b, x0, 1.0, eps, MaxIter);
+vector<T> method_Zeidel_diag(vector<T> A, vector<T> B, vector<T> C, vector<T> b, vector<T> x0, T eps, int maxIterations) {
+    size_t n = A.size();
+    vector<T> x = x0; // Начальное приближение
+
+    for (int iter = 0; iter < maxIterations; ++iter) {
+        T max_diff = 0;
+
+        for (size_t i = 0; i < n; ++i) {
+            T sum1 = 0.0;
+            if (i > 0) {
+                sum1 = A[i] * x[i - 1];
+            }
+
+            T sum2 = 0.0;
+            if (i < n - 1) {
+                sum2 = C[i] * x[i + 1];
+            }
+
+            T new_x_i = (1 - 1) * x[i] + (1 / B[i]) * (b[i] - sum1 - sum2);
+
+            max_diff = max(max_diff, abs(new_x_i - x[i]));
+
+            x[i] = new_x_i;
+        }
+
+        // Проверка на достижение необходимой точности
+        if (max_diff < eps) {
+            cout << "Converged after " << iter + 1 << " iterations\n";
+            break;
+        }
+    }
     return x;
 }
+
 /* Функция решения трехдиагональной СЛАУ большой размерности методом Релаксации */
 template <typename T>
 vector<T> method_Relax_diag(vector<T> A, vector<T> B, vector<T> C, vector<T> b, vector<T> x0, T w, T eps, int MaxIter){
