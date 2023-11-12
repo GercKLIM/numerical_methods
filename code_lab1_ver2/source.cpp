@@ -162,7 +162,6 @@ vector<vector<T>> inverseMatrix(vector<vector<T>> A) {
     lu_decomposition(A, L, U);
 
     // Создаем векторы для решения системы
-    vector<vector<T>> identity = create_identity_matrix<T>(n);
     vector<vector<T>> A_inv(n, vector<T>(n, 0));
 
     // Решаем системы уравнений Ly = I и Ux = y для каждой строки I
@@ -175,7 +174,7 @@ vector<vector<T>> inverseMatrix(vector<vector<T>> A) {
             for (int k = 0; k < j; k++) {
                 sum += L[j][k] * y[k];
             }
-            y[j] = (identity[i][j] - sum) / L[j][j];
+            y[j] = (i == j) ? 1 - sum : -sum;  // Изменение в этой строке
         }
 
         for (int j = n - 1; j >= 0; j--) {
@@ -186,8 +185,12 @@ vector<vector<T>> inverseMatrix(vector<vector<T>> A) {
             x[j] = (y[j] - sum) / U[j][j];
         }
 
-        A_inv[i] = x;
+        // Изменение в этой строке
+        for (int j = 0; j < n; j++) {
+            A_inv[j][i] = x[j];
+        }
     }
+
     return A_inv;
 }
 

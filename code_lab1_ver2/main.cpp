@@ -9,7 +9,7 @@ template <typename T>
 
 void test_programm() {
     // Путь к файлу
-    const string filename = "input_data/TEST/D4.txt";
+    const string filename = "input_data/TEST/D1.txt";
 
     // Базовые функции
     vector<vector<T>> SLAU = importSLAU<T>(filename);         // Импорт СЛАУ из текстового файла
@@ -69,9 +69,12 @@ void test_programm() {
     n_nev2 = norm_vector_nevazki(matrix, vec, sol, 0); // Норма вектора незязки
     cout << "Norm_oo(b - b1) = " << n_nev2 << endl;
     cout << endl;
-    //vector<vector<double>> E = MatrixMultiply(matrix, inverse_matrix);          //
-    //vector<vector<double>> roundE = Matrix_round(E, 0.01);                      //  Проверка A * A^-1 = E
-    //print(roundE);                                                              //
+
+
+    vector<vector<T>> E = MatrixMultiply(matrix, inverse_matrix);        //
+    vector<vector<T>> roundE = Matrix_round(E, 0.01);                  //  Проверка A * A^-1 = E
+    cout << "E = " << endl;                                                           //
+    print(roundE);                                                           //
 }
 
 int main() {

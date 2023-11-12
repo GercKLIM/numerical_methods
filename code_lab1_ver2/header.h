@@ -53,12 +53,6 @@ void lu_decomposition(vector<vector<T>>& A, vector<vector<T>>& L, vector<vector<
 template <typename T>
 vector<vector<T>> inverseMatrix(vector<vector<double>> matrix);
 
-
-/* Функция для решения СЛАУ методом QR-разложения
-template <typename T>
-vector<T> method_QR(vector<vector<T>> A, vector<T> b);
-*/
-
 /* Функция для умножения матриц */
 template <typename T>
 vector<vector<T>> MatrixMultiply(vector<vector<T>> A, vector<vector<T>> B);
