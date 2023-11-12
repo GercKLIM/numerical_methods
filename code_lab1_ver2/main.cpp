@@ -6,17 +6,16 @@ using namespace std;
 
 /* Тест программы */
 template <typename T>
-
 void test_programm() {
     // Путь к файлу
-    const string filename = "input_data/TEST/D1.txt";
+    const string filename = "input_data/TEST/D5.txt";
 
     // Базовые функции
     vector<vector<T>> SLAU = importSLAU<T>(filename);         // Импорт СЛАУ из текстового файла
     vector<vector<T>> matrix = SLAU_to_matrix(SLAU);          // Получение матрицы из СЛАУ
     vector<T> vec = SLAU_to_vec(SLAU);                        // Получение вектора из СЛАУ
     vector<vector<T>> trans_matrix = transpon(matrix);        // Транспонирование матрицы
-    vector<vector<T>> inverse_matrix = inverseMatrix(matrix); // Обратная матрица
+    vector<vector<T>> inverse_matrix = inverseMatrix2(matrix); // Обратная матрица
 
 
     cout << "Precision: FLOAT \n \n";
@@ -70,14 +69,15 @@ void test_programm() {
     cout << "Norm_oo(b - b1) = " << n_nev2 << endl;
     cout << endl;
 
-
-    vector<vector<T>> E = MatrixMultiply(matrix, inverse_matrix);        //
-    vector<vector<T>> roundE = Matrix_round(E, 0.01);                  //  Проверка A * A^-1 = E
-    cout << "E = " << endl;                                                           //
-    print(roundE);                                                           //
+    print(matrix);
+    print(inverse_matrix);
+    vector<vector<T>> E = MatrixMultiply(matrix, inverse_matrix);       //
+    vector<vector<T>> roundE = Matrix_round(E, 0.01);                 //  Проверка A * A^-1 = E
+    cout << "E = " << endl;                                                   //
+    print(roundE);                                                            //
 }
 
 int main() {
-    test_programm<float>();
+    test_programm<double>();
     return 0;
 }

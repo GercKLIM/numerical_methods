@@ -5,7 +5,7 @@ using namespace std;
 /* Функция для решения СЛАУ прямым методом Гаусса */
 
 template <typename T>
-vector<T> method_Gaussa(vector<vector<T>>& matrix, vector<T>& vec){
+vector<T> method_Gaussa(vector<vector<T>> matrix, vector<T> vec){
     int n = matrix.size();
 
     // Создаем копии матрицы и вектора
@@ -65,6 +65,64 @@ vector<T> method_Gaussa(vector<vector<T>>& matrix, vector<T>& vec){
 
 }
 
+/* Функция поворота матрицы вправо */
+template <typename T>
+vector<vector<T>> MatrixRotateRight(vector<vector<T>> A){
+
+    vector<vector<T>> A_rotate(A.size(), vector<T>(A.size(), 0));
+
+    for (int i = 0; i < A.size(); ++i) {
+        for (int j = 0; j < A.size(); ++j) {
+            A_rotate[A.size() - 1 - j][i] = A[i][j];
+        }
+    }
+
+    return A_rotate;
+
+}
+
+/* Функция поворота матрицы влево */
+template <typename T>
+vector<vector<T>> MatrixRotateLeft(vector<vector<T>> A){
+
+    vector<vector<T>> A_rotate(A.size(), vector<T>(A.size(), 0));
+
+    for (int i = 0; i < A.size(); ++i) {
+        for (int j = 0; j < A.size(); ++j) {
+            A_rotate[j][A.size() - 1 - i] = A[i][j];
+        }
+    }
+
+    return A_rotate;
+}
+
+// Функция для создания единичной матрицы размера n x n
+template <typename T>
+vector<vector<T>> create_identity_matrix(int n) {
+    vector<vector<T>> identity(n, vector<T>(n, 0));
+    for (int i = 0; i < n; i++) {
+        identity[i][i] = 1;
+    }
+    return identity;
+}
+
+// Функция для обратной матрицы с проверкой на вырожденность
+template <typename T>
+vector<vector<T>> inverseMatrix2(vector<vector<T>> A) {
+    vector<vector<T>> E = create_identity_matrix<T>(A.size());
+    vector<vector<T>> E_rotate = MatrixRotateLeft(E);
+    vector<T> e(A.size());
+    vector<vector<T>> X(A.size(), vector<T>(A.size(), 0));
+
+
+    for (int i = 0; i < A.size(); i++){
+        e = E_rotate[i];
+        X[i] = method_Gaussa(A, e);
+
+    }
+    vector<vector<T>> A_inv = MatrixRotateLeft(X);
+    return A_inv;
+}
 
 
 /* Функция для оценки изменения числа обуcловленности от возмущения вектора правой части */

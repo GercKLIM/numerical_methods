@@ -103,16 +103,6 @@ vector<vector<T>> transpon(vector<vector<T>> matrix){
     return TMatrix;
 }
 
-// Функция для создания единичной матрицы размера n x n
-template <typename T>
-vector<vector<T>> create_identity_matrix(int n) {
-    vector<vector<T>> identity(n, vector<T>(n, 0));
-    for (int i = 0; i < n; i++) {
-        identity[i][i] = 1;
-    }
-    return identity;
-}
-
 // Функция для LU-разложения с частичным выбором
 template <typename T>
 void lu_decomposition(vector<vector<T>>& A, vector<vector<T>>& L, vector<vector<T>>& U) {
@@ -174,7 +164,7 @@ vector<vector<T>> inverseMatrix(vector<vector<T>> A) {
             for (int k = 0; k < j; k++) {
                 sum += L[j][k] * y[k];
             }
-            y[j] = (i == j) ? 1 - sum : -sum;  // Изменение в этой строке
+            y[j] = (i == j) ?  1 - sum : -sum;  // Изменение в этой строке
         }
 
         for (int j = n - 1; j >= 0; j--) {
@@ -187,12 +177,24 @@ vector<vector<T>> inverseMatrix(vector<vector<T>> A) {
 
         // Изменение в этой строке
         for (int j = 0; j < n; j++) {
-            A_inv[j][i] = x[j];
+            A_inv[j][i] = (x[j] == -0) ? -x[j] : x[j];
         }
     }
 
+    /*vector<vector<T>> A_inv_rotated = A_inv;
+
+    for (int i = 0; i < A_inv.size(); ++i) {
+        for (int j = 0; j < A_inv.size(); ++j) {
+            A_inv_rotated[A_inv.size() - 1 - j][i] = A_inv[i][j];
+        }
+    }
+
+    return A_inv_rotated;
+    */
     return A_inv;
 }
+
+
 
 /* Функция для умножения матриц */
 template <typename T>

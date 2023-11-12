@@ -18,10 +18,10 @@ vector<vector<T>> importSLAU(const string& filename);
 
 
 /* Функция вывода матрицы на экран */
-
 template <typename T>
 void print(vector<vector<T>> matrix);
 
+/* Функция вывода вектора на экран */
 template <typename T>
 void print(vector<T> vec);
 
@@ -40,26 +40,44 @@ vector<T> SLAU_to_vec(vector<vector<T>> SLAU);
 template <typename T>
 vector<vector<T>> transpon(vector<vector<T>> matrix);
 
+
 /* Функция для создания единичной матрицы размера n x n */
 template <typename T>
 vector<vector<T>> create_identity_matrix(int n);
+
 
 /* Функция для LU-разложения с частичным выбором */
 template <typename T>
 void lu_decomposition(vector<vector<T>>& A, vector<vector<T>>& L, vector<vector<T>>& U);
 
+/* Функция поворота матрицы вправо */
+template <typename T>
+vector<vector<T>> MatrixRotateRight(vector<vector<T>> A);
+
+/* Функция поворота матрицы влево */
+template <typename T>
+vector<vector<T>> MatrixRotateLeft(vector<vector<T>> A);
 
 /* Функция для вычисления обратной матрицы методом Гаусса-Жордана */
 template <typename T>
 vector<vector<T>> inverseMatrix(vector<vector<double>> matrix);
 
+
+/* Операции с матрицами и векторами */
+
+/* Функция для скалярного умножения векторов */
+template <typename T>
+T dot_vec(vector<T> a, vector<T> b);
+
 /* Функция для умножения матриц */
 template <typename T>
 vector<vector<T>> MatrixMultiply(vector<vector<T>> A, vector<vector<T>> B);
 
+
 /* Функция округления чисел в матрицах */
 template <typename T>
 vector<vector<T>> Matrix_round(vector<vector<T>> A, double eps);
+
 
 /* Функция для вычисления 1-нормы матрицы */
 template <typename T>
@@ -91,10 +109,6 @@ T cond_oo(vector<vector<T>> matrix);
 template <typename T>
 T norm_vector_nevazki(vector<vector<T>> A, vector<T> b, vector<T> x, const int n);
 
-
-/* Функция для скалярного умножения векторов */
-template <typename T>
-T dot_vec(vector<T> a, vector<T> b);
 
 /* Функция для нормы-1 вектора */
 template <typename T>
