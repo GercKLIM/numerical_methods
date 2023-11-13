@@ -286,11 +286,49 @@ void LDU_decomposotion(vector<vector<T>> A, vector<vector<T>> &L, vector<vector<
     }
 }
 
+/* Функция исследования итерационного параметра tau для метода простых итераций (Метод Золотого сечения)*/
 
+
+// Целевая функция, для которой мы ищем минимум
 
 template<typename T>
-vector<T> method_SimpleIteration(vector<vector<T>> A, vector<T> b, vector<T> x0, T tau, T eps, int MaxIter) {
+T SimpleIterations_method_matrix_C(vector<vector<T>> A, T tau) {
+    vector<vector<T>> E = create_identity_matrix<T>(A.size()); // Единичный вектор
+    vector<vector<T>> C = -1.0 * (tau * A - E);                   // Матрица С
+    return norm_1(C);
+}
 
+// Метод золотого сечения для поиска минимума функции на заданном интервале [a, b]
+template<typename T>
+T golden_section_search(vector<vector<T>> A, T a, T b, T epsilon) {
+
+    const double golden_ratio = 1.618033988749895; // Золотое Сечение
+    double x1, x2;
+
+    // Начальные точки
+    x1 = b - (b - a) / golden_ratio;
+    x2 = a + (b - a) / golden_ratio;
+
+    while (fabs(b - a) > epsilon) {
+        if (SimpleIterations_method_matrix_C(A, x1) < SimpleIterations_method_matrix_C(A, x2)) {
+            b = x2;
+            x2 = x1;
+            x1 = b - (b - a) / golden_ratio;
+        } else {
+            a = x1;
+            x1 = x2;
+            x2 = a + (b - a) / golden_ratio;
+        }
+    }
+    return (a + b) / 2;
+}
+
+template<typename T>
+vector<T> method_SimpleIteration(vector<vector<T>> A, vector<T> b, vector<T> x0, T eps, int MaxIter) {
+
+
+    //T tau = golden_section_search(A, -1000.0, 1000.0, eps);
+    T tau = 0.01;
     vector<vector<T>> E = create_identity_matrix<T>(A.size()); // Единичный вектор
     vector<vector<T>> C = -1.0 * (tau * A - E);                   // Матрица С
     vector<T> y = tau * b;                                        // Вектор y
@@ -474,7 +512,5 @@ vector<T> method_Relax_diag(vector<T> A, vector<T> B, vector<T> C, vector<T> b, 
     }
     return x;
 }
-
-/* Функция исследования итерационного параметра */
 
 /* Функция исследования сходимости при различных начальных приближениях */

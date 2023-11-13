@@ -8,7 +8,6 @@ using namespace std;
 
 /* Тест программы */
 template <typename T>
-
 void test_programm() {
     // Путь к файлу
     const string filename = "input_data/TEST2/D1.txt";
@@ -28,57 +27,55 @@ void test_programm() {
     print(vec);
     cout << endl;
 
-    /* Параметры методов */
+    // Параметры методов
     vector<T> x0(vec.size(), 0);
-    T Tau = 0.01;
     T EPS = 10e-9;
     int MaxIteration = 10000;
 
 
-    /* Метод Простой Итерации */
+    // Метод Простой Итерации
     cout << "Method Simple Iteration:" << endl;
-    vector<T> sol1 = method_SimpleIteration(matrix, vec, x0, Tau, EPS, MaxIteration);
+    vector<T> sol1 = method_SimpleIteration(matrix, vec, x0, EPS, MaxIteration);
     cout << "x = ";
     print(sol1);
     cout << endl;
 
-
-    /* Метод Якоби */
+    // Метод Якоби
     cout << "Method Yacobi:" << endl;
     vector<T> sol2 = method_Yacobi(matrix, vec, x0, EPS, MaxIteration);
     cout << "x = ";
     print(sol2);
     cout << endl;
 
-    /* Метод Зейделя */
+    // Метод Зейделя
     cout << "Method Zeidela:" << endl;
-    vector<T> sol3= method_Zeidel(matrix, vec, x0, EPS, MaxIteration);
+    vector<T> sol3 = method_Zeidel(matrix, vec, x0, EPS, MaxIteration);
     cout << "x = ";
     print(sol3);
     cout << endl;
 
-    /* Метод Релаксации */
+    // Метод Релаксации
     cout << "Method Relaxation:" << endl;
     T w = 0.01;
-    vector<T> sol4= method_Relax(matrix, vec, x0, w, EPS, MaxIteration);
+    vector<T> sol4 = method_Relax(matrix, vec, x0, w, EPS, MaxIteration);
     cout << "x = ";
     print(sol4);
     cout << endl;
 
-    /*
-    vector<vector<T>> L(matrix.size(), vector<T>(matrix.size(), 0)), D(matrix.size(), vector<T>(matrix.size(), 0)), U(matrix.size(), vector<T>(matrix.size(), 0));
-    LDU_decomposotion(matrix, L, D, U);
-    cout << "A = " << endl;
-    print(L);
-    cout << " + " << endl;
-    print(D);
-    cout << " + " << endl;
-    print(U);
-    cout << " = " << endl;
-    print(matrix);
-    */
+    // Функция представления матрицы С в виде: C = C_l + C_d + D_u
+    //vector<vector<T>> L(matrix.size(), vector<T>(matrix.size(), 0)), D(matrix.size(), vector<T>(matrix.size(), 0)), U(matrix.size(), vector<T>(matrix.size(), 0));
+    //LDU_decomposotion(matrix, L, D, U);
+    //cout << "A = " << endl;
+    //print(L);
+    //cout << " + " << endl;
+    //print(D);
+    //cout << " + " << endl;
+    //print(U);
+    //cout << " = " << endl;
+    //print(matrix);
 
-    /* Функции для трехдиагональных матриц реализованы, но не протестированы */
+
+    // Функции для трехдиагональных матриц реализованы, но не протестированы
     // зададим 3-диагональную матрицу через векторы диагоналей
     int n = 210;
     vector<T> A(n, 1), B(n, 4), C(n, 1);
@@ -86,7 +83,7 @@ void test_programm() {
 
     T W = 10e-11;
     D[0] = 6;
-    for (int i = 0; i <= n; ++i){
+    for (int i = 0; i <= n; ++i) {
         D[i] = 10 - 2 * (i / 2);
         x0_diag[i] = 2 - (i % 2);
     }
@@ -106,6 +103,7 @@ void test_programm() {
     print(x0_diag);
     cout << endl;
 }
+
 
 int main() {
     test_programm<double>();
