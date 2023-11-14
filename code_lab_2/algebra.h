@@ -30,6 +30,11 @@ template <typename T>
 void print(vector<T> vec);
 
 
+/* Функция вывода обрезанного вектора на экран */
+template <typename T>
+void print_short(vector<T> vec, const int n);
+
+
 /* Функция для получения матрицы из СЛАУ */
 template <typename T>
 vector<vector<T>> SLAU_to_matrix(vector<vector<T>> SLAU);
@@ -67,6 +72,10 @@ vector<T> operator*(vector<T> vec2, T c);
 /* Операция почленного деления векторов */
 template <typename T>
 vector<T> operator/(vector<T> vec1, vector<T> vec2);
+
+// Определение оператора отрицания для матрицы
+template <typename T>
+vector<vector<T>> operator-(vector<vector<T>> matrix);
 
 /* Функция для скалярного умножения векторов */
 template <typename T>

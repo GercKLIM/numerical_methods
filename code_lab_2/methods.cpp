@@ -288,29 +288,26 @@ void LDU_decomposotion(vector<vector<T>> A, vector<vector<T>> &L, vector<vector<
 
 /* Функция исследования итерационного параметра tau для метода простых итераций (Метод Золотого сечения)*/
 
-
-// Целевая функция, для которой мы ищем минимум
-
 template<typename T>
-T SimpleIterations_method_matrix_C(vector<vector<T>> A, T tau) {
+T SimpleIterations_method_matrix_norm_C(vector<vector<T>> A, T tau) {
     vector<vector<T>> E = create_identity_matrix<T>(A.size()); // Единичный вектор
-    vector<vector<T>> C = -1.0 * (tau * A - E);                   // Матрица С
+    vector<vector<T>> C = -(tau * A - E);                   // Матрица С
     return norm_1(C);
 }
 
 // Метод золотого сечения для поиска минимума функции на заданном интервале [a, b]
 template<typename T>
-T golden_section_search(vector<vector<T>> A, T a, T b, T epsilon) {
+T golden_section_search_tau(vector<vector<T>> A, T a, T b, T epsilon) {
 
-    const double golden_ratio = 1.618033988749895; // Золотое Сечение
-    double x1, x2;
+    const T golden_ratio = 1.618033988749895; // Золотое Сечение
+    T x1, x2;
 
     // Начальные точки
     x1 = b - (b - a) / golden_ratio;
     x2 = a + (b - a) / golden_ratio;
 
     while (fabs(b - a) > epsilon) {
-        if (SimpleIterations_method_matrix_C(A, x1) < SimpleIterations_method_matrix_C(A, x2)) {
+        if (SimpleIterations_method_matrix_norm_C(A, x1) < SimpleIterations_method_matrix_norm_C(A, x2)) {
             b = x2;
             x2 = x1;
             x1 = b - (b - a) / golden_ratio;
@@ -323,21 +320,17 @@ T golden_section_search(vector<vector<T>> A, T a, T b, T epsilon) {
     return (a + b) / 2;
 }
 
+
 template<typename T>
-vector<T> method_SimpleIteration(vector<vector<T>> A, vector<T> b, vector<T> x0, T eps, int MaxIter) {
+vector<T> method_SimpleIteration(vector<vector<T>> A, vector<T> b, vector<T> x0, T tau, T eps, int MaxIter) {
 
-
-    //T tau = golden_section_search(A, -1000.0, 1000.0, eps);
-    T tau = 0.01;
     vector<vector<T>> E = create_identity_matrix<T>(A.size()); // Единичный вектор
-    vector<vector<T>> C = -1.0 * (tau * A - E);                   // Матрица С
+    vector<vector<T>> C = -(tau * A - E);                   // Матрица С
     vector<T> y = tau * b;                                        // Вектор y
 
     vector<T> xk = x0;
     vector<T> xk_new = xk;
     T C_norm = norm_2(C);
-    cout << "Tau = " <<  tau << endl;
-    cout << "norm(C) = " <<  C_norm << endl;
 
     for (int i = 0; i < MaxIter; ++i){
 
@@ -345,11 +338,13 @@ vector<T> method_SimpleIteration(vector<vector<T>> A, vector<T> b, vector<T> x0,
 
         // Критерий останова итерационного процесса
         vector<T> delta_stop = xk_new - xk;
-        if (norm_2(delta_stop) <= ((1 - norm_2(C)) / norm_2(C)) * eps) {
-            break;
-        }
         xk = xk_new;
+        if (norm_vector_nevazki(A, b, xk, 1) <= eps)  { /*(norm_1(delta_stop) <= (((1 - norm_1(C)) / norm_1(C)) * eps))*/
+            cout << "Method_SimpleIterations converged after " << i + 1 << " iterations" << endl;
+            return xk;
+        }
     }
+    cout << "Method_SimpleIterations DON'T converged after " << MaxIter << " iterations" << endl;
     return xk;
 
 }
@@ -363,13 +358,12 @@ vector<T> method_Yacobi(vector<vector<T>> A, vector<T> b, vector<T> x0, T eps, i
     LDU_decomposotion(A, L, D, U);
 
     vector<vector<T>> D_inv = inverseMatrix(D);
-
-    vector<vector<T>> C = -1.0 * D_inv * (L + U);
+    vector<vector<T>> C =  -D_inv * (L + U);
     vector<T> y = D_inv * b;
 
     vector<T> xk = x0;
     vector<T> xk_new = xk;
-    T C_norm = norm_2(C);
+    T C_norm = norm_1(C);
     cout << "norm(C) = " <<  C_norm << endl;
 
     for (int i = 0; i < MaxIter; ++i){
@@ -378,11 +372,13 @@ vector<T> method_Yacobi(vector<vector<T>> A, vector<T> b, vector<T> x0, T eps, i
 
         // Критерий останова итерационного процесса
         vector<T> delta_stop = xk_new - xk;
-        if (norm_2(delta_stop) <= ((1 - norm_2(C)) / norm_2(C)) * eps) {
-            break;
-        }
         xk = xk_new;
+        if  (norm_vector_nevazki(A, b, xk, 1) <= eps) { /*(norm_1(delta_stop) <= (((1 - norm_1(C)) / norm_1(C)) * eps))*/
+            cout << "Method_Yacobi converged after " << i + 1 << " iterations" << endl;
+            return xk;
+        }
     }
+    cout << "Method_Yacobi DON'T converged after " << MaxIter << " iterations" << endl;
     return xk;
 
 }
@@ -391,10 +387,11 @@ vector<T> method_Yacobi(vector<vector<T>> A, vector<T> b, vector<T> x0, T eps, i
 template<typename T>
 vector<T> method_Relax(vector<vector<T>> A, vector<T> b, vector<T> x0, T w, T eps, int MaxIter){
     int n = A.size();
-    vector<T> x(n, 0);  // Начальное приближение
+    vector<T> x = x0;  // Начальное приближение
     cout << "W = " << w << endl;
+
     for (int k = 0; k < MaxIter; ++k) {
-        std::vector<T> x_new(n, 0);
+        vector<T> x_new(n, 0);
 
         for (int i = 0; i < n; ++i) {
             T sum1 = 0;
@@ -422,6 +419,7 @@ vector<T> method_Relax(vector<vector<T>> A, vector<T> b, vector<T> x0, T w, T ep
 
         // Если достигнута необходимая точность, завершаем итерации
         if (max_error < eps) {
+            cout << "Method_Relax converged after " << k + 1 << " iterations" << endl;
             return x_new;
         }
 
@@ -429,20 +427,93 @@ vector<T> method_Relax(vector<vector<T>> A, vector<T> b, vector<T> x0, T w, T ep
     }
 
     // Если не достигнута необходимая точность за максимальное число итераций
-    cout << "Error: Relax don't converge :(" << endl;
+    cout << "Method_Relax DON'T converged after " << MaxIter << " iterations" << endl;
     return x;
 }
 
 /* Функция решения СЛАУ методом Зейделя */
 template<typename T>
 vector<T> method_Zeidel(vector<vector<T>> A, vector<T> b, vector<T> x0, T eps, int MaxIter){
-    vector<T> x = method_Relax(A, b, x0, 1.0, eps, MaxIter);
+    int n = A.size();
+    vector<T> x = x0;  // Начальное приближение
+    T w = 1;
+
+    for (int k = 0; k < MaxIter; ++k) {
+        vector<T> x_new(n, 0);
+
+        for (int i = 0; i < n; ++i) {
+            T sum1 = 0;
+            T sum2 = 0;
+
+            for (int j = 0; j < i; ++j) {
+                sum1 += A[i][j] * x_new[j];
+            }
+
+            for (int j = i + 1; j < n; ++j) {
+                sum2 += A[i][j] * x[j];
+            }
+
+            x_new[i] = (1 - w) * x[i] + (w / A[i][i]) * (b[i] - sum1 - sum2);
+        }
+
+        // Проверка на сходимость
+        T max_error = 0;
+        for (int i = 0; i < n; ++i) {
+            T error = abs(x_new[i] - x[i]);
+            if (error > max_error) {
+                max_error = error;
+            }
+        }
+
+        // Если достигнута необходимая точность, завершаем итерации
+        if (max_error < eps) {
+            cout << "Method_Zeidel converged after " << k + 1 << " iterations" << endl;
+            return x_new;
+        }
+
+        x = x_new;
+    }
+
+    // Если не достигнута необходимая точность за максимальное число итераций
+    cout << "Method_Zeidel DON'T converged after " << MaxIter << " iterations" << endl;
     return x;
 }
 
+
+/* Функция для вычисления нормы вектора невязки трехдиагональной СЛАУ */
+template <typename T>
+T norm_vector_nevazki(vector<T> A, vector<T> B, vector<T> C, vector<T> b, vector<T> solution, const int n){
+    // Вычисление невязки
+    vector<T> residual(n);
+    for (int i = 0; i < n; ++i) {
+        residual[i] = b[i] - (A[i - 1] * solution[i - 1] + B[i] * solution[i] + C[i] * solution[i + 1]);
+    }
+
+    // Норма невязки
+    T residual_norm;
+    if (n == 1) {
+        residual_norm = norm_1(residual);
+        return residual_norm;
+    }
+    if (n == 2) {
+        residual_norm = norm_2(residual);
+        return residual_norm;
+    }
+    if (n == 0) {
+        residual_norm = norm_oo(residual);
+        return residual_norm;
+    } else {
+        cout << "Error: U stupid" << n << endl;
+        exit(1);
+    }
+
+
+}
+
+
 /* Функция решения трехдиагональной СЛАУ большой размерности методом Зейделя */
 template <typename T>
-vector<T> method_Zeidel_diag(vector<T> A, vector<T> B, vector<T> C, vector<T> b, vector<T> x0, T eps, int maxIterations) {
+vector<T> method_Zeidel_diag(vector<T> A, vector<T> B, vector<T> C, vector<T> b, vector<T> x0, T eps, T maxIterations) {
     size_t n = A.size();
     vector<T> x = x0; // Начальное приближение
 
@@ -469,16 +540,19 @@ vector<T> method_Zeidel_diag(vector<T> A, vector<T> B, vector<T> C, vector<T> b,
 
         // Проверка на достижение необходимой точности
         if (max_diff < eps) {
-            cout << "Converged after " << iter + 1 << " iterations\n";
-            break;
+            cout << "Method_Zeidel_diag converged after " << iter + 1 << " iterations\n";
+            return x;
         }
     }
+    cout << "Method_Zeidel_diag DON'T converged after " << maxIterations << " iterations\n";
     return x;
 }
 
+
+
 /* Функция решения трехдиагональной СЛАУ большой размерности методом Релаксации */
 template <typename T>
-vector<T> method_Relax_diag(vector<T> A, vector<T> B, vector<T> C, vector<T> b, vector<T> x0, T w, T eps, int MaxIter){
+vector<T> method_Relax_diag(vector<T> A, vector<T> B, vector<T> C, vector<T> b, vector<T> x0, T w, T eps, T MaxIter){
     size_t n = A.size();
     vector<T> x = x0; // Начальное приближение
 
@@ -506,11 +580,49 @@ vector<T> method_Relax_diag(vector<T> A, vector<T> B, vector<T> C, vector<T> b, 
 
         // Проверка на достижение необходимой точности
         if (max_diff < eps) {
-            cout << "Converged after " << iter + 1 << " iterations\n";
-            break;
+            cout << "Method_Relax_diag converged after " << iter + 1 << " iterations\n";
+            return x;
         }
     }
+    cout << "Method_Relax_diag DON'T converged after " << MaxIter << " iterations\n";
     return x;
 }
+
+
+//* Функция исследования итерационного параметра W для метода Релаксации для трехдиагональной матрицы (Метод Золотого сечения)*/
+//template<typename T>
+//T golden_section_search_W(vector<T> A, vector<T> B, vector<T> C, vector<T> vec, vector<T> x, T EPS, int MaxIteration, T a, T b) {
+//
+//    const T golden_ratio = 1.618033988749895; // Золотое Сечение
+//    T x1, x2;
+//
+//    // Начальные точки
+//    x1 = b - (b - a) / golden_ratio;
+//    x2 = a + (b - a) / golden_ratio;
+//
+//    while (fabs(b - a) > EPS) {
+//
+//        vector<T> sol1 = method_Relax_diag(A, B, C, vec, x, x1, EPS, MaxIteration);
+//        vector<T> sol2 = method_Relax_diag(A, B, C, vec, x, x2, EPS, MaxIteration);
+//        T norm_sol1 = norm_vector_nevazki(A, B, C, vec, sol1, 1);
+//        T norm_sol2 = norm_vector_nevazki(A, B, C, vec, sol2, 1);
+//
+//
+//
+//        if (norm_sol1 < norm_sol2) {
+//            b = x2;
+//            x2 = x1;
+//            x1 = b - (b - a) / golden_ratio;
+//        } else {
+//            a = x1;
+//            x1 = x2;
+//            x2 = a + (b - a) / golden_ratio;
+//        }
+//    }
+//    return (a + b) / 2;
+//}
+
+
+
 
 /* Функция исследования сходимости при различных начальных приближениях */

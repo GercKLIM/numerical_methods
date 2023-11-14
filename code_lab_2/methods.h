@@ -55,6 +55,7 @@ void min_change_cond(vector<vector<T>> matrix, vector<T> vec, vector<T> mod);
 template<typename T>
 void LDU_decomposotion(vector<vector<T>> A, vector<vector<T>>& L, vector<vector<T>>& D, vector<vector<T>>& U);
 
+
 /* Функция решения СЛАУ методом Простой Итерации */
 template<typename T>
 vector<T> method_SimpleIteration(vector<vector<T>> A, vector<T> b, vector<T> x0, T tau, T eps, int MaxIter);
@@ -64,21 +65,32 @@ vector<T> method_SimpleIteration(vector<vector<T>> A, vector<T> b, vector<T> x0,
 template<typename T>
 vector<T> method_Yacobi(vector<vector<T>> A, vector<T> b, vector<T> x0, T eps, int MaxIter);
 
+
 /* Функция решения СЛАУ методом Зейделя */
 template<typename T>
 vector<T> method_Zeidel(vector<vector<T>> A, vector<T> b, vector<T> x0, T eps, int MaxIter);
+
 
 /* Функция решения СЛАУ методом Релаксации */
 template<typename T>
 vector<T> method_Relax(vector<vector<T>> A, vector<T> b, vector<T> x0, T w, T eps, int MaxIter);
 
+
 /* Функция решения трехдиагональной СЛАУ большой размерности методом Зейделя */
 template <typename T>
-vector<T> method_Zeidel_diag(vector<T> A, vector<T> B, vector<T> C, vector<T> b, vector<T> x0, T eps, int maxIterations);
+vector<T> method_Zeidel_diag(vector<T> A, vector<T> B, vector<T> C, vector<T> b, vector<T> x0, T eps, T maxIterations);
+
 
 /* Функция решения трехдиагональной СЛАУ большой размерности методом Релаксации */
 template <typename T>
-vector<T> method_Relax_diag(vector<T> A, vector<T> B, vector<T> C, vector<T> b, vector<T> x0, T w, T eps, int MaxIter);
+vector<T> method_Relax_diag(vector<T> A, vector<T> B, vector<T> C, vector<T> b, vector<T> x0, T w, T eps, T MaxIter);
+
+
+/* Функция для вычисления нормы вектора невязки трехдиагональной СЛАУ */
+template <typename T>
+T norm_vector_nevazki(vector<T> A, vector<T> B, vector<T> C, vector<T> b, vector<T> solution, const int n);
+
+
 /* Функция представления матрицы С в виде: C = C_l + C_d + D_u */
 
 /* Функция исследования итерационного параметра */

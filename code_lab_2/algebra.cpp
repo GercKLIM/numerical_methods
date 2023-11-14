@@ -60,6 +60,18 @@ void print(vector<T> vec) {
     cout << endl;
 }
 
+/* Функция вывода обрезанного вектора на экран */
+template <typename T>
+void print_short(vector<T> vec, const int n){
+
+    for (int i = 0; i < n; ++i){
+        cout << vec[i] << ' ';
+    }
+    cout << "..." << endl;
+}
+
+
+
 /* Функция для получения матрицы из СЛАУ */
 template <typename T>
 vector<vector<T>> SLAU_to_matrix(vector<vector<T>> SLAU){
@@ -207,7 +219,7 @@ template <typename T>
 T norm_oo(vector<T> vec) {
     T norm = 0;
     for (const T& value : vec) {
-        T abs_value = std::abs(value);
+        T abs_value = abs(value);
         if (abs_value > norm) {
             norm = abs_value;
         }
@@ -235,6 +247,7 @@ vector<vector<T>> operator*(vector<vector<T>> A,  T scalar){
     return result;
 }
 
+/* Операция для умножения  числа на матрицу */
 template <typename T>
 vector<vector<T>> operator*(T scalar, vector<vector<T>> A){
     // Создание результирующей матрицы с теми же размерами
@@ -338,6 +351,20 @@ vector<vector<T>> operator*(vector<vector<T>> A, vector<vector<T>> B){
     return result;
 }
 
+// Определение оператора отрицания для матрицы
+template <typename T>
+vector<vector<T>> operator-(vector<vector<T>> matrix) {
+    int rows = matrix.size();
+    int cols = matrix[0].size();
+    vector<vector<T>> result(rows, vector<T>(cols, 0));
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            result[i][j] = -matrix[i][j];
+        }
+    }
+    return result;
+}
+
 /* Функция для поэлементного умножения матриц */
 template <typename T>
 vector<vector<T>> Multyply(vector<vector<T>> A, vector<vector<T>> B){
@@ -386,7 +413,7 @@ T norm_1(vector<vector<T>> matrix){
     for (int j = 0; j < cols; j++) {
         T columnSum = 0;
         for (int i = 0; i < rows; i++) {
-            columnSum += std::abs(matrix[i][j]);
+            columnSum += abs(matrix[i][j]);
         }
         if (columnSum > norm) {
             norm = columnSum;

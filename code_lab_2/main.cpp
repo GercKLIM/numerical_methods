@@ -10,7 +10,7 @@ using namespace std;
 template <typename T>
 void test_programm() {
     // Путь к файлу
-    const string filename = "input_data/TEST2/D1.txt";
+    const string filename = "input_data/TEST2/D2.txt";
 
     // Базовые функции
     vector<vector<T>> SLAU = importSLAU<T>(filename);         // Импорт СЛАУ из текстового файла
@@ -29,15 +29,21 @@ void test_programm() {
 
     // Параметры методов
     vector<T> x0(vec.size(), 0);
-    T EPS = 10e-9;
-    int MaxIteration = 10000;
+    T EPS = 10e-3;
+    long int MaxIteration = 10000;
 
 
     // Метод Простой Итерации
     cout << "Method Simple Iteration:" << endl;
-    vector<T> sol1 = method_SimpleIteration(matrix, vec, x0, EPS, MaxIteration);
+
+    T tau = golden_section_search_tau<T>(matrix, -1000.0, 1000.0, EPS); // Поиск тау
+
+    cout << "Tau = " << tau << endl;
+    cout << "norm_1(C) = " << SimpleIterations_method_matrix_norm_C(matrix, tau) << endl;
+    vector<T> sol1 = method_SimpleIteration(matrix, vec, x0, tau, EPS, MaxIteration);
     cout << "x = ";
     print(sol1);
+    cout << "norm_1(b - b1) = " << norm_vector_nevazki(matrix, vec, sol1, 1) << endl;
     cout << endl;
 
     // Метод Якоби
@@ -45,6 +51,7 @@ void test_programm() {
     vector<T> sol2 = method_Yacobi(matrix, vec, x0, EPS, MaxIteration);
     cout << "x = ";
     print(sol2);
+    cout << "norm_1(b - b1) = " << norm_vector_nevazki(matrix, vec, sol2, 1) << endl;
     cout << endl;
 
     // Метод Зейделя
@@ -52,14 +59,16 @@ void test_programm() {
     vector<T> sol3 = method_Zeidel(matrix, vec, x0, EPS, MaxIteration);
     cout << "x = ";
     print(sol3);
+    cout << "norm_1(b - b1) = " << norm_vector_nevazki(matrix, vec, sol3, 1) << endl;
     cout << endl;
 
     // Метод Релаксации
     cout << "Method Relaxation:" << endl;
-    T w = 0.01;
+    T w = 1;
     vector<T> sol4 = method_Relax(matrix, vec, x0, w, EPS, MaxIteration);
     cout << "x = ";
     print(sol4);
+    cout << "norm_1(b - b1) = " << norm_vector_nevazki(matrix, vec, sol4, 1) << endl;
     cout << endl;
 
     // Функция представления матрицы С в виде: C = C_l + C_d + D_u
@@ -77,31 +86,41 @@ void test_programm() {
 
     // Функции для трехдиагональных матриц реализованы, но не протестированы
     // зададим 3-диагональную матрицу через векторы диагоналей
+
     int n = 210;
-    vector<T> A(n, 1), B(n, 4), C(n, 1);
-    vector<T> D(n, 0), x(n, 0), x0_diag(n, 0);
+    vector<T> A(n, 1), B(n, 4), C(n, 1), b(n, 0);  // Диагонали и вектор правой части трехдиагональной матрицы
+    vector<T> x_diag(n, 0); // true sol
+    vector<T> x0_diag(n, 0); // Начальное приближение
 
-    T W = 10e-11;
-    D[0] = 6;
-    for (int i = 0; i <= n; ++i) {
-        D[i] = 10 - 2 * (i / 2);
-        x0_diag[i] = 2 - (i % 2);
+
+    for (int i = 0; i < n; ++i) {
+        b[i] = 10 - 2 * ((i+1) % 2);
+        x_diag[i] = 2 - ((i+1) % 2);
     }
+    b[0] = 6;
+    b[n] = 9 - 3 * (n % 2);
 
-    vector<T> sol5 = method_Relax_diag(A, B, C, D, x0_diag, W, EPS, MaxIteration);
-    cout << "Method Relaxation 3-diag:" << endl;
-    cout << "x = ";
-    print(sol5);
 
-    vector<T> sol6 = method_Zeidel_diag(A, B, C, D, x0_diag, EPS, MaxIteration + 10e20);
+
+    T EPS_diag = 10e-7;
+    T MaxIteration_diag = 10e10;
+
     cout << "Method Zeidela 3-diag:" << endl;
+    vector<T> sol5 = method_Zeidel_diag(A, B, C, b, x0_diag, EPS_diag, MaxIteration_diag);
     cout << "x = ";
-    print(sol6);
+    print_short(sol5, 10);
+    cout << "norm_1(b - b1) = " << norm_vector_nevazki(A, B, C, b, sol5, 1) << endl;
     cout << endl;
 
-    cout << "True x = ";
-    print(x0_diag);
+    T W = 1;
+    cout << "Method Relaxation 3-diag:" << endl;
+    cout << "W = " << W << endl;
+    vector<T> sol6 = method_Relax_diag(A, B, C, b, x0_diag, W, EPS_diag, MaxIteration_diag);
+    cout << "x = ";
+    print_short(sol6, 10);
+    cout << "norm_1(b - b1) = " << norm_vector_nevazki(A, B, C, b, sol6, 1) << endl;
     cout << endl;
+
 }
 
 
