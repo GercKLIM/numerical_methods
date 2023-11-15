@@ -324,9 +324,9 @@ T golden_section_search_tau(vector<vector<T>> A, T a, T b, T epsilon) {
 template<typename T>
 vector<T> method_SimpleIteration(vector<vector<T>> A, vector<T> b, vector<T> x0, T tau, T eps, int MaxIter) {
 
-    vector<vector<T>> E = create_identity_matrix<T>(A.size()); // Единичный вектор
-    vector<vector<T>> C = -(tau * A - E);                   // Матрица С
-    vector<T> y = tau * b;                                        // Вектор y
+    vector<vector<T>> E = create_identity_matrix<T>(A.size());   // Единичный вектор
+    vector<vector<T>> C = -(tau * A - E);                           // Матрица С
+    vector<T> y = tau * b;                                          // Вектор y
 
     vector<T> xk = x0;
     vector<T> xk_new = xk;
@@ -339,7 +339,7 @@ vector<T> method_SimpleIteration(vector<vector<T>> A, vector<T> b, vector<T> x0,
         // Критерий останова итерационного процесса
         vector<T> delta_stop = xk_new - xk;
         xk = xk_new;
-        if (norm_vector_nevazki(A, b, xk, 1) <= eps)  { /*(norm_1(delta_stop) <= (((1 - norm_1(C)) / norm_1(C)) * eps))*/
+        if ((norm_vector_nevazki(A, b, xk, 1) <= eps) or (norm_1(delta_stop) <= (((1 - norm_1(C)) / norm_1(C)) * eps))) {
             cout << "Method_SimpleIterations converged after " << i + 1 << " iterations" << endl;
             return xk;
         }
@@ -373,7 +373,7 @@ vector<T> method_Yacobi(vector<vector<T>> A, vector<T> b, vector<T> x0, T eps, i
         // Критерий останова итерационного процесса
         vector<T> delta_stop = xk_new - xk;
         xk = xk_new;
-        if  (norm_vector_nevazki(A, b, xk, 1) <= eps) { /*(norm_1(delta_stop) <= (((1 - norm_1(C)) / norm_1(C)) * eps))*/
+        if  ((norm_vector_nevazki(A, b, xk, 1) <= eps) or (norm_1(delta_stop) <= (((1 - norm_1(C)) / norm_1(C)) * eps))){
             cout << "Method_Yacobi converged after " << i + 1 << " iterations" << endl;
             return xk;
         }
@@ -465,7 +465,7 @@ vector<T> method_Zeidel(vector<vector<T>> A, vector<T> b, vector<T> x0, T eps, i
             }
         }
 
-        // Если достигнута необходимая точность, завершаем итерации
+        // Если достигнута необходимая точность - завершаем итерации
         if (max_error < eps) {
             cout << "Method_Zeidel converged after " << k + 1 << " iterations" << endl;
             return x_new;
@@ -474,7 +474,6 @@ vector<T> method_Zeidel(vector<vector<T>> A, vector<T> b, vector<T> x0, T eps, i
         x = x_new;
     }
 
-    // Если не достигнута необходимая точность за максимальное число итераций
     cout << "Method_Zeidel DON'T converged after " << MaxIter << " iterations" << endl;
     return x;
 }
@@ -622,6 +621,30 @@ vector<T> method_Relax_diag(vector<T> A, vector<T> B, vector<T> C, vector<T> b, 
 //    return (a + b) / 2;
 //}
 
+
+/* Функция, которая делает диагональные элементы матрицы больше нуля */
+
+//template<typename T>
+//vector<vector<T>> make_plus_diaf_matrix(vector<vector<T>> matrix) {
+//    int rows = matrix.size();
+//    int cols = matrix[0].size();
+//
+//
+//    vector<vector<T>> result(rows, vector<T>(cols, 0));
+//
+//    for (int i = 0; i < rows; ++i) {
+//        for (int j = 0; j < cols; ++j) {
+//            // Увеличиваем диагональные элементы
+//            if (i == j) {
+//                result[i][j] = matrix[i][j] + 1;
+//            } else {
+//                result[i][j] = matrix[i][j];
+//            }
+//        }
+//    }
+//
+//    return result;
+//}
 
 
 

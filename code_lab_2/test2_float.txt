@@ -1,0 +1,46 @@
+Precision: FLOAT
+
+Input matrix:
+A =
+86 -8.93 -9.59 -3.91
+4.05 -100 -9.1 -8.14
+0.26 3.61 -71.8 -4.28
+-4.03 -6.88 6.67 -198.6
+
+Input vec:
+b = 818.58 898.74 -912.22 -687.06
+
+Method Simple Iteration:
+Tau = -0.00140717
+norm_1(C) = 1.13275
+Method_SimpleIterations DON'T converged after 10000 iterations
+x = nan nan nan nan
+norm_1(b - b1) = nan
+
+Method Yacobi:
+norm(C) = 0.236097
+Method_Yacobi converged after 5 iterations
+x = 10.0002 -10.0004 11.9996 4.00603
+norm_1(b - b1) = 0.0043335
+
+Method Zeidela:
+Method_Zeidel converged after 4 iterations
+x = 10.0002 -10.0005 11.9996 4.00604
+norm_1(b - b1) = 0.00439453
+
+Method Relaxation:
+W = 1
+Method_Relax converged after 4 iterations
+x = 10.0002 -10.0005 11.9996 4.00604
+norm_1(b - b1) = 0.00439453
+
+Method Zeidela 3-diag:
+Method_Zeidel_diag converged after 13 iterations
+x = 1 2 1 2 1 2 1 2 1 2 ...
+norm_1(b - b1) = 9.53674e-07
+
+Method Relaxation 3-diag:
+W = 1
+Method_Relax_diag converged after 13 iterations
+x = 1 2 1 2 1 2 1 2 1 2 ...
+norm_1(b - b1) = 9.53674e-07

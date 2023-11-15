@@ -13,12 +13,11 @@ void test_programm() {
     const string filename = "input_data/TEST2/D2.txt";
 
     // Базовые функции
-    vector<vector<T>> SLAU = importSLAU<T>(filename);         // Импорт СЛАУ из текстового файла
-    vector<vector<T>> matrix = SLAU_to_matrix(SLAU);          // Получение матрицы из СЛАУ
-    vector<T> vec = SLAU_to_vec(SLAU);                        // Получение вектора из СЛАУ
-    vector<vector<T>> trans_matrix = transpose(matrix);        // Транспонирование матрицы
+    vector<vector<T>> SLAU = importSLAU<T>(filename);            // Импорт СЛАУ из текстового файла
+    vector<vector<T>> matrix = SLAU_to_matrix(SLAU);             // Получение матрицы из СЛАУ
+    vector<T> vec = SLAU_to_vec(SLAU);                           // Получение вектора из СЛАУ
+    vector<vector<T>> trans_matrix = transpose(matrix);       // Транспонирование матрицы
     vector<vector<T>> inverse_matrix = inverseMatrix(matrix); // Обратная матрица
-
 
     cout << "Precision: DOUBLE \n \n";
     printf("Input matrix: \nA = \n");
@@ -30,13 +29,13 @@ void test_programm() {
     // Параметры методов
     vector<T> x0(vec.size(), 0);
     T EPS = 10e-3;
-    long int MaxIteration = 10000;
+    long int MaxIteration = 100000;
 
 
     // Метод Простой Итерации
     cout << "Method Simple Iteration:" << endl;
 
-    T tau = golden_section_search_tau<T>(matrix, -1000.0, 1000.0, EPS); // Поиск тау
+    T tau = 0; //golden_section_search_tau<T>(matrix, -1000.0, 1000.0, EPS); // Поиск тау меотодом золотого сечения
 
     cout << "Tau = " << tau << endl;
     cout << "norm_1(C) = " << SimpleIterations_method_matrix_norm_C(matrix, tau) << endl;
@@ -85,8 +84,8 @@ void test_programm() {
 
 
     // Функции для трехдиагональных матриц реализованы, но не протестированы
-    // зададим 3-диагональную матрицу через векторы диагоналей
 
+    // зададим 3-диагональную матрицу через векторы диагоналей
     int n = 210;
     vector<T> A(n, 1), B(n, 4), C(n, 1), b(n, 0);  // Диагонали и вектор правой части трехдиагональной матрицы
     vector<T> x_diag(n, 0); // true sol

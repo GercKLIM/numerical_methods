@@ -1,0 +1,46 @@
+Precision: DOUBLE
+
+Input matrix:
+A =
+15 2 -3 7
+-5 11 2 -3
+0 -1 7 4
+12 0 -6 20
+
+Input vec:
+b = 53 -90 107 68
+
+Method Simple Iteration:
+Tau = 0.01
+norm_1(C) = 1.04
+Method_SimpleIterations converged after 116 iterations
+x = 4.99992 -6.99995 11.9993 3.99973
+norm_1(b - b1) = 0.00947013
+
+Method Yacobi:
+norm(C) = 1.31082
+Method_Yacobi converged after 16 iterations
+x = 5.00004 -7.0001 12.0001 4.00007
+norm_1(b - b1) = 0.00392787
+
+Method Zeidela:
+Method_Zeidel converged after 6 iterations
+x = 4.99475 -6.99946 11.9958 4.00189
+norm_1(b - b1) = 0.0924421
+
+Method Relaxation:
+W = 1
+Method_Relax converged after 6 iterations
+x = 4.99475 -6.99946 11.9958 4.00189
+norm_1(b - b1) = 0.0924421
+
+Method Zeidela 3-diag:
+Method_Zeidel_diag converged after 13 iterations
+x = 1 2 1 2 1 2 1 2 1 2 ...
+norm_1(b - b1) = 5.64903e-07
+
+Method Relaxation 3-diag:
+W = 1
+Method_Relax_diag converged after 13 iterations
+x = 1 2 1 2 1 2 1 2 1 2 ...
+norm_1(b - b1) = 5.64903e-07
