@@ -5,10 +5,10 @@ using namespace std;
 /* Функция для решения СЛАУ прямым методом Гаусса */
 
 template <typename T>
-vector<T> method_Gaussa(vector<vector<T>> matrix, vector<T> vec){
+vector<T> method_Gaussa(const vector<vector<T>>& matrix, const vector<T>& vec){
     int n = matrix.size();
 
-    // Создаем копии матрицы и вектора
+    // копии матрицы и вектора
     vector<vector<T>> A(matrix);
     vector<T> b(vec);
 
@@ -24,12 +24,7 @@ vector<T> method_Gaussa(vector<vector<T>> matrix, vector<T> vec){
             }
         }
 
-        if (maxVal < numeric_limits<T>::epsilon()) {
-            printf("Error: Det(matrix) = 0 \n");
-            exit(1);
-        }
-
-        // Обмен строк, если необходимо
+        // Обмен строк
         if (maxRow != i) {
             swap(A[i], A[maxRow]);
             swap(b[i], b[maxRow]);
@@ -52,6 +47,11 @@ vector<T> method_Gaussa(vector<vector<T>> matrix, vector<T> vec){
         }
     }
 
+    if (fabs(A[n-1][n-1]) < numeric_limits<T>::epsilon()) {
+        printf("Error: Det(matrix) = 0 \n");
+        exit(1);
+    }
+
     // Подстановка обратно в систему
     vector<T> x(n, 0);
     for (int i = n - 1; i >= 0; i--) {
@@ -67,7 +67,7 @@ vector<T> method_Gaussa(vector<vector<T>> matrix, vector<T> vec){
 
 /* Функция поворота матрицы вправо */
 template <typename T>
-vector<vector<T>> MatrixRotateRight(vector<vector<T>> A){
+vector<vector<T>> MatrixRotateRight(const vector<vector<T>>& A){
 
     vector<vector<T>> A_rotate(A.size(), vector<T>(A.size(), 0));
 
@@ -108,7 +108,7 @@ vector<vector<T>> create_identity_matrix(int n) {
 
 // Функция для обратной матрицы с проверкой на вырожденность
 template <typename T>
-vector<vector<T>> inverseMatrix2(vector<vector<T>> A) {
+vector<vector<T>> inverseMatrix2(const vector<vector<T>>& A) {
     vector<vector<T>> E = create_identity_matrix<T>(A.size());
     vector<vector<T>> E_rotate = MatrixRotateLeft(E);
     vector<T> e(A.size());
@@ -127,7 +127,7 @@ vector<vector<T>> inverseMatrix2(vector<vector<T>> A) {
 
 /* Функция для оценки изменения числа обуcловленности от возмущения вектора правой части */
 template <typename T>
-void min_change_cond(vector<vector<T>> matrix, vector<T> vec, vector<T> mod) {
+void min_change_cond(const vector<vector<T>>& matrix, const vector<T>& vec, const vector<T>& mod) {
     /* Находим минимальное значение числа обусловленности */
 
     // Находим относительную погрешность

@@ -12,7 +12,7 @@ void test_programm() {
 
     // Базовые функции
     vector<vector<T>> SLAU = importSLAU<T>(filename);         // Импорт СЛАУ из текстового файла
-    vector<vector<T>> matrix = SLAU_to_matrix(SLAU);          // Получение матрицы из СЛАУ
+    vector<vector<T>> matrix = SLAU_to_matrix<T>(SLAU);          // Получение матрицы из СЛАУ
     vector<T> vec = SLAU_to_vec(SLAU);                        // Получение вектора из СЛАУ
     vector<vector<T>> trans_matrix = transpon(matrix);        // Транспонирование матрицы
     vector<vector<T>> inverse_matrix = inverseMatrix2(matrix); // Обратная матрица

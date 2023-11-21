@@ -44,7 +44,7 @@ vector<vector<T>> importSLAU(const string& filename) {
 /* Функция вывода матрицы на экран */
 
 template <typename T>
-void print(vector<vector<T>> matrix) {
+void print(const vector<vector<T>>& matrix) {
     for (vector<T> row : matrix) {
         for (T value: row) {
             cout << value << ' ';
@@ -55,7 +55,7 @@ void print(vector<vector<T>> matrix) {
 }
 
 template <typename T>
-void print(vector<T> vec) {
+void print(const vector<T>& vec) {
     for (T value : vec) {
         cout << value << ' ';
     }
@@ -64,7 +64,7 @@ void print(vector<T> vec) {
 
 /* Функция для получения матрицы из СЛАУ */
 template <typename T>
-vector<vector<T>> SLAU_to_matrix(vector<vector<T>> SLAU){
+vector<vector<T>> SLAU_to_matrix(const vector<vector<T>>& SLAU){
     vector<vector<T>> matrix;
     matrix.resize(SLAU.size(), vector<T>(SLAU.size()));
 
@@ -79,7 +79,7 @@ vector<vector<T>> SLAU_to_matrix(vector<vector<T>> SLAU){
 
 /* Функция для получения вектора из СЛАУ */
 template <typename T>
-vector<T> SLAU_to_vec(vector<vector<T>> SLAU){
+vector<T> SLAU_to_vec(const vector<vector<T>>& SLAU){
     int s = SLAU.size();
     vector<T> vec(s);
 
@@ -92,7 +92,7 @@ vector<T> SLAU_to_vec(vector<vector<T>> SLAU){
 
 /* Функция для транспонирования матрицы */
 template <typename T>
-vector<vector<T>> transpon(vector<vector<T>> matrix){
+vector<vector<T>> transpon(const vector<vector<T>>& matrix){
     vector<vector<T>> TMatrix = matrix;
     int s = matrix.size();
     for (int i = 0; i < s; i++) {
@@ -103,9 +103,19 @@ vector<vector<T>> transpon(vector<vector<T>> matrix){
     return TMatrix;
 }
 
+// угадай шо делает :)
+//template <typename T>
+//void swap(const vector<T>& A, const vector<T>& B){
+//    vector<T> C = A;
+//    A = B;
+//    B = C;
+//}
+
 // Функция для LU-разложения с частичным выбором
 template <typename T>
-void lu_decomposition(vector<vector<T>>& A, vector<vector<T>>& L, vector<vector<T>>& U) {
+void lu_decomposition(const vector<vector<T>>& matrix, vector<vector<T>>& L, vector<vector<T>>& U) {
+    vector<vector<T>> A(matrix);
+
     int n = A.size();
     for (int i = 0; i < n; i++) {
         int pivot_row = i;
@@ -143,7 +153,7 @@ void lu_decomposition(vector<vector<T>>& A, vector<vector<T>>& L, vector<vector<
 
 // Функция для обратной матрицы с проверкой на вырожденность
 template <typename T>
-vector<vector<T>> inverseMatrix(vector<vector<T>> A) {
+vector<vector<T>> inverseMatrix(const vector<vector<T>>& A) {
     int n = A.size();
     vector<vector<T>> L(n, vector<T>(n, 0));
     vector<vector<T>> U(n, vector<T>(n, 0));
@@ -198,7 +208,7 @@ vector<vector<T>> inverseMatrix(vector<vector<T>> A) {
 
 /* Функция для умножения матриц */
 template <typename T>
-vector<vector<T>> MatrixMultiply(vector<vector<T>> A, vector<vector<T>> B){
+vector<vector<T>> MatrixMultiply(const vector<vector<T>>& A, const vector<vector<T>>& B){
     int m = A.size();    // Количество строк в матрице A
     int n = A[0].size(); // Количество столбцов в матрице A
     int p = B[0].size(); // Количество столбцов в матрице B
@@ -223,7 +233,7 @@ vector<vector<T>> MatrixMultiply(vector<vector<T>> A, vector<vector<T>> B){
 
 /* Функция округления чисел в матрицах */
 template <typename T>
-vector<vector<T>> Matrix_round(vector<vector<T>> A, double eps){
+vector<vector<T>> Matrix_round(const vector<vector<T>>& A, const double& eps){
     vector<vector<T>> roundA = A;
     int size = A.size();
 
@@ -238,7 +248,7 @@ vector<vector<T>> Matrix_round(vector<vector<T>> A, double eps){
 
 /* Функция для вычисления 1-нормы матрицы */
 template <typename T>
-T norm_1(vector<vector<T>> matrix){
+T norm_1(const vector<vector<T>>& matrix){
     int rows = matrix.size();
     int cols = matrix[0].size();
     T norm = 0;
@@ -258,7 +268,7 @@ T norm_1(vector<vector<T>> matrix){
 
 /* Функция для вычисления 2-нормы матрицы */
 template <typename T>
-T norm_2(vector<vector<T>> matrix){
+T norm_2(const vector<vector<T>>& matrix){
     int n = matrix.size();
     T norm = 0;
     for (int i = 0; i < n; i++) {
@@ -273,7 +283,7 @@ T norm_2(vector<vector<T>> matrix){
 
 /* Функция для вычисления оо-нормы матрицы */
 template <typename T>
-T norm_oo(vector<vector<T>> matrix){
+T norm_oo(const vector<vector<T>>& matrix){
     int rows = matrix.size();
     int cols = matrix[0].size();
     T norm = 0;
@@ -294,7 +304,7 @@ T norm_oo(vector<vector<T>> matrix){
 
 /* Функция для вычисления числа обусловленности матрицы c нормой 1*/
 template <typename T>
-T cond_1(vector<vector<T>> matrix){
+T cond_1(const vector<vector<T>>& matrix){
     T n_1 = norm_1(matrix);
     if (n_1 == 0) {
         printf("Error: Det(A) = 0  =>  cond_1(A) = oo");
@@ -308,7 +318,7 @@ T cond_1(vector<vector<T>> matrix){
 
 /* Функция для вычисления числа обусловленности матрицы c нормой 2*/
 template <typename T>
-T cond_2(vector<vector<T>> matrix){
+T cond_2(const vector<vector<T>>& matrix){
     T n_1 = norm_2(matrix);
     if (n_1 == 0) {
         printf("Error: Det(A) = 0  =>  cond_2(A) = oo");
@@ -322,7 +332,7 @@ T cond_2(vector<vector<T>> matrix){
 
 /* Функция для вычисления числа обусловленности матрицы с нормой oo*/
 template <typename T>
-T cond_oo(vector<vector<T>> matrix){
+T cond_oo(const vector<vector<T>>& matrix){
     T n_1 = norm_oo(matrix);
     if (n_1 == 0) {
         printf("Error: Det(A) = 0  =>  cond_oo(A) = oo");
@@ -336,7 +346,7 @@ T cond_oo(vector<vector<T>> matrix){
 
 /* Функция для сложения векторов */
 template <typename T>
-vector<T> vec_sum(vector<T> vec1, vector<T> vec2) {
+vector<T> vec_sum(const vector<T>& vec1, const vector<T>& vec2) {
     vector<T> pert_vec = vec1;
     for (int i = 0; i < vec1.size(); i++) {
         pert_vec[i] += vec2[i];
@@ -347,7 +357,7 @@ vector<T> vec_sum(vector<T> vec1, vector<T> vec2) {
 
 /* Функция для скалярного умножения векторов */
 template <typename T>
-T dot_vec(vector<T> a, vector<T> b){
+T dot_vec(const vector<T>& a, const vector<T>& b){
     if (a.size != b.size()) {
         cout << "Error: different lenght of vectors" << endl;
         exit(1);
@@ -361,7 +371,7 @@ T dot_vec(vector<T> a, vector<T> b){
 
 /* Функция для нормы-1 вектора */
 template <typename T>
-T norm_1(vector<T> vec) {
+T norm_1(const vector<T>& vec) {
     T norm = 0;
     for (const T& value : vec) {
         norm += abs(value);
@@ -371,7 +381,7 @@ T norm_1(vector<T> vec) {
 
 /* Функция для нормы-2 вектора */
 template <typename T>
-T norm_2(vector<T> a){
+T norm_2(const vector<T>& a){
     T sum = 0;
     for (int i = 0; i < a.size(); i++){
         sum += a[i] * a[i];
@@ -381,7 +391,7 @@ T norm_2(vector<T> a){
 
 /* Функция для нормы-оо вектора */
 template <typename T>
-T norm_oo(vector<T> vec) {
+T norm_oo(const vector<T>& vec) {
     T norm = 0;
     for (const T& value : vec) {
         T abs_value = std::abs(value);
@@ -394,7 +404,7 @@ T norm_oo(vector<T> vec) {
 
 /* Функция для вычисления нормы вектора невязки */
 template <typename T>
-T norm_vector_nevazki(vector<vector<T>> A, vector<T> b, vector<T> x, const int n) {
+T norm_vector_nevazki(const vector<vector<T>>& A, const vector<T>& b, const vector<T>& x, const int& n) {
     int s = A.size();
     vector<T> residual(s, 0);
 
