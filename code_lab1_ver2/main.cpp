@@ -77,7 +77,31 @@ void test_programm() {
     print(roundE);                                                            //
 }
 
+/* мой тест программы */
+//template <typename T>
+//void test(){
+//    const string filename = "input_data/TEST/D5.txt";
+//    vector<vector<T>> SLAU = importSLAU<T>(filename);
+//    vector<vector<T>> matrix = SLAU_to_matrix<T>(SLAU);
+//    vector<T> vec = SLAU_to_vec(SLAU);
+//    vector<vector<T>> trans_matrix = transpon(matrix);
+//    vector<vector<T>> inverse_matrix = inverseMatrix2(matrix);
+//
+//    vector<T> sol = method_QR(matrix, vec);
+//    cout << "QR solve SLAU= ";
+//    print(sol);
+//
+//    vector<vector<T>> Q, R;
+//    QR_decomposition(matrix, Q, R);
+//    cout << "Q = \n";
+//    print(Q);
+//    cout << "R = \n";
+//    print(R);
+//
+//}
+
 int main() {
     test_programm<double>();
+    //test<double>();
     return 0;
 }
