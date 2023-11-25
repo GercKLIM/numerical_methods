@@ -62,6 +62,12 @@ void print(const vector<T>& vec) {
     cout << endl;
 }
 
+void printline(const int& n){
+    for (int i = 0; i < n; i ++){
+        cout << "-";
+    }
+    cout << endl;
+}
 /* Функция для получения матрицы из СЛАУ */
 template <typename T>
 vector<vector<T>> SLAU_to_matrix(const vector<vector<T>>& SLAU){

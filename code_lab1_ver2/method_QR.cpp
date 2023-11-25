@@ -48,7 +48,7 @@ vector<vector<T>> multiply(const vector<vector<T>>& A, const vector<vector<T>>& 
 
 /* Функция QR-разложения матрицы методом вращений */
 template<typename T>
-void QR_decomposition(const vector<vector<T>>& matrix, vector<vector<T>>& Q, vector<vector<T>>& R){
+void QR_decomposition(const vector<vector<T>>& matrix, vector<vector<T>>& Q, vector<vector<T>>& R, const T& eps){
 
     int n = matrix.size();
     R = matrix;                        // R - копия матрицы A
@@ -68,7 +68,7 @@ void QR_decomposition(const vector<vector<T>>& matrix, vector<vector<T>>& Q, vec
             swap(Q[k][m], Q[k][i]);
         }
 
-        if (fabs(R[i][i]) <= 1e-7){
+        if (fabs(R[i][i]) <= eps){
             cout << "Error in QR_decomposition" << endl;
             system("pause");
             exit(1);
@@ -95,59 +95,6 @@ void QR_decomposition(const vector<vector<T>>& matrix, vector<vector<T>>& Q, vec
         }
     }
 }
-
-
-/* Функция QR-разложения матрицы методом вращений */
-//template<typename T>
-//void QR_decomposition(const vector<vector<T>>& matrix, vector<vector<T>>& Q, vector<vector<T>>& R){
-//    int rows = matrix.size();
-//    vector<vector<T>> A(matrix), G(Q);
-//    T accuracy = 10e-10;
-//    int cols;
-//    if (rows != 0) {
-//        cols = rows;
-//
-//    } else {
-//        cout << "Error: Matrix A not quadratic" << endl;
-//        exit(1);
-//    }
-//
-//    G.resize(rows);
-//    for (int i = 0; i < rows; i++){
-//        G[i].resize(cols);
-//        for (size_t j = 0; j < cols; j++){
-//            G[i][j] = 0.0;
-//        }
-//    }
-//    for (int i = 0; i < rows; i++){
-//        G[i][i] = 1.0;
-//    }
-//    for (int k = 0; k < rows; k++){
-//        for (int i = k + 1; i < rows; i++){
-//            if (abs(A[i][k]) >= accuracy){
-//                T c = A[k][k]/sqrt(A[k][k] * A[k][k] + A[i][k] * A[i][k]);
-//                T s = A[i][k]/sqrt(A[k][k] * A[k][k] + A[i][k] * A[i][k]);
-//                for (int j = 0; j < cols; j++){
-//                    T temp = G[k][j];
-//                    G[k][j] = c * G[k][j] + s * G[i][j];
-//                    G[i][j] = -s * temp + c * G[i][j];
-//                    if (abs(G[i][j]) < accuracy)
-//                        G[i][j] = 0.0;
-//                }
-//                for (int j = k; j < cols; j++){
-//                    T temp = A[k][j];
-//                    G[k][j] = c * G[k][j] + s * G[i][j];
-//                    A[i][j] = -s * temp + c * A[i][j];
-//                    if (abs(A[i][j]) < accuracy)
-//                        A[i][j] = 0.0;
-//                }
-//            }
-//        }
-//    }
-//    R = multiply(G, A);
-//    Q = transpose(G);
-//
-//}
 
 /* Функция QR-разложения матрицы методом Грамма-Шмидта */
 //template <typename T>
@@ -180,10 +127,10 @@ void QR_decomposition(const vector<vector<T>>& matrix, vector<vector<T>>& Q, vec
 //}
 
 template <typename T>
-vector<T> method_QR(const vector<vector<T>>& A, const vector<T>& b) {
+vector<T> method_QR(const vector<vector<T>>& A, const vector<T>& b, const T& eps) {
     int n = A.size();
     vector<vector<T>> Q, R;
-    QR_decomposition(A, Q, R);
+    QR_decomposition(A, Q, R, eps);
 
     // Решение системы Q^T * y = b
     vector<T> y(n, 0);
