@@ -16,15 +16,15 @@ vector<T> method_Gaussa(vector<vector<T>> matrix, vector<T> vec){
     for (int i = 0; i < n; i++) {
         // Поиск максимального элемента в текущем столбце и его индекса
         int maxRow = i;
-        T maxVal = abs(A[i][i]);
+        T maxVal = fabs(A[i][i]);
         for (int k = i + 1; k < n; k++) {
-            if (abs(A[k][i]) > maxVal) {
-                maxVal = abs(A[k][i]);
+            if (fabs(A[k][i]) > maxVal) {
+                maxVal = fabs(A[k][i]);
                 maxRow = k;
             }
         }
 
-        if (maxVal < numeric_limits<T>::epsilon()) {
+        if (maxVal < numeric_limits<T>::epsilon()) { // Машинный эпсилон = 2   ^-t, где t - порядок мантиссы числового типа
             printf("Error: Det(matrix) = 0 \n");
             exit(1);
         }
@@ -124,6 +124,28 @@ vector<vector<T>> inverseMatrix2(vector<vector<T>> A) {
     return A_inv;
 }
 
+template<typename T>
+vector<vector<T>> generateCombinations(const vector<T>& vec) {
+    int n = vec.size();
+
+    // Вектор для хранения всех комбинаций
+    vector<vector<T>> combinations;
+
+    // Внешний цикл по всем возможным комбинациям
+    for (int i = 0; i < (1 << n); ++i) {
+        vector<T> current(n);
+
+        // Внутренний цикл для каждой позиции вектора
+        for (int j = 0; j < n; ++j) {
+            current[j] = (i & (1 << j)) ? vec[j] : -vec[j];
+        }
+
+        // Добавить текущую комбинацию в вектор
+        combinations.push_back(current);
+    }
+
+    return combinations;
+}
 
 /* Функция для оценки изменения числа обуcловленности от возмущения вектора правой части */
 template <typename T>
@@ -141,8 +163,8 @@ void min_change_cond(vector<vector<T>> matrix, vector<T> vec, vector<T> mod) {
     T delta_x_oo = 0;
 
     vector<T> solve = method_Gaussa(matrix, vec);
+    // Модификация для любой размерности
     vector<T> mod_vec;
-
     for (int epo = 0; epo < 50; epo++) {
 
         // создаем модифицированный вектор правой части
@@ -162,6 +184,24 @@ void min_change_cond(vector<vector<T>> matrix, vector<T> vec, vector<T> mod) {
         delta_x_2 = (delta_x_2 <= norm_2(mod_solve)) ? norm_2(mod_solve) : delta_x_2;
         delta_x_oo = (delta_x_oo <= norm_oo(mod_solve)) ? norm_oo(mod_solve) : delta_x_oo;
     }
+
+//    vector<T> mod_vec;
+//    vector<vector<T>> all_mod_vec = generateCombinations(mod);
+//    for (int k = 0; k < all_mod_vec.size(); k++) {
+//        // создаем модифицированный вектор правой части
+//        mod_vec = all_mod_vec[k];
+//
+//        // Ищем максимальное изменение нормы вектора изменения решения
+//        vector<T> mod_solve = method_Gaussa(matrix, mod_vec);
+//
+//        for (int i = 0; i < mod_solve.size(); i++) {
+//            mod_solve[i] = abs(mod_solve[i] - solve[i]);
+//        }
+//        delta_x_1 = (delta_x_1 <= norm_1(mod_solve)) ? norm_1(mod_solve) : delta_x_1;
+//        delta_x_2 = (delta_x_2 <= norm_2(mod_solve)) ? norm_2(mod_solve) : delta_x_2;
+//        delta_x_oo = (delta_x_oo <= norm_oo(mod_solve)) ? norm_oo(mod_solve) : delta_x_oo;
+//    }
+
 
     delta_x_1 /= norm_1(solve);
     delta_x_2 /= norm_1(solve);
