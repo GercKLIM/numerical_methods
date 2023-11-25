@@ -17,7 +17,6 @@ void test_programm() {
     vector<vector<T>> trans_matrix = transpon(matrix);        // Транспонирование матрицы
     vector<vector<T>> inverse_matrix = inverseMatrix2(matrix); // Обратная матрица
 
-
     cout << "Precision: FLOAT \n \n";
     printf("Input matrix: \nA = \n");
     print(matrix);
