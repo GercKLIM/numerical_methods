@@ -11,7 +11,7 @@ template <typename T>
 void test_programm() {
     //cout << "Precision: DOUBLE \n \n";
 
-    const string filename = "input_data/TEST2/D2.txt";           // Путь к файлу
+    const string filename = "input_data/TEST2/D1.txt";           // Путь к файлу
 
     vector<vector<T>> SLAU = importSLAU<T>(filename);            // Импорт СЛАУ из текстового файла
     vector<vector<T>> matrix = SLAU_to_matrix(SLAU);             // Получение матрицы из СЛАУ
@@ -52,6 +52,8 @@ void test_programm() {
     cout << "x = ";
     print(result1.solve);
     cout << "Converge on iterations = " << result1.iterations << endl;
+    cout << "C = " << endl;
+    print(result1.C);
     cout << "norm_oo(b - b1) = " << norm_vector_nevazki(matrix, vec, result1.solve, 0) << endl;
     cout << endl;
     printline(30);
@@ -61,6 +63,8 @@ void test_programm() {
     cout << "x = ";
     print(result2.solve);
     cout << "Converge on iterations = " << result2.iterations << endl;
+    cout << "C = " << endl;
+    print(result2.C);
     cout << "norm_1(b - b1) = " << norm_vector_nevazki(matrix, vec, result2.solve, 1) << endl;
     cout << endl;
     printline(30);
@@ -70,6 +74,8 @@ void test_programm() {
     cout << "x = ";
     print(result3.solve);
     cout << "Converge on iterations = " << result3.iterations << endl;
+    cout << "C = " << endl;
+    print(result3.C);
     cout << "norm_1(b - b1) = " << norm_vector_nevazki(matrix, vec, result3.solve, 1) << endl;
     cout << endl;
     printline(30);
@@ -80,6 +86,8 @@ void test_programm() {
     cout << "x = ";
     print(result4.solve);
     cout << "Converge on iterations = " << result4.iterations << endl;
+    cout << "C = " << endl;
+    print(result4.C);
     cout << "norm_1(b - b1) = " << norm_vector_nevazki(matrix, vec, result4.solve, 1) << endl;
     cout << endl;
     printline(30);

@@ -5,7 +5,7 @@ using namespace std;
 
 // Функция для LU-разложения с частичным выбором
 template <typename T>
-void lu_decomposition(vector<vector<T>>& A, vector<vector<T>>& L, vector<vector<T>>& U) {
+void lu_decomposition(const vector<vector<T>>& A, vector<vector<T>>& L, vector<vector<T>>& U) {
     int n = A.size();
     for (int i = 0; i < n; i++) {
         int pivot_row = i;
@@ -43,7 +43,7 @@ void lu_decomposition(vector<vector<T>>& A, vector<vector<T>>& L, vector<vector<
 
 /* Функция для вычисления нормы вектора невязки */
 template <typename T>
-T norm_vector_nevazki(vector<vector<T>> A, vector<T> b, vector<T> x, const int n) {
+T norm_vector_nevazki(const vector<vector<T>>& A, const vector<T>& b, const vector<T>& x, const int& n) {
     int s = A.size();
     vector<T> residual(s, 0);
 
@@ -76,7 +76,7 @@ T norm_vector_nevazki(vector<vector<T>> A, vector<T> b, vector<T> x, const int n
 /* Функция для решения СЛАУ прямым методом Гаусса */
 
 template <typename T>
-vector<T> method_Gaussa(vector<vector<T>>& matrix, vector<T>& vec){
+vector<T> method_Gaussa(const vector<vector<T>>& matrix, const vector<T>& vec){
     int n = matrix.size();
 
     // Создаем копии матрицы и вектора
@@ -140,7 +140,7 @@ vector<T> method_Gaussa(vector<vector<T>>& matrix, vector<T>& vec){
 
 /* Функция для оценки изменения числа обуcловленности от возмущения вектора правой части */
 template <typename T>
-void min_change_cond(vector<vector<T>> matrix, vector<T> vec, vector<T> mod) {
+void min_change_cond(const vector<vector<T>>& matrix,const  vector<T>& vec, const vector<T>& mod) {
     /* Находим минимальное значение числа обусловленности */
 
     // Находим относительную погрешность
@@ -237,7 +237,7 @@ void QR_decomposition(const vector<vector<T>>& A, vector<vector<T>>& Q, vector<v
 }
 
 template <typename T>
-vector<T> method_QR(vector<vector<T>>& A, vector<T>& b) {
+vector<T> method_QR(const vector<vector<T>>& A, const vector<T>& b) {
     int n = A.size();
     vector<vector<T>> Q, R;
     QR_decomposition(A, Q, R);
@@ -271,7 +271,7 @@ vector<T> method_QR(vector<vector<T>>& A, vector<T>& b) {
 
 /* Функция представления матрицы С в виде: C = C_l + C_d + D_u (Нижнетреугольной, Диагональной, Верхнетреугольной) */
 template<typename T>
-void LDU_decomposotion(vector<vector<T>> A, vector<vector<T>> &L, vector<vector<T>> &D, vector<vector<T>> &U){
+void LDU_decomposotion(const vector<vector<T>>& A, vector<vector<T>> &L, vector<vector<T>> &D, vector<vector<T>> &U){
     int n = A.size();
 
     for (int i = 0; i < n; i++) {
@@ -290,7 +290,7 @@ void LDU_decomposotion(vector<vector<T>> A, vector<vector<T>> &L, vector<vector<
 /* Функция исследования итерационного параметра tau для метода простых итераций (Метод Золотого сечения)*/
 
 template<typename T>
-T SimpleIterations_method_matrix_norm_C(vector<vector<T>> A, T tau) {
+T SimpleIterations_method_matrix_norm_C(const vector<vector<T>>& A, const T& tau) {
     vector<vector<T>> E = create_identity_matrix<T>(A.size()); // Единичный вектор
     vector<vector<T>> C = -(tau * A - E);                   // Матрица С
     return norm_oo(C);
@@ -323,7 +323,7 @@ T golden_section_search_tau(vector<vector<T>> A, T a, T b, T epsilon) {
 
 
 template<typename T>
-Result<T> method_SimpleIteration(vector<vector<T>> A, vector<T> b, vector<T> x0, T tau, T eps, int MaxIter) {
+Result<T> method_SimpleIteration(const vector<vector<T>>& A, const vector<T>& b, const vector<T>& x0, const T& tau, const T& eps, const int& MaxIter) {
 
     Result<T> result;
     vector<vector<T>> E = create_identity_matrix<T>(A.size());   // Единичный вектор
@@ -355,7 +355,7 @@ Result<T> method_SimpleIteration(vector<vector<T>> A, vector<T> b, vector<T> x0,
 
 /* Функция решения СЛАУ методом Якоби */
 template<typename T>
-Result<T> method_Yacobi(vector<vector<T>> A, vector<T> b, vector<T> x0, T eps, int MaxIter){
+Result<T> method_Yacobi(const vector<vector<T>>& A, const vector<T>& b, const vector<T>& x0, const T& eps, const int& MaxIter){
 
     Result<T> result;
     vector<vector<T>> L(A.size(), vector<T>(A.size(), 0)),D(A.size(), vector<T>(A.size(), 0)), U(A.size(), vector<T>(A.size(), 0));
@@ -394,13 +394,17 @@ Result<T> method_Yacobi(vector<vector<T>> A, vector<T> b, vector<T> x0, T eps, i
 
 /* Функция решения СЛАУ методом Релаксации */
 template<typename T>
-Result<T> method_Relax(vector<vector<T>> A, vector<T> b, vector<T> x0, T w, T eps, int MaxIter){
+Result<T> method_Relax(const vector<vector<T>>& A, const vector<T>& b, const vector<T>& x0, const T& w, const T& eps,const int& MaxIter){
     Result<T> result;
 
     int n = A.size();
     vector<T> x = x0;  // Начальное приближение
 
-    result.C = A; // костыль
+
+    vector<vector<T>> L(n, vector<T>(n, 0)), D(n, vector<T>(n, 0)), U(n, vector<T>(n, 0));
+    LDU_decomposotion(A, L, D, U);
+    result.C = D + w * L;
+
 
     for (int k = 0; k < MaxIter; ++k) {
         vector<T> x_new(n, 0);
@@ -429,7 +433,6 @@ Result<T> method_Relax(vector<vector<T>> A, vector<T> b, vector<T> x0, T w, T ep
             }
         }
 
-        // Если достигнута необходимая точность, завершаем итерации
         if (max_error < eps) {
             result.solve = x_new;
             result.iterations = k + 1;
@@ -447,59 +450,15 @@ Result<T> method_Relax(vector<vector<T>> A, vector<T> b, vector<T> x0, T w, T ep
 
 /* Функция решения СЛАУ методом Зейделя */
 template<typename T>
-Result<T> method_Zeidel(vector<vector<T>> A, vector<T> b, vector<T> x0, T eps, int MaxIter){
-    Result<T> result;
-    int n = A.size();
-    vector<T> x = x0;  // Начальное приближение
-    T w = 1;
-
-    result.C = A; // Костыль
-
-    for (int k = 0; k < MaxIter; ++k) {
-        vector<T> x_new(n, 0);
-
-        for (int i = 0; i < n; ++i) {
-            T sum1 = 0;
-            T sum2 = 0;
-
-            for (int j = 0; j < i; ++j) {
-                sum1 += A[i][j] * x_new[j];
-            }
-
-            for (int j = i + 1; j < n; ++j) {
-                sum2 += A[i][j] * x[j];
-            }
-
-            x_new[i] = (1 - w) * x[i] + (w / A[i][i]) * (b[i] - sum1 - sum2);
-        }
-
-        // Проверка на сходимость
-        T max_error = 0;
-        for (int i = 0; i < n; ++i) {
-            T error = abs(x_new[i] - x[i]);
-            if (error > max_error) {
-                max_error = error;
-            }
-        }
-
-        // Если достигнута необходимая точность - завершаем итерации
-        if (max_error < eps) {
-            result.solve = x_new;
-            result.iterations = k + 1;
-            return result;
-        }
-
-        x = x_new;
-    }
-    result.solve = x;
-    result.iterations = MaxIter;
+Result<T> method_Zeidel(const vector<vector<T>>& A, const vector<T>& b, const vector<T>& x0, const T& eps, const int& MaxIter){
+    Result<T> result = method_Relax<T>(A, b, x0, 1, eps, MaxIter);
     return result;
 }
 
 
 /* Функция для вычисления нормы вектора невязки трехдиагональной СЛАУ */
 template <typename T>
-T norm_vector_nevazki(vector<T> A, vector<T> B, vector<T> C, vector<T> b, vector<T> solution, const int n){
+T norm_vector_nevazki(const vector<T>& A, const vector<T>& B, const vector<T>& C, const vector<T>& b, const vector<T>& solution, const int& n){
     // Вычисление невязки
     vector<T> residual(n);
     for (int i = 0; i < n; ++i) {
@@ -530,7 +489,7 @@ T norm_vector_nevazki(vector<T> A, vector<T> B, vector<T> C, vector<T> b, vector
 
 /* Функция решения трехдиагональной СЛАУ большой размерности методом Зейделя */
 template <typename T>
-vector<T> method_Zeidel_diag(vector<T> A, vector<T> B, vector<T> C, vector<T> b, vector<T> x0, T eps, T maxIterations) {
+vector<T> method_Zeidel_diag(const vector<T>& A, const vector<T>& B, const vector<T>& C, const vector<T>& b, const vector<T>& x0, const T& eps, const T& maxIterations) {
     size_t n = A.size();
     vector<T> x = x0; // Начальное приближение
 
@@ -569,7 +528,7 @@ vector<T> method_Zeidel_diag(vector<T> A, vector<T> B, vector<T> C, vector<T> b,
 
 /* Функция решения трехдиагональной СЛАУ большой размерности методом Релаксации */
 template <typename T>
-vector<T> method_Relax_diag(vector<T> A, vector<T> B, vector<T> C, vector<T> b, vector<T> x0, T w, T eps, T MaxIter){
+vector<T> method_Relax_diag(const vector<T>& A, const vector<T>& B, const vector<T>& C, const vector<T>& b, const vector<T>& x0, const T& w, const T& eps, const T& MaxIter){
     size_t n = A.size();
     vector<T> x = x0; // Начальное приближение
 

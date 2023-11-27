@@ -39,7 +39,7 @@ vector<vector<T>> importSLAU(const string& filename) {
 
 /* Функция вывода матрицы на экран */
 template <typename T>
-void print(vector<vector<T>> matrix) {
+void print(const vector<vector<T>>& matrix) {
     for (vector<T> row : matrix) {
         for (T value: row) {
             cout << value << ' ';
@@ -51,7 +51,7 @@ void print(vector<vector<T>> matrix) {
 
 /* Функция вывода вектора на экран */
 template <typename T>
-void print(vector<T> vec) {
+void print(const vector<T>& vec) {
     for (T value : vec) {
         cout << value << ' ';
     }
@@ -60,7 +60,7 @@ void print(vector<T> vec) {
 
 /* Функция вывода обрезанного вектора на экран */
 template <typename T>
-void print_short(vector<T> vec, const int n){
+void print_short(const vector<T>& vec, const int& n){
 
     for (int i = 0; i < n; ++i){
         cout << vec[i] << ' ';
@@ -78,7 +78,7 @@ void printline(const int& n){
 
 /* Функция для получения матрицы из СЛАУ */
 template <typename T>
-vector<vector<T>> SLAU_to_matrix(vector<vector<T>> SLAU){
+vector<vector<T>> SLAU_to_matrix(const vector<vector<T>>& SLAU){
     vector<vector<T>> matrix;
     matrix.resize(SLAU.size(), vector<T>(SLAU.size()));
 
@@ -93,7 +93,7 @@ vector<vector<T>> SLAU_to_matrix(vector<vector<T>> SLAU){
 
 /* Функция для получения вектора из СЛАУ */
 template <typename T>
-vector<T> SLAU_to_vec(vector<vector<T>> SLAU){
+vector<T> SLAU_to_vec(const vector<vector<T>>& SLAU){
     int s = SLAU.size();
     vector<T> vec(s);
 
@@ -108,7 +108,7 @@ vector<T> SLAU_to_vec(vector<vector<T>> SLAU){
 
 /* Функция для сложения векторов */
 template <typename T>
-vector<T> operator+(vector<T> vec1, vector<T> vec2){
+vector<T> operator+(const vector<T>& vec1, const vector<T>& vec2){
     vector<T> pert_vec = vec1;
     for (int i = 0; i < vec1.size(); i++) {
         pert_vec[i] += vec2[i];
@@ -119,7 +119,7 @@ vector<T> operator+(vector<T> vec1, vector<T> vec2){
 
 /* Функция вычитания векторов */
 template <typename T>
-vector<T> operator-(vector<T> a, vector<T> b){
+vector<T> operator-(const vector<T>& a, const vector<T>& b){
     // Проверка на возможность умножения
     if (a.size() != b.size()) {
         cout << "Error: size a != size b in substraction vectors." << endl;
@@ -138,7 +138,7 @@ vector<T> operator-(vector<T> a, vector<T> b){
 
 /* Операция почленного умножения векторов */
 template <typename T>
-vector<T> operator*(vector<T> vec1, vector<T> vec2){
+vector<T> operator*(const vector<T>& vec1, const vector<T>& vec2){
     if (vec1.size() != vec2.size()) {
         cout << "Error: vector1 size != vector2 size in operator*." << endl;
         exit(1);
@@ -152,7 +152,7 @@ vector<T> operator*(vector<T> vec1, vector<T> vec2){
 
 /* Операция умножения вектора на число */
 template <typename T>
-vector<T> operator*(T c, vector<T> vec){
+vector<T> operator*(const T& c, const vector<T>& vec){
     vector<T> result(vec.size(), 0);
     for (int i = 0; i < vec.size(); i++){
         result[i] = vec[i] * c;
@@ -161,7 +161,7 @@ vector<T> operator*(T c, vector<T> vec){
 }
 
 template <typename T>
-vector<T> operator*(vector<T> vec, T c){
+vector<T> operator*(const vector<T>& vec, const T& c){
     vector<T> result(vec.size(), 0);
     for (int i = 0; i < vec.size(); i++){
         result[i] = vec[i] * c;
@@ -172,7 +172,7 @@ vector<T> operator*(vector<T> vec, T c){
 
 /* Операция почленного деления векторов */
 template <typename T>
-vector<T> operator/(vector<T> vec1, vector<T> vec2){
+vector<T> operator/(const vector<T>& vec1, const vector<T>& vec2){
     if (vec1.size() != vec2.size()) {
         cout << "Error: vector1 size != vector2 size in operator*." << endl;
         exit(1);
@@ -186,7 +186,7 @@ vector<T> operator/(vector<T> vec1, vector<T> vec2){
 
 /* Функция для скалярного умножения векторов */
 template <typename T>
-T dot(vector<T> vec1, vector<T> vec2){
+T dot(const vector<T>& vec1, const vector<T>& vec2){
     if (vec1.size() != vec2.size()) {
         cout << "Error: vector1 size != vector2 size in operator*." << endl;
         exit(1);
@@ -200,7 +200,7 @@ T dot(vector<T> vec1, vector<T> vec2){
 
 /* Функция для нормы-1 вектора */
 template <typename T>
-T norm_1(vector<T> vec) {
+T norm_1(const vector<T>& vec) {
     T norm = 0;
     for (const T& value : vec) {
         norm += abs(value);
@@ -210,7 +210,7 @@ T norm_1(vector<T> vec) {
 
 /* Функция для нормы-2 вектора */
 template <typename T>
-T norm_2(vector<T> vec){
+T norm_2(const vector<T>& vec){
     T sum = 0;
     for (int i = 0; i < vec.size(); i++){
         sum += vec[i] * vec[i];
@@ -220,7 +220,7 @@ T norm_2(vector<T> vec){
 
 /* Функция для нормы-оо вектора */
 template <typename T>
-T norm_oo(vector<T> vec) {
+T norm_oo(const vector<T>& vec) {
     T norm = 0;
     for (const T& value : vec) {
         T abs_value = abs(value);
@@ -237,7 +237,7 @@ T norm_oo(vector<T> vec) {
 
 /* Операция для умножения матрицы на число */
 template <typename T>
-vector<vector<T>> operator*(vector<vector<T>> A,  T scalar){
+vector<vector<T>> operator*(const vector<vector<T>>& A, const T& scalar){
     // Создание результирующей матрицы с теми же размерами
     vector<vector<T>> result(A.size(), vector<T>(A[0].size(), 0));
 
@@ -253,7 +253,7 @@ vector<vector<T>> operator*(vector<vector<T>> A,  T scalar){
 
 /* Операция для умножения  числа на матрицу */
 template <typename T>
-vector<vector<T>> operator*(T scalar, vector<vector<T>> A){
+vector<vector<T>> operator*(const T& scalar, const vector<vector<T>>& A){
     // Создание результирующей матрицы с теми же размерами
     vector<vector<T>> result(A.size(), vector<T>(A[0].size(), 0));
 
@@ -269,7 +269,7 @@ vector<vector<T>> operator*(T scalar, vector<vector<T>> A){
 
 /* Операция поэлементного сложения матриц */
 template <typename T>
-vector<vector<T>> operator+(vector<vector<T>> A, vector<vector<T>> B){
+vector<vector<T>> operator+(const vector<vector<T>>& A, const vector<vector<T>>& B){
     // Проверка на совпадение размеров матриц
     if (A.size() != B.size() || A[0].size() != B[0].size()) {
         cout << "Error: size A != size B in addition matrix." << endl;
@@ -291,7 +291,7 @@ vector<vector<T>> operator+(vector<vector<T>> A, vector<vector<T>> B){
 
 /* Операция поэлементного вычитания матриц */
 template <typename T>
-vector<vector<T>> operator-(vector<vector<T>> A, vector<vector<T>> B){
+vector<vector<T>> operator-(const vector<vector<T>>& A, const vector<vector<T>>& B){
     // Проверка на совпадение размеров матриц
     if (A.size() != B.size() || A[0].size() != B[0].size()) {
         cout << "Error: size A != size B in substraction matrix." << endl;
@@ -312,7 +312,7 @@ vector<vector<T>> operator-(vector<vector<T>> A, vector<vector<T>> B){
 
 /* Операция умножения матрицы на вектор */
 template <typename T>
-vector<T> operator*(vector<vector<T>> matrix, vector<T> vec) {
+vector<T> operator*(const vector<vector<T>>& matrix, const vector<T>& vec) {
     // Проверка на возможность умножения
     if (matrix[0].size() != vec.size()) {
         cout << "Error: size A != size b in multiply Matrix By Vector." << endl;
@@ -333,7 +333,7 @@ vector<T> operator*(vector<vector<T>> matrix, vector<T> vec) {
 
 /* Матричное умножение */
 template <typename T>
-vector<vector<T>> operator*(vector<vector<T>> A, vector<vector<T>> B){
+vector<vector<T>> operator*(const vector<vector<T>>& A, const vector<vector<T>>& B){
     int m = A.size();    // Количество строк в матрице A
     int n = A[0].size(); // Количество столбцов в матрице A
     int p = B[0].size(); // Количество столбцов в матрице B
@@ -357,7 +357,7 @@ vector<vector<T>> operator*(vector<vector<T>> A, vector<vector<T>> B){
 
 // Определение оператора отрицания для матрицы
 template <typename T>
-vector<vector<T>> operator-(vector<vector<T>> matrix) {
+vector<vector<T>> operator-(const vector<vector<T>>& matrix) {
     int rows = matrix.size();
     int cols = matrix[0].size();
     vector<vector<T>> result(rows, vector<T>(cols, 0));
@@ -371,7 +371,7 @@ vector<vector<T>> operator-(vector<vector<T>> matrix) {
 
 /* Функция для поэлементного умножения матриц */
 template <typename T>
-vector<vector<T>> Multyply(vector<vector<T>> A, vector<vector<T>> B){
+vector<vector<T>> Multyply(const vector<vector<T>>& A, const vector<vector<T>>& B){
     int m = A.size();    // Количество строк в матрице A
     int n = A[0].size(); // Количество столбцов в матрице A
     int p = B[0].size(); // Количество столбцов в матрице B
@@ -394,7 +394,7 @@ vector<vector<T>> Multyply(vector<vector<T>> A, vector<vector<T>> B){
 
 /* Функция округления чисел в матрицах */
 template <typename T>
-vector<vector<T>> Matrix_round(vector<vector<T>> A, double eps){
+vector<vector<T>> Matrix_round(const vector<vector<T>>& A, const double& eps){
     vector<vector<T>> roundA = A;
     int size = A.size();
 
@@ -409,7 +409,7 @@ vector<vector<T>> Matrix_round(vector<vector<T>> A, double eps){
 
 /* Функция для вычисления 1-нормы матрицы */
 template <typename T>
-T norm_1(vector<vector<T>> matrix){
+T norm_1(const vector<vector<T>>& matrix){
     int rows = matrix.size();
     int cols = matrix[0].size();
     T norm = 0;
@@ -429,7 +429,7 @@ T norm_1(vector<vector<T>> matrix){
 
 /* Функция для вычисления 2-нормы матрицы */
 template <typename T>
-T norm_2(vector<vector<T>> matrix){
+T norm_2(const vector<vector<T>>& matrix){
     int n = matrix.size();
     T norm = 0;
     for (int i = 0; i < n; i++) {
@@ -444,7 +444,7 @@ T norm_2(vector<vector<T>> matrix){
 
 /* Функция для вычисления оо-нормы матрицы */
 template <typename T>
-T norm_oo(vector<vector<T>> matrix){
+T norm_oo(const vector<vector<T>>& matrix){
     int rows = matrix.size();
     int cols = matrix[0].size();
     T norm = 0;
@@ -465,7 +465,7 @@ T norm_oo(vector<vector<T>> matrix){
 
 /* Функция поворота матрицы вправо */
 template <typename T>
-vector<vector<T>> RotateRight(vector<vector<T>> A){
+vector<vector<T>> RotateRight(const vector<vector<T>>& A){
 
     vector<vector<T>> A_rotate(A.size(), vector<T>(A.size(), 0));
 
@@ -481,7 +481,7 @@ vector<vector<T>> RotateRight(vector<vector<T>> A){
 
 /* Функция поворота матрицы влево */
 template <typename T>
-vector<vector<T>> RotateLeft(vector<vector<T>> A){
+vector<vector<T>> RotateLeft(const vector<vector<T>>& A){
 
     vector<vector<T>> A_rotate(A.size(), vector<T>(A.size(), 0));
 
@@ -496,7 +496,7 @@ vector<vector<T>> RotateLeft(vector<vector<T>> A){
 
 // Функция для создания единичной матрицы размера n x n
 template <typename T>
-vector<vector<T>> create_identity_matrix(int n) {
+vector<vector<T>> create_identity_matrix(const int& n) {
     vector<vector<T>> identity(n, vector<T>(n, 0));
     for (int i = 0; i < n; i++) {
         identity[i][i] = 1;
@@ -506,7 +506,7 @@ vector<vector<T>> create_identity_matrix(int n) {
 
 // Функция для обратной матрицы с проверкой на вырожденность
 template <typename T>
-vector<vector<T>> inverseMatrix(vector<vector<T>> A) {
+vector<vector<T>> inverseMatrix(const vector<vector<T>>& A) {
     vector<vector<T>> E = create_identity_matrix<T>(A.size());
     vector<vector<T>> E_rotate = RotateLeft(E);
     vector<T> e(A.size());
@@ -524,7 +524,7 @@ vector<vector<T>> inverseMatrix(vector<vector<T>> A) {
 
 /* Функция для вычисления числа обусловленности матрицы c нормой 1*/
 template <typename T>
-T cond_1(vector<vector<T>> matrix){
+T cond_1(const vector<vector<T>>& matrix){
     T n_1 = norm_1(matrix);
     if (n_1 == 0) {
         printf("Error: Det(A) = 0  =>  cond_1(A) = oo");
@@ -538,7 +538,7 @@ T cond_1(vector<vector<T>> matrix){
 
 /* Функция для вычисления числа обусловленности матрицы c нормой 2*/
 template <typename T>
-T cond_2(vector<vector<T>> matrix){
+T cond_2(const vector<vector<T>>& matrix){
     T n_1 = norm_2(matrix);
     if (n_1 == 0) {
         printf("Error: Det(A) = 0  =>  cond_2(A) = oo");
@@ -552,7 +552,7 @@ T cond_2(vector<vector<T>> matrix){
 
 /* Функция для вычисления числа обусловленности матрицы с нормой oo*/
 template <typename T>
-T cond_oo(vector<vector<T>> matrix){
+T cond_oo(const vector<vector<T>>& matrix){
     T n_1 = norm_oo(matrix);
     if (n_1 == 0) {
         printf("Error: Det(A) = 0  =>  cond_oo(A) = oo");
