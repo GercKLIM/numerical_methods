@@ -34,6 +34,8 @@ void print(vector<T> vec);
 template <typename T>
 void print_short(vector<T> vec, const int n);
 
+/* Функция вывода разделительной линии на экран */
+void printline(const int& n);
 
 /* Функция для получения матрицы из СЛАУ */
 template <typename T>

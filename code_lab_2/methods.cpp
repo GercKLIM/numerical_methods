@@ -268,6 +268,7 @@ vector<T> method_QR(vector<vector<T>>& A, vector<T>& b) {
 
 /* ### Функций лабы 2 ### */
 
+
 /* Функция представления матрицы С в виде: C = C_l + C_d + D_u (Нижнетреугольной, Диагональной, Верхнетреугольной) */
 template<typename T>
 void LDU_decomposotion(vector<vector<T>> A, vector<vector<T>> &L, vector<vector<T>> &D, vector<vector<T>> &U){
@@ -292,7 +293,7 @@ template<typename T>
 T SimpleIterations_method_matrix_norm_C(vector<vector<T>> A, T tau) {
     vector<vector<T>> E = create_identity_matrix<T>(A.size()); // Единичный вектор
     vector<vector<T>> C = -(tau * A - E);                   // Матрица С
-    return norm_1(C);
+    return norm_oo(C);
 }
 
 // Метод золотого сечения для поиска минимума функции на заданном интервале [a, b]
@@ -322,15 +323,16 @@ T golden_section_search_tau(vector<vector<T>> A, T a, T b, T epsilon) {
 
 
 template<typename T>
-vector<T> method_SimpleIteration(vector<vector<T>> A, vector<T> b, vector<T> x0, T tau, T eps, int MaxIter) {
+Result<T> method_SimpleIteration(vector<vector<T>> A, vector<T> b, vector<T> x0, T tau, T eps, int MaxIter) {
 
+    Result<T> result;
     vector<vector<T>> E = create_identity_matrix<T>(A.size());   // Единичный вектор
     vector<vector<T>> C = -(tau * A - E);                           // Матрица С
     vector<T> y = tau * b;                                          // Вектор y
-
     vector<T> xk = x0;
     vector<T> xk_new = xk;
-    T C_norm = norm_2(C);
+
+    result.C = C;
 
     for (int i = 0; i < MaxIter; ++i){
 
@@ -339,21 +341,23 @@ vector<T> method_SimpleIteration(vector<vector<T>> A, vector<T> b, vector<T> x0,
         // Критерий останова итерационного процесса
         vector<T> delta_stop = xk_new - xk;
         xk = xk_new;
-        if ((norm_vector_nevazki(A, b, xk, 1) <= eps) or (norm_1(delta_stop) <= (((1 - norm_1(C)) / norm_1(C)) * eps))) {
-            cout << "Method_SimpleIterations converged after " << i + 1 << " iterations" << endl;
-            return xk;
+        if ((norm_vector_nevazki(A, b, xk, 2) <= eps) or (norm_oo(delta_stop) <= (((1 - norm_oo(C)) / norm_oo(C)) * eps))) {
+            result.solve = xk;
+            result.iterations = i + 1;
+            return result;
         }
     }
-    cout << "Method_SimpleIterations DON'T converged after " << MaxIter << " iterations" << endl;
-    return xk;
-
+    result.solve = xk;
+    result.iterations = MaxIter;
+    return result;
 }
 
 
 /* Функция решения СЛАУ методом Якоби */
 template<typename T>
-vector<T> method_Yacobi(vector<vector<T>> A, vector<T> b, vector<T> x0, T eps, int MaxIter){
+Result<T> method_Yacobi(vector<vector<T>> A, vector<T> b, vector<T> x0, T eps, int MaxIter){
 
+    Result<T> result;
     vector<vector<T>> L(A.size(), vector<T>(A.size(), 0)),D(A.size(), vector<T>(A.size(), 0)), U(A.size(), vector<T>(A.size(), 0));
     LDU_decomposotion(A, L, D, U);
 
@@ -361,10 +365,13 @@ vector<T> method_Yacobi(vector<vector<T>> A, vector<T> b, vector<T> x0, T eps, i
     vector<vector<T>> C =  -D_inv * (L + U);
     vector<T> y = D_inv * b;
 
+    result.C = C;
+
     vector<T> xk = x0;
     vector<T> xk_new = xk;
     T C_norm = norm_1(C);
-    cout << "norm(C) = " <<  C_norm << endl;
+
+
 
     for (int i = 0; i < MaxIter; ++i){
 
@@ -374,21 +381,26 @@ vector<T> method_Yacobi(vector<vector<T>> A, vector<T> b, vector<T> x0, T eps, i
         vector<T> delta_stop = xk_new - xk;
         xk = xk_new;
         if  ((norm_vector_nevazki(A, b, xk, 1) <= eps) or (norm_1(delta_stop) <= (((1 - norm_1(C)) / norm_1(C)) * eps))){
-            cout << "Method_Yacobi converged after " << i + 1 << " iterations" << endl;
-            return xk;
+            result.solve = xk;
+            result.iterations = i + 1;
+            return result;
         }
     }
-    cout << "Method_Yacobi DON'T converged after " << MaxIter << " iterations" << endl;
-    return xk;
+    result.solve = xk;
+    result.iterations = MaxIter;
+    return result;
 
 }
 
 /* Функция решения СЛАУ методом Релаксации */
 template<typename T>
-vector<T> method_Relax(vector<vector<T>> A, vector<T> b, vector<T> x0, T w, T eps, int MaxIter){
+Result<T> method_Relax(vector<vector<T>> A, vector<T> b, vector<T> x0, T w, T eps, int MaxIter){
+    Result<T> result;
+
     int n = A.size();
     vector<T> x = x0;  // Начальное приближение
-    cout << "W = " << w << endl;
+
+    result.C = A; // костыль
 
     for (int k = 0; k < MaxIter; ++k) {
         vector<T> x_new(n, 0);
@@ -419,24 +431,29 @@ vector<T> method_Relax(vector<vector<T>> A, vector<T> b, vector<T> x0, T w, T ep
 
         // Если достигнута необходимая точность, завершаем итерации
         if (max_error < eps) {
-            cout << "Method_Relax converged after " << k + 1 << " iterations" << endl;
-            return x_new;
+            result.solve = x_new;
+            result.iterations = k + 1;
+            return result;
         }
 
         x = x_new;
     }
 
     // Если не достигнута необходимая точность за максимальное число итераций
-    cout << "Method_Relax DON'T converged after " << MaxIter << " iterations" << endl;
-    return x;
+    result.solve = x;
+    result.iterations = MaxIter;
+    return result;
 }
 
 /* Функция решения СЛАУ методом Зейделя */
 template<typename T>
-vector<T> method_Zeidel(vector<vector<T>> A, vector<T> b, vector<T> x0, T eps, int MaxIter){
+Result<T> method_Zeidel(vector<vector<T>> A, vector<T> b, vector<T> x0, T eps, int MaxIter){
+    Result<T> result;
     int n = A.size();
     vector<T> x = x0;  // Начальное приближение
     T w = 1;
+
+    result.C = A; // Костыль
 
     for (int k = 0; k < MaxIter; ++k) {
         vector<T> x_new(n, 0);
@@ -467,15 +484,16 @@ vector<T> method_Zeidel(vector<vector<T>> A, vector<T> b, vector<T> x0, T eps, i
 
         // Если достигнута необходимая точность - завершаем итерации
         if (max_error < eps) {
-            cout << "Method_Zeidel converged after " << k + 1 << " iterations" << endl;
-            return x_new;
+            result.solve = x_new;
+            result.iterations = k + 1;
+            return result;
         }
 
         x = x_new;
     }
-
-    cout << "Method_Zeidel DON'T converged after " << MaxIter << " iterations" << endl;
-    return x;
+    result.solve = x;
+    result.iterations = MaxIter;
+    return result;
 }
 
 

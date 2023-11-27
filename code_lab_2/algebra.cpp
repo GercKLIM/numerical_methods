@@ -20,7 +20,6 @@ vector<vector<T>> importSLAU(const string& filename) {
     int size;
     file >> size;
 
-
     matrix.resize(size, vector<T>(size+1));
 
     for (int i = 0; i < size; ++i) {
@@ -39,7 +38,6 @@ vector<vector<T>> importSLAU(const string& filename) {
 
 
 /* Функция вывода матрицы на экран */
-
 template <typename T>
 void print(vector<vector<T>> matrix) {
     for (vector<T> row : matrix) {
@@ -70,7 +68,13 @@ void print_short(vector<T> vec, const int n){
     cout << "..." << endl;
 }
 
-
+/* Функция вывода разделительной линии на экран */
+void printline(const int& n){
+    for (int i = 0; i < n; i ++){
+        cout << "-";
+    }
+    cout << endl;
+}
 
 /* Функция для получения матрицы из СЛАУ */
 template <typename T>
