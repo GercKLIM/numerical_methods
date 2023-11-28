@@ -66,22 +66,22 @@ void LDU_decomposotion(const vector<vector<T>>& A, vector<vector<T>>& L, vector<
 
 /* Функция решения СЛАУ методом Простой Итерации */
 template<typename T>
-Result<T> method_SimpleIteration(const vector<vector<T>>& A, const vector<T>& b, const vector<T>& x0, const T& tau, const T& eps, const int& MaxIter);
+Result<T> method_SimpleIteration(const vector<vector<T>>& A, const vector<T>& b, const vector<T>& x0, const T& tau, const T& eps, const int& p, const int& MaxIter);
 
 
 /* Функция решения СЛАУ методом Якоби */
 template<typename T>
-Result<T> method_Yacobi(const vector<vector<T>>& A, const vector<T>& b, const vector<T>& x0, const T& eps, const int& MaxIter);
-
-
-/* Функция решения СЛАУ методом Зейделя */
-template<typename T>
-Result<T> method_Zeidel(const vector<vector<T>>& A, const vector<T>& b, const vector<T>& x0, const T& eps, const int& MaxIter);
+Result<T> method_Yacobi(const vector<vector<T>>& A, const vector<T>& b, const vector<T>& x0, const T& eps, const int& p, const int& MaxIter);
 
 
 /* Функция решения СЛАУ методом Релаксации */
 template<typename T>
 Result<T> method_Relax(const vector<vector<T>>& A, const vector<T>& b, const vector<T>& x0, const T& w, const T& eps, const int& MaxIter);
+
+
+/* Функция решения СЛАУ методом Зейделя */
+template<typename T>
+Result<T> method_Zeidel(const vector<vector<T>>& A, const vector<T>& b, const vector<T>& x0, const T& eps, const int& MaxIter);
 
 
 /* Функция решения трехдиагональной СЛАУ большой размерности методом Зейделя */

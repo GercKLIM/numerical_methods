@@ -198,38 +198,37 @@ T dot(const vector<T>& vec1, const vector<T>& vec2){
     return result;
 }
 
-/* Функция для нормы-1 вектора */
+/* Функция для нормы вектора */
 template <typename T>
-T norm_1(const vector<T>& vec) {
-    T norm = 0;
-    for (const T& value : vec) {
-        norm += abs(value);
+T norm(const vector<T>& vec, const int& p){
+    if (vec.empty()) {
+        cerr << "Error: Empty vector in norm() \n";
+        exit(1);
     }
-    return norm;
-}
 
-/* Функция для нормы-2 вектора */
-template <typename T>
-T norm_2(const vector<T>& vec){
-    T sum = 0;
-    for (int i = 0; i < vec.size(); i++){
-        sum += vec[i] * vec[i];
-    }
-    return sum;
-}
+    T result = 0.0;
 
-/* Функция для нормы-оо вектора */
-template <typename T>
-T norm_oo(const vector<T>& vec) {
-    T norm = 0;
-    for (const T& value : vec) {
-        T abs_value = abs(value);
-        if (abs_value > norm) {
-            norm = abs_value;
+    // Вычисление нормы
+    if (p == 0) {
+        // Норма oo
+        for (const auto& element : vec) {
+            T absElement = abs(element);
+            if (absElement > result) {
+                result = absElement;
+            }
         }
+    } else {
+        // Общий случай для норм L1, L2 и т.д.
+        for (const auto& element : vec) {
+            result += pow(abs(element), p);
+        }
+
+        result = pow(result, 1.0 / p);
     }
-    return norm;
+
+    return result;
 }
+
 
 
 
@@ -407,59 +406,45 @@ vector<vector<T>> Matrix_round(const vector<vector<T>>& A, const double& eps){
 }
 
 
-/* Функция для вычисления 1-нормы матрицы */
+/* Функция для вычисления нормы матрицы */
 template <typename T>
-T norm_1(const vector<vector<T>>& matrix){
+T norm(const vector<vector<T>>& matrix, const int& p) {
+    // Проверка на пустую матрицу
+    if (matrix.empty() || matrix[0].empty()) {
+        cout << "Error: Empty matrix in norm()\n";
+        exit(1);
+    }
+
     int rows = matrix.size();
     int cols = matrix[0].size();
-    T norm = 0;
 
-    for (int j = 0; j < cols; j++) {
-        T columnSum = 0;
-        for (int i = 0; i < rows; i++) {
-            columnSum += abs(matrix[i][j]);
+    T result = 0.0;
+
+    // Вычисление нормы матрицы
+    if (p == 0) {
+        // Норма матрицы Чебышева (максимальное значение по модулю в строке)
+        for (int i = 0; i < rows; ++i) {
+            T rowSum = 0.0;
+            for (int j = 0; j < cols; ++j) {
+                rowSum += abs(matrix[i][j]);
+            }
+            if (rowSum > result) {
+                result = rowSum;
+            }
         }
-        if (columnSum > norm) {
-            norm = columnSum;
+    } else {
+        // Общий случай для норм матрицы (Фробениуса и др.)
+        for (int j = 0; j < cols; ++j) {
+            T colSum = 0.0;
+            for (T i = 0; i < rows; ++i) {
+                colSum += pow(abs(matrix[i][j]), p);
+            }
+            result += pow(colSum, 1.0 / p);
         }
+
+        result = pow(result, 1.0 / p);
     }
-
-    return norm;
-}
-
-/* Функция для вычисления 2-нормы матрицы */
-template <typename T>
-T norm_2(const vector<vector<T>>& matrix){
-    int n = matrix.size();
-    T norm = 0;
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            T abs_value = std::abs(matrix[i][j]);
-            norm += abs_value * abs_value;
-        }
-    }
-    norm = sqrt(norm);
-    return norm;
-}
-
-/* Функция для вычисления оо-нормы матрицы */
-template <typename T>
-T norm_oo(const vector<vector<T>>& matrix){
-    int rows = matrix.size();
-    int cols = matrix[0].size();
-    T norm = 0;
-
-    for (int i = 0; i < rows; i++) {
-        T rowSum = 0;
-        for (int j = 0; j < cols; j++) {
-            rowSum += std::abs(matrix[i][j]);
-        }
-        if (rowSum > norm) {
-            norm = rowSum;
-        }
-    }
-
-    return norm;
+    return result;
 }
 
 

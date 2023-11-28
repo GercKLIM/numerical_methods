@@ -54,23 +54,8 @@ T norm_vector_nevazki(const vector<vector<T>>& A, const vector<T>& b, const vect
         }
         residual[i] = b[i] - residual[i];
     }
-    T residual_norm;
-    if (n == 1) {
-        residual_norm = norm_1(residual);
-        return residual_norm;
-    }
-    if (n == 2) {
-        residual_norm = norm_2(residual);
-        return residual_norm;
-    }
-    if (n == 0) {
-        residual_norm = norm_oo(residual);
-        return residual_norm;
-    } else {
-        cout << "Error: U stupid" << n << endl;
-        exit(1);
-    }
-
+    T residual_norm = norm(residual, n);
+    return residual_norm;
 }
 
 /* Функция для решения СЛАУ прямым методом Гаусса */
@@ -144,9 +129,9 @@ void min_change_cond(const vector<vector<T>>& matrix,const  vector<T>& vec, cons
     /* Находим минимальное значение числа обусловленности */
 
     // Находим относительную погрешность
-    T delta_b_1 = norm_1(mod) / norm_1(vec);
-    T delta_b_2 = norm_1(mod) / norm_1(vec);
-    T delta_b_oo = norm_1(mod) / norm_1(vec);
+    T delta_b_1 = norm(mod, 1) / norm(vec, 1);
+    T delta_b_2 = norm(mod, 2) / norm(vec, 2);
+    T delta_b_oo = norm(mod, 0) / norm(vec, 0);
 
     // Находим относительную погрешность x
     T delta_x_1 = 0;
@@ -171,14 +156,14 @@ void min_change_cond(const vector<vector<T>>& matrix,const  vector<T>& vec, cons
         for (int i = 0; i < mod_solve.size(); i++) {
             mod_solve[i] = abs(mod_solve[i] - solve[i]);
         }
-        delta_x_1 = (delta_x_1 <= norm_1(mod_solve)) ? norm_1(mod_solve) : delta_x_1;
-        delta_x_2 = (delta_x_2 <= norm_2(mod_solve)) ? norm_2(mod_solve) : delta_x_2;
-        delta_x_oo = (delta_x_oo <= norm_oo(mod_solve)) ? norm_oo(mod_solve) : delta_x_oo;
+        delta_x_1 = (delta_x_1 <= norm(mod_solve, 1)) ? norm(mod_solve, 1) : delta_x_1;
+        delta_x_2 = (delta_x_2 <= norm(mod_solve, 2)) ? norm(mod_solve, 2) : delta_x_2;
+        delta_x_oo = (delta_x_oo <= norm(mod_solve, 0)) ? norm(mod_solve, 0) : delta_x_oo;
     }
 
-    delta_x_1 /= norm_1(solve);
-    delta_x_2 /= norm_1(solve);
-    delta_x_oo /= norm_1(solve);
+    delta_x_1 /= norm(solve, 1);
+    delta_x_2 /= norm(solve, 2);
+    delta_x_oo /= norm(solve, 0);
 
     T min_cond_1 = delta_x_1 / delta_b_1;
     T min_cond_2 = delta_x_2 / delta_b_2;
@@ -290,15 +275,15 @@ void LDU_decomposotion(const vector<vector<T>>& A, vector<vector<T>> &L, vector<
 /* Функция исследования итерационного параметра tau для метода простых итераций (Метод Золотого сечения)*/
 
 template<typename T>
-T SimpleIterations_method_matrix_norm_C(const vector<vector<T>>& A, const T& tau) {
+T SimpleIterations_method_matrix_norm_C(const vector<vector<T>>& A, const T& tau, const int& p) {
     vector<vector<T>> E = create_identity_matrix<T>(A.size()); // Единичный вектор
     vector<vector<T>> C = -(tau * A - E);                   // Матрица С
-    return norm_oo(C);
+    return norm(C, p);
 }
 
 // Метод золотого сечения для поиска минимума функции на заданном интервале [a, b]
 template<typename T>
-T golden_section_search_tau(vector<vector<T>> A, T a, T b, T epsilon) {
+T golden_section_search_tau(const vector<vector<T>>& A, T a, T b, const int& p, const T& epsilon) {
 
     const T golden_ratio = 1.618033988749895; // Золотое Сечение
     T x1, x2;
@@ -308,7 +293,7 @@ T golden_section_search_tau(vector<vector<T>> A, T a, T b, T epsilon) {
     x2 = a + (b - a) / golden_ratio;
 
     while (fabs(b - a) > epsilon) {
-        if (SimpleIterations_method_matrix_norm_C(A, x1) < SimpleIterations_method_matrix_norm_C(A, x2)) {
+        if (SimpleIterations_method_matrix_norm_C(A, x1, p) < SimpleIterations_method_matrix_norm_C(A, x2, p)) {
             b = x2;
             x2 = x1;
             x1 = b - (b - a) / golden_ratio;
@@ -323,7 +308,7 @@ T golden_section_search_tau(vector<vector<T>> A, T a, T b, T epsilon) {
 
 
 template<typename T>
-Result<T> method_SimpleIteration(const vector<vector<T>>& A, const vector<T>& b, const vector<T>& x0, const T& tau, const T& eps, const int& MaxIter) {
+Result<T> method_SimpleIteration(const vector<vector<T>>& A, const vector<T>& b, const vector<T>& x0, const T& tau, const T& eps, const int& p, const int& MaxIter) {
 
     Result<T> result;
     vector<vector<T>> E = create_identity_matrix<T>(A.size());   // Единичный вектор
@@ -341,7 +326,7 @@ Result<T> method_SimpleIteration(const vector<vector<T>>& A, const vector<T>& b,
         // Критерий останова итерационного процесса
         vector<T> delta_stop = xk_new - xk;
         xk = xk_new;
-        if ((norm_vector_nevazki(A, b, xk, 2) <= eps) or (norm_oo(delta_stop) <= (((1 - norm_oo(C)) / norm_oo(C)) * eps))) {
+        if ((norm_vector_nevazki(A, b, xk, p) <= eps) or (norm(delta_stop, p) <= (((1 - norm(C, p)) / norm(C, p)) * eps))) {
             result.solve = xk;
             result.iterations = i + 1;
             return result;
@@ -355,7 +340,7 @@ Result<T> method_SimpleIteration(const vector<vector<T>>& A, const vector<T>& b,
 
 /* Функция решения СЛАУ методом Якоби */
 template<typename T>
-Result<T> method_Yacobi(const vector<vector<T>>& A, const vector<T>& b, const vector<T>& x0, const T& eps, const int& MaxIter){
+Result<T> method_Yacobi(const vector<vector<T>>& A, const vector<T>& b, const vector<T>& x0, const T& eps, const int& p, const int& MaxIter){
 
     Result<T> result;
     vector<vector<T>> L(A.size(), vector<T>(A.size(), 0)),D(A.size(), vector<T>(A.size(), 0)), U(A.size(), vector<T>(A.size(), 0));
@@ -369,7 +354,7 @@ Result<T> method_Yacobi(const vector<vector<T>>& A, const vector<T>& b, const ve
 
     vector<T> xk = x0;
     vector<T> xk_new = xk;
-    T C_norm = norm_1(C);
+    T C_norm = norm(C, p);
 
 
 
@@ -380,7 +365,7 @@ Result<T> method_Yacobi(const vector<vector<T>>& A, const vector<T>& b, const ve
         // Критерий останова итерационного процесса
         vector<T> delta_stop = xk_new - xk;
         xk = xk_new;
-        if  ((norm_vector_nevazki(A, b, xk, 1) <= eps) or (norm_1(delta_stop) <= (((1 - norm_1(C)) / norm_1(C)) * eps))){
+        if  ((norm_vector_nevazki(A, b, xk, 1) <= eps) or (norm(delta_stop, p) <= (((1 - norm(C, p)) / norm(C, p)) * eps))){
             result.solve = xk;
             result.iterations = i + 1;
             return result;
@@ -391,19 +376,58 @@ Result<T> method_Yacobi(const vector<vector<T>>& A, const vector<T>& b, const ve
     return result;
 
 }
+template <typename T>
+T C_matrix_for_relax(const vector<vector<T>>& A, const T& w, const int& p){
 
-/* Функция решения СЛАУ методом Релаксации */
+    vector<vector<T>> L(A.size(), vector<T>(A.size(), 0)), D(A.size(), vector<T>(A.size(), 0)), U(A.size(), vector<T>(A.size(),0));
+    LDU_decomposotion(A, L, D, U);
+    vector<vector<T>> C = ((1 / w) * D - L);
+    C = inverseMatrix(C);
+    C = C * (((1 - w) / w) * D + U);
+    return norm(C, p);
+}
+
+//* Функция исследования итерационного параметра W для метода Релаксации для трехдиагональной матрицы (Метод Золотого сечения)*/
 template<typename T>
-Result<T> method_Relax(const vector<vector<T>>& A, const vector<T>& b, const vector<T>& x0, const T& w, const T& eps,const int& MaxIter){
+T golden_section_search_W(const vector<vector<T>>& A, T a, T b, const int& p, const T& eps) {
+
+    const T golden_ratio = 1.618033988749895; // Золотое Сечение
+    T x1, x2;
+
+    // Начальные точки
+    x1 = b - (b - a) / golden_ratio;
+    x2 = a + (b - a) / golden_ratio;
+
+    while (abs(b - a) > eps) {
+        if (C_matrix_for_relax(A, x1, p) < C_matrix_for_relax(A, x2, p) ) {
+            b = x2;
+            x2 = x1;
+            x1 = b - (b - a) / golden_ratio;
+        } else {
+            a = x1;
+            x1 = x2;
+            x2 = a + (b - a) / golden_ratio;
+        }
+    }
+    return (a + b) / 2;
+}
+
+/* Функция решения СЛАУ методом Релаксации через каноническую формулу */
+template <typename T>
+Result<T> method_Relax(const vector<vector<T>>& A, const vector<T>& b, const vector<T>& x0, const T& w, const T& eps, const int& p, const int& MaxIter) {
     Result<T> result;
 
     int n = A.size();
     vector<T> x = x0;  // Начальное приближение
 
-
-    vector<vector<T>> L(n, vector<T>(n, 0)), D(n, vector<T>(n, 0)), U(n, vector<T>(n, 0));
+    // Вычисление ненужной матрицы С для вывода
+    vector<vector<T>> L(A.size(), vector<T>(A.size(), 0)), D(A.size(), vector<T>(A.size(), 0)), U(A.size(), vector<T>(A.size(),0));
     LDU_decomposotion(A, L, D, U);
-    result.C = D + w * L;
+    vector<vector<T>> C = ((1 / w) * D - L);
+    C = inverseMatrix(C);
+    vector<T> y = C * b;
+    C = C * (((1 - w) / w) * D + U);
+    result.C = C;
 
 
     for (int k = 0; k < MaxIter; ++k) {
@@ -424,34 +448,64 @@ Result<T> method_Relax(const vector<vector<T>>& A, const vector<T>& b, const vec
             x_new[i] = (1 - w) * x[i] + (w / A[i][i]) * (b[i] - sum1 - sum2);
         }
 
-        // Проверка на сходимость
-        T max_error = 0;
-        for (int i = 0; i < n; ++i) {
-            T error = abs(x_new[i] - x[i]);
-            if (error > max_error) {
-                max_error = error;
-            }
-        }
-
-        if (max_error < eps) {
-            result.solve = x_new;
+        // Критерий останова итерационного процесса
+        vector<T> delta_stop = x_new - x;
+        x = x_new;
+        if ((norm_vector_nevazki(A, b, x, p) <= eps) or
+            (norm(delta_stop, p) <= (((1 - norm(C, p)) / norm(C, p)) * eps))) {
+            result.solve = x;
             result.iterations = k + 1;
             return result;
         }
-
-        x = x_new;
     }
-
     // Если не достигнута необходимая точность за максимальное число итераций
     result.solve = x;
     result.iterations = MaxIter;
     return result;
+
 }
 
+/* Функция решения СЛАУ методом Релаксации через матричную формулу */
+//template<typename T>
+//Result<T> method_Relax(const vector<vector<T>>& A, const vector<T>& b, const vector<T>& x0, const T& w, const T& eps, const int& p, const int& MaxIter){
+//    Result<T> result;
+//
+//    vector<vector<T>> L(A.size(), vector<T>(A.size(), 0)),D(A.size(), vector<T>(A.size(), 0)), U(A.size(), vector<T>(A.size(), 0));
+//    LDU_decomposotion(A, L, D, U);
+//
+//    vector<vector<T>> C = ((1 / w) * D - L);
+//    C = inverseMatrix(C);
+//    vector<T> y = C * b;
+//    C = C * (((1 - w) / w) * D + U);
+//
+//    vector<T> xk = x0;
+//    vector<T> xk_new = xk;
+//
+//    result.C = C;
+//
+//    for (int i = 0; i < MaxIter; ++i){
+//
+//        xk_new = C * xk + y;
+//
+//        // Критерий останова итерационного процесса
+//        vector<T> delta_stop = xk_new - xk;
+//        xk = xk_new;
+//        if ((norm_vector_nevazki(A, b, xk, p) <= eps) or (norm(delta_stop, p) <= (((1 - norm(C, p)) / norm(C, p)) * eps))) {
+//            result.solve = xk;
+//            result.iterations = i + 1;
+//            return result;
+//        }
+//    }
+//    result.solve = xk;
+//    result.iterations = MaxIter;
+//    return result;
+//}
+
+
 /* Функция решения СЛАУ методом Зейделя */
-template<typename T>
-Result<T> method_Zeidel(const vector<vector<T>>& A, const vector<T>& b, const vector<T>& x0, const T& eps, const int& MaxIter){
-    Result<T> result = method_Relax<T>(A, b, x0, 1, eps, MaxIter);
+template <typename T>
+Result<T> method_Zeidel(const vector<vector<T>>& A, const vector<T>& b, const vector<T>& x0, const T& eps, const int& p, const int& MaxIter){
+    Result<T> result = method_Relax<T>(A, b, x0, 1, eps, p, MaxIter);
     return result;
 }
 
@@ -466,24 +520,8 @@ T norm_vector_nevazki(const vector<T>& A, const vector<T>& B, const vector<T>& C
     }
 
     // Норма невязки
-    T residual_norm;
-    if (n == 1) {
-        residual_norm = norm_1(residual);
-        return residual_norm;
-    }
-    if (n == 2) {
-        residual_norm = norm_2(residual);
-        return residual_norm;
-    }
-    if (n == 0) {
-        residual_norm = norm_oo(residual);
-        return residual_norm;
-    } else {
-        cout << "Error: U stupid" << n << endl;
-        exit(1);
-    }
-
-
+    T residual_norm = norm(residual, n);
+    return residual_norm;
 }
 
 
@@ -566,62 +604,62 @@ vector<T> method_Relax_diag(const vector<T>& A, const vector<T>& B, const vector
 
 
 //* Функция исследования итерационного параметра W для метода Релаксации для трехдиагональной матрицы (Метод Золотого сечения)*/
-//template<typename T>
-//T golden_section_search_W(vector<T> A, vector<T> B, vector<T> C, vector<T> vec, vector<T> x, T EPS, int MaxIteration, T a, T b) {
-//
-//    const T golden_ratio = 1.618033988749895; // Золотое Сечение
-//    T x1, x2;
-//
-//    // Начальные точки
-//    x1 = b - (b - a) / golden_ratio;
-//    x2 = a + (b - a) / golden_ratio;
-//
-//    while (fabs(b - a) > EPS) {
-//
-//        vector<T> sol1 = method_Relax_diag(A, B, C, vec, x, x1, EPS, MaxIteration);
-//        vector<T> sol2 = method_Relax_diag(A, B, C, vec, x, x2, EPS, MaxIteration);
-//        T norm_sol1 = norm_vector_nevazki(A, B, C, vec, sol1, 1);
-//        T norm_sol2 = norm_vector_nevazki(A, B, C, vec, sol2, 1);
-//
-//
-//
-//        if (norm_sol1 < norm_sol2) {
-//            b = x2;
-//            x2 = x1;
-//            x1 = b - (b - a) / golden_ratio;
-//        } else {
-//            a = x1;
-//            x1 = x2;
-//            x2 = a + (b - a) / golden_ratio;
-//        }
-//    }
-//    return (a + b) / 2;
-//}
+template<typename T>
+T golden_section_search_W(vector<T> A, vector<T> B, vector<T> C, vector<T> vec, vector<T> x, T EPS, int MaxIteration, T a, T b) {
+
+    const T golden_ratio = 1.618033988749895; // Золотое Сечение
+    T x1, x2;
+
+    // Начальные точки
+    x1 = b - (b - a) / golden_ratio;
+    x2 = a + (b - a) / golden_ratio;
+
+    while (abs(b - a) > EPS) {
+
+        vector<T> sol1 = method_Relax_diag(A, B, C, vec, x, x1, EPS,MaxIteration);
+        vector<T> sol2 = method_Relax_diag(A, B, C, vec, x, x2, EPS,MaxIteration);
+        T norm_sol1 = norm_vector_nevazki(A, B, C, vec, sol1, 1);
+        T norm_sol2 = norm_vector_nevazki(A, B, C, vec, sol2, 1);
 
 
-/* Функция, которая делает диагональные элементы матрицы больше нуля */
 
-//template<typename T>
-//vector<vector<T>> make_plus_diaf_matrix(vector<vector<T>> matrix) {
-//    int rows = matrix.size();
-//    int cols = matrix[0].size();
-//
-//
-//    vector<vector<T>> result(rows, vector<T>(cols, 0));
-//
-//    for (int i = 0; i < rows; ++i) {
-//        for (int j = 0; j < cols; ++j) {
-//            // Увеличиваем диагональные элементы
-//            if (i == j) {
-//                result[i][j] = matrix[i][j] + 1;
-//            } else {
-//                result[i][j] = matrix[i][j];
-//            }
-//        }
-//    }
-//
-//    return result;
-//}
+        if (norm_sol1 < norm_sol2) {
+            b = x2;
+            x2 = x1;
+            x1 = b - (b - a) / golden_ratio;
+        } else {
+            a = x1;
+            x1 = x2;
+            x2 = a + (b - a) / golden_ratio;
+        }
+    }
+    return (a + b) / 2;
+}
+
+
+//* Функция, которая делает диагональные элементы матрицы больше нуля */
+
+template<typename T>
+vector<vector<T>> make_plus_diaf_matrix(vector<vector<T>> matrix) {
+    int rows = matrix.size();
+    int cols = matrix[0].size();
+
+
+    vector<vector<T>> result(rows, vector<T>(cols, 0));
+
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            // Увеличиваем диагональные элементы
+            if (i == j) {
+                result[i][j] = matrix[i][j] + 1;
+            } else {
+                result[i][j] = matrix[i][j];
+            }
+        }
+    }
+
+    return result;
+}
 
 
 

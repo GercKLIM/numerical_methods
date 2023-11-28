@@ -47,7 +47,6 @@ template <typename T>
 vector<T> SLAU_to_vec(const vector<vector<T>>& SLAU);
 
 
-
 /* *** Функции математики векторов *** */
 
 /* Операция cложения векторов */
@@ -84,19 +83,10 @@ template <typename T>
 T dot(const vector<T>& vec1, const vector<T>& vec2);
 
 
-/* Функция для нормы-1 вектора */
+/* Функция для нормы вектора */
 template <typename T>
-T norm_1(const vector<T>& vec);
+T norm(const vector<T>& vec, const int& p = 2);
 
-
-/* Функция для нормы-2 вектора */
-template <typename T>
-T norm_2(const vector<T>& vec);
-
-
-/* Функция для нормы-oo вектора */
-template <typename T>
-T norm_oo(const vector<T>& vec);
 
 /* *** Функции математики матриц *** */
 
@@ -148,19 +138,9 @@ template <typename T>
 vector<vector<T>> Matrix_round(const vector<vector<T>>& A, const double& eps);
 
 
-/* Функция для вычисления 1-нормы матрицы */
+/* Функция для вычисления нормы матрицы */
 template <typename T>
-T norm_1(const vector<vector<T>>& A);
-
-
-/* Функция для вычисления 2-нормы матрицы */
-template <typename T>
-T norm_2(const vector<vector<T>>& A);
-
-
-/* Функция для вычисления оо-нормы матрицы */
-template <typename T>
-T norm_oo(const vector<vector<T>>& A);
+T norm(const vector<vector<T>>& matrix, const int& p = 2);
 
 
 /* Функция для вычисления числа обусловленности матрицы c нормой 1*/
