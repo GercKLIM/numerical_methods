@@ -168,7 +168,10 @@ template <typename T>
 vector<vector<T>> RotateLeft(const vector<vector<T>>& A);
 
 
-// Функция для обратной матрицы с проверкой на вырожденность
+// Функция для обратной матрицы с проверкой на вырожденность c определенной точностью
+template <typename T>
+vector<vector<T>> inverseMatrix(const vector<vector<T>>& A, const T& eps);
+
+// Функция для обратной матрицы с проверкой на вырожденность c определенной точностью
 template <typename T>
 vector<vector<T>> inverseMatrix(const vector<vector<T>>& A);
-

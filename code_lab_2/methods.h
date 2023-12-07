@@ -30,17 +30,17 @@ T norm_vector_nevazki(const vector<vector<T>>& A, const vector<T>& b, const vect
 
 /* Функция для решения СЛАУ прямым методом Гаусса */
 template <typename T>
-vector<T> method_Gaussa(const vector<vector<T>>& matrix, const vector<T>& vec);
+vector<T> method_Gaussa(const vector<vector<T>>& matrix, const vector<T>& vec, const T& eps);
 
 
-/* Функция для QR-разложения матрицы */
-template <typename T>
-void QR_decomposition(const vector<vector<T>>& A, vector<vector<T>>& Q, vector<vector<T>>& R);
+/* Функция QR-разложения матрицы методом вращений */
+template<typename T>
+void QR_decomposition(const vector<vector<T>>& matrix, vector<vector<T>>& Q, vector<vector<T>>& R, const T& eps);
 
 
 /* Функция для решения СЛАУ методом QR-разложения */
 template <typename T>
-vector<T> method_QR(const vector<vector<T>>& A, const vector<T>& b);
+vector<T> method_QR(const vector<vector<T>>& A, const vector<T>& b, const T& eps);
 
 
 /* Функция для оценки изменения числа обуcловленности от возмущения вектора правой части */
@@ -77,12 +77,12 @@ Result<T> method_Yacobi(const vector<vector<T>>& A, const vector<T>& b, const ve
 
 /* Функция решения СЛАУ методом Релаксации */
 template<typename T>
-Result<T> method_Relax(const vector<vector<T>>& A, const vector<T>& b, const vector<T>& x0, const T& w, const T& eps, const int& MaxIter);
+Result<T> method_Relax(const vector<vector<T>>& A, const vector<T>& b, const vector<T>& x0, const T& w, const T& eps, const int& p, const int& MaxIter);
 
 
 /* Функция решения СЛАУ методом Зейделя */
 template<typename T>
-Result<T> method_Zeidel(const vector<vector<T>>& A, const vector<T>& b, const vector<T>& x0, const T& eps, const int& MaxIter);
+Result<T> method_Zeidel(const vector<vector<T>>& A, const vector<T>& b, const vector<T>& x0, const T& eps, const int& p, const int& MaxIter);
 
 
 /* Функция решения трехдиагональной СЛАУ большой размерности методом Зейделя */

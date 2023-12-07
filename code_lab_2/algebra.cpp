@@ -229,7 +229,29 @@ T norm(const vector<T>& vec, const int& p){
     return result;
 }
 
+/* Функция, которая возращает матрицу комбинаций жлементов вектора */
+template<typename T>
+vector<vector<T>> generateCombinations(const vector<T>& vec) {
+    int n = vec.size();
 
+    // Вектор для хранения всех комбинаций
+    vector<vector<T>> combinations;
+
+    // Внешний цикл по всем возможным комбинациям
+    for (int i = 0; i < (1 << n); ++i) {
+        vector<T> current(n);
+
+        // Внутренний цикл для каждой позиции вектора
+        for (int j = 0; j < n; ++j) {
+            current[j] = (i & (1 << j)) ? vec[j] : -vec[j];
+        }
+
+        // Добавить текущую комбинацию в вектор
+        combinations.push_back(current);
+    }
+
+    return combinations;
+}
 
 
 /* *** Функции математики матриц *** */
@@ -491,7 +513,7 @@ vector<vector<T>> create_identity_matrix(const int& n) {
 
 // Функция для обратной матрицы с проверкой на вырожденность
 template <typename T>
-vector<vector<T>> inverseMatrix(const vector<vector<T>>& A) {
+vector<vector<T>> inverseMatrix(const vector<vector<T>>& A, const T& eps) {
     vector<vector<T>> E = create_identity_matrix<T>(A.size());
     vector<vector<T>> E_rotate = RotateLeft(E);
     vector<T> e(A.size());
@@ -500,11 +522,18 @@ vector<vector<T>> inverseMatrix(const vector<vector<T>>& A) {
 
     for (int i = 0; i < A.size(); i++){
         e = E_rotate[i];
-        X[i] = method_Gaussa(A, e);
+        X[i] = method_Gaussa(A, e, eps);
 
     }
     vector<vector<T>> A_inv = RotateLeft(X);
     return A_inv;
+}
+
+// Функция для обратной матрицы с проверкой на вырожденность с максимальной точностью
+template <typename T>
+vector<vector<T>> inverseMatrix(const vector<vector<T>>& A){
+    T eps = numeric_limits<T>::epsilon();
+    return inverseMatrix(A, eps);
 }
 
 /* Функция для вычисления числа обусловленности матрицы c нормой 1*/
