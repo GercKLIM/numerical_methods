@@ -7,7 +7,6 @@
 using namespace std;
 
 
-
 /* Функция импорта матрицы из текстового файла*/
 template <typename T>
 vector<vector<T>> importSLAU(const string& filename) {
@@ -408,6 +407,7 @@ T norm_oo(const vector<T>& vec) {
     return norm;
 }
 
+
 /* Функция для вычисления нормы вектора невязки */
 template <typename T>
 T norm_vector_nevazki(const vector<vector<T>>& A, const vector<T>& b, const vector<T>& x, const int& n) {
@@ -439,6 +439,7 @@ T norm_vector_nevazki(const vector<vector<T>>& A, const vector<T>& b, const vect
     }
 
 }
+
 
 template <typename T>
 vector<vector<T>> operator*(const vector<vector<T>>& A, const T& scalar){

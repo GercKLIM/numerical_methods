@@ -4,6 +4,7 @@ using namespace std;
 
 /* Функция для решения СЛАУ прямым методом Гаусса */
 
+
 template <typename T>
 vector<T> method_Gaussa(const vector<vector<T>>& matrix, const vector<T>& vec, const T& eps){
     int n = matrix.size();
@@ -24,7 +25,7 @@ vector<T> method_Gaussa(const vector<vector<T>>& matrix, const vector<T>& vec, c
             }
         }
 
-        if (maxVal < eps) { // Машинный эпсилон = 2   ^-t, где t - порядок мантиссы числового типа
+        if (maxVal < eps) {
             printf("Error: Det(matrix) = 0 \n");
             exit(1);
         }
@@ -64,6 +65,7 @@ vector<T> method_Gaussa(const vector<vector<T>>& matrix, const vector<T>& vec, c
     return x;
 
 }
+
 
 template <typename T>
 vector<vector<T>> R_decomposition(const vector<vector<T>>& matrix) {
@@ -112,6 +114,8 @@ vector<vector<T>> R_decomposition(const vector<vector<T>>& matrix) {
     }
     return A;
 }
+
+
 /* Функция поворота матрицы вправо */
 template <typename T>
 vector<vector<T>> MatrixRotateRight(const vector<vector<T>>& A){
@@ -127,6 +131,7 @@ vector<vector<T>> MatrixRotateRight(const vector<vector<T>>& A){
     return A_rotate;
 
 }
+
 
 /* Функция поворота матрицы влево */
 template <typename T>
@@ -193,6 +198,7 @@ vector<vector<T>> generateCombinations(const vector<T>& vec) {
 
     return combinations;
 }
+
 
 /* Функция для оценки изменения числа обуcловленности от возмущения вектора правой части */
 template <typename T>
