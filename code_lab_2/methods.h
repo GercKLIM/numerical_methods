@@ -56,7 +56,8 @@ struct Result {
     vector<T> solve;
     int iterations;
     vector<vector<T>> C;
-    T norm_C;
+    vector<T> y;
+    T batch;
 };
 
 /* Функция преобразования матрицы в сумму из Нижнетреугольной, Диагональной, Верхнетреугольной */
@@ -98,3 +99,37 @@ vector<T> method_Relax_diag(const vector<T>& A, const vector<T>& B, const vector
 template <typename T>
 T norm_vector_nevazki(const vector<T>& A, const vector<T>& B, const vector<T>& C, const vector<T>& b, const vector<T>& solution, const int& n);
 
+
+/* Функция исследования итерационного параметра tau для метода простых итераций (Метод Золотого сечения)*/
+template<typename T>
+T SimpleIterations_method_matrix_norm_C(const vector<vector<T>>& A, const T& tau, const int& p);
+
+
+// Метод золотого сечения для поиска минимума функции на заданном интервале [a, b]
+template<typename T>
+T golden_section_search_tau(const vector<vector<T>>& A, T a, T b, const int& p, const T& epsilon);
+
+
+/* Функция исследования итерационного параметра W для метода Релаксации (Метод Золотого сечения)*/
+template<typename T>
+T golden_section_search_W(const vector<vector<T>>& A, T a, T b, const int& p, const T& eps);
+
+
+/* Функция от которой ищется минимум в золотом сечении для релаксации */
+template <typename T>
+T C_matrix_for_relax(const vector<vector<T>>& A, const T& w, const int& p);
+
+
+/* Функция исследования итерационного параметра W для метода Релаксации для трехдиагональной матрицы (Метод Золотого сечения)*/
+template<typename T>
+T golden_section_search_W(vector<T> A, vector<T> B, vector<T> C, vector<T> vec, vector<T> x, T EPS, int MaxIteration, T a, T b);
+
+
+/* Функция априорной оценки */
+template <typename T>
+void aprior_eps(const vector<vector<T>>& C, const vector<T>& y, const vector<T>& x0, const int& p);
+
+
+/* Функция апостериорной оценки */
+template <typename T>
+void aposter_eps(const vector<vector<T>>& C, T norm_delta, const int& p);

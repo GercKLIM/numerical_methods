@@ -273,7 +273,6 @@ void LDU_decomposotion(const vector<vector<T>>& A, vector<vector<T>> &L, vector<
 }
 
 /* Функция исследования итерационного параметра tau для метода простых итераций (Метод Золотого сечения)*/
-
 template<typename T>
 T SimpleIterations_method_matrix_norm_C(const vector<vector<T>>& A, const T& tau, const int& p) {
     vector<vector<T>> E = create_identity_matrix<T>(A.size()); // Единичный вектор
@@ -318,6 +317,7 @@ Result<T> method_SimpleIteration(const vector<vector<T>>& A, const vector<T>& b,
     vector<T> xk_new = xk;
 
     result.C = C;
+    result.y = y;
 
     for (int i = 0; i < MaxIter; ++i){
 
@@ -329,6 +329,7 @@ Result<T> method_SimpleIteration(const vector<vector<T>>& A, const vector<T>& b,
         if ((norm_vector_nevazki(A, b, xk, p) <= eps) or (norm(delta_stop, p) <= (((1 - norm(C, p)) / norm(C, p)) * eps))) {
             result.solve = xk;
             result.iterations = i + 1;
+            result.batch =  norm(delta_stop, p);
             return result;
         }
     }
@@ -351,6 +352,7 @@ Result<T> method_Yacobi(const vector<vector<T>>& A, const vector<T>& b, const ve
     vector<T> y = D_inv * b;
 
     result.C = C;
+    result.y = y;
 
     vector<T> xk = x0;
     vector<T> xk_new = xk;
@@ -368,6 +370,7 @@ Result<T> method_Yacobi(const vector<vector<T>>& A, const vector<T>& b, const ve
         if  ((norm_vector_nevazki(A, b, xk, 1) <= eps) or (norm(delta_stop, p) <= (((1 - norm(C, p)) / norm(C, p)) * eps))){
             result.solve = xk;
             result.iterations = i + 1;
+            result.batch =  norm(delta_stop, p);
             return result;
         }
     }
@@ -387,7 +390,7 @@ T C_matrix_for_relax(const vector<vector<T>>& A, const T& w, const int& p){
     return norm(C, p);
 }
 
-//* Функция исследования итерационного параметра W для метода Релаксации для трехдиагональной матрицы (Метод Золотого сечения)*/
+/* Функция исследования итерационного параметра W для метода Релаксации для трехдиагональной матрицы (Метод Золотого сечения)*/
 template<typename T>
 T golden_section_search_W(const vector<vector<T>>& A, T a, T b, const int& p, const T& eps) {
 
@@ -427,8 +430,9 @@ Result<T> method_Relax(const vector<vector<T>>& A, const vector<T>& b, const vec
     C = inverseMatrix(C);
     vector<T> y = C * b;
     C = C * (((1 - w) / w) * D + U);
-    result.C = C;
 
+    result.C = C;
+    result.y = y;
 
     for (int k = 0; k < MaxIter; ++k) {
         vector<T> x_new(n, 0);
@@ -455,6 +459,7 @@ Result<T> method_Relax(const vector<vector<T>>& A, const vector<T>& b, const vec
             (norm(delta_stop, p) <= (((1 - norm(C, p)) / norm(C, p)) * eps))) {
             result.solve = x;
             result.iterations = k + 1;
+            result.batch =  norm(delta_stop, p);
             return result;
         }
     }
@@ -637,7 +642,7 @@ T golden_section_search_W(vector<T> A, vector<T> B, vector<T> C, vector<T> vec, 
 }
 
 
-//* Функция, которая делает диагональные элементы матрицы больше нуля */
+/* Функция, которая делает диагональные элементы матрицы больше нуля */
 
 template<typename T>
 vector<vector<T>> make_plus_diaf_matrix(vector<vector<T>> matrix) {
@@ -663,4 +668,21 @@ vector<vector<T>> make_plus_diaf_matrix(vector<vector<T>> matrix) {
 
 
 
-/* Функция исследования сходимости при различных начальных приближениях */
+/* Функция априорной оценки */
+template <typename T>
+void aprior_eps(const vector<vector<T>>& C, const vector<T>& y, const vector<T>& x0, const int& p){
+    T normC = norm(C, p);
+    vector<T> delta_stop = C * x0 + y;
+    T norm_delta_stop = norm(delta_stop, p);
+    cout << "Aprior Eps <= " << abs((normC/ (1 - normC)) * norm_delta_stop) << endl;
+}
+
+
+/* Функция апостериорной оценки */
+template <typename T>
+void aposter_eps(const vector<vector<T>>& C, T norm_delta, const int& p){
+    T normC = norm(C, p);
+    cout << "Aposterior Eps <= " << abs((normC/ (1 - normC)) * norm_delta) << endl;
+}
+
+
