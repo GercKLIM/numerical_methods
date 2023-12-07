@@ -154,3 +154,115 @@ vector<T> method_QR(const vector<vector<T>>& A, const vector<T>& b, const T& eps
 
     return x;
 }
+
+template <typename T>
+vector<T> method_QR_withoutQR(const vector<vector<T>>& A, const vector<T>& b, const vector<vector<T>>& Q, const vector<vector<T>>& R, const T& eps) {
+
+    int n = A.size();
+    // Решение системы Q^T * y = b
+    vector<T> y(n, 0);
+    for (int i = 0; i < n; i++) {
+        T dotProduct = 0;
+        for (int j = 0; j < n; j++) {
+            dotProduct += Q[j][i] * b[j];
+        }
+        y[i] = dotProduct;
+    }
+
+    // Решение системы R * x = y методом обратной подстановки
+    vector<T> x(n, 0);
+    for (int i = n - 1; i >= 0; i--) {
+        x[i] = y[i];
+        for (int j = i + 1; j < n; j++) {
+            x[i] -= R[i][j] * x[j];
+        }
+        x[i] /= R[i][i];
+    }
+
+    return x;
+}
+
+// Функция для обратной матрицы с проверкой на вырожденность
+template <typename T>
+vector<vector<T>> inverseMatrix3(const vector<vector<T>>& A, const T& eps) {
+    vector<vector<T>> E = create_identity_matrix<T>(A.size());
+    vector<vector<T>> E_rotate = MatrixRotateLeft(E);
+    vector<T> e(A.size());
+    vector<vector<T>> X(A.size(), vector<T>(A.size(), 0));
+
+
+    for (int i = 0; i < A.size(); i++){
+        e = E_rotate[i];
+        X[i] = method_QR(A, e, eps);
+
+    }
+    vector<vector<T>> A_inv = MatrixRotateLeft(X);
+    return A_inv;
+}
+
+/* Функция для оценки изменения числа обуcловленности от возмущения вектора правой части */
+template <typename T>
+void min_change_cond2(const vector<vector<T>>& matrix, const vector<T>& vec, const vector<T>& mod, const T& eps) {
+    /* Находим минимальное значение числа обусловленности */
+
+    // Находим относительную погрешность vec
+    T delta_b_1 = norm_1(mod) / norm_1(vec);
+    T delta_b_2 = norm_1(mod) / norm_1(vec);
+    T delta_b_oo = norm_1(mod) / norm_1(vec);
+
+    // Находим относительную погрешность x
+    T delta_x_1 = 0;
+    T delta_x_2 = 0;
+    T delta_x_oo = 0;
+
+    vector<T> solve = method_Gaussa(matrix, vec, eps);
+
+    vector<T> mod_vec = vec;
+    vector<vector<T>> all_mod_vec = generateCombinations(mod);
+
+    int n = matrix.size();
+    vector<vector<T>> Q, R;
+    QR_decomposition(matrix, Q, R, eps);
+
+    for (int k = 0; k < all_mod_vec.size(); k++) {
+        // Cоздаем модифицированный вектор правой части
+        mod_vec = vec_sum(mod_vec, all_mod_vec[k]);
+        // Ищем максимальное изменение нормы вектора изменения решения
+        vector<T> mod_solve = method_QR_withoutQR(matrix, mod_vec, Q, R, eps);
+
+        for (int i = 0; i < mod_solve.size(); i++) {
+            mod_solve[i] = abs(mod_solve[i] - solve[i]);
+        }
+        delta_x_1 = (delta_x_1 <= norm_1(mod_solve)) ? norm_1(mod_solve) : delta_x_1;
+        delta_x_2 = (delta_x_2 <= norm_2(mod_solve)) ? norm_2(mod_solve) : delta_x_2;
+        delta_x_oo = (delta_x_oo <= norm_oo(mod_solve)) ? norm_oo(mod_solve) : delta_x_oo;
+    }
+
+
+    delta_x_1 /= norm_1(solve);
+    delta_x_2 /= norm_1(solve);
+    delta_x_oo /= norm_1(solve);
+
+    T min_cond_1 = delta_x_1 / delta_b_1;
+    T min_cond_2 = delta_x_2 / delta_b_2;
+    T min_cond_oo = delta_x_oo / delta_b_oo;
+
+    /* Находим максимальное значение числа обусловленности */
+
+    vector<vector<T>> U(matrix);
+    vector<vector<T>> L(matrix);
+
+    lu_decomposition(matrix, L, U);
+
+    L = transpon(L);
+    T max_cond_1 = cond_1(L) * cond_1(U);
+    T max_cond_2 = cond_2(L) * cond_2(U);
+    T max_cond_oo = cond_oo(L) * cond_oo(U);
+
+
+    cout << endl;
+    cout << min_cond_1 << " <= cond_1(A) <= " << max_cond_1 << endl;
+    cout << min_cond_2 << " <= cond_2(A) <= " << max_cond_2 << endl;
+    cout << min_cond_oo << " <= cond_oo(A) <= " << max_cond_oo << endl;
+    cout << endl;
+}

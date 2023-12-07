@@ -440,4 +440,149 @@ T norm_vector_nevazki(const vector<vector<T>>& A, const vector<T>& b, const vect
 
 }
 
+template <typename T>
+vector<vector<T>> operator*(const vector<vector<T>>& A, const T& scalar){
+    // Создание результирующей матрицы с теми же размерами
+    vector<vector<T>> result(A.size(), vector<T>(A[0].size(), 0));
+
+    // Умножение каждого элемента матрицы на число
+    for (size_t i = 0; i < A.size(); ++i) {
+        for (size_t j = 0; j < A[0].size(); ++j) {
+            result[i][j] = A[i][j] * scalar;
+        }
+    }
+
+    return result;
+}
+
+/* Операция для умножения  числа на матрицу */
+template <typename T>
+vector<vector<T>> operator*(const T& scalar, const vector<vector<T>>& A){
+    // Создание результирующей матрицы с теми же размерами
+    vector<vector<T>> result(A.size(), vector<T>(A[0].size(), 0));
+
+    // Умножение каждого элемента матрицы на число
+    for (size_t i = 0; i < A.size(); ++i) {
+        for (size_t j = 0; j < A[0].size(); ++j) {
+            result[i][j] = A[i][j] * scalar;
+        }
+    }
+
+    return result;
+}
+
+/* Операция поэлементного сложения матриц */
+template <typename T>
+vector<vector<T>> operator+(const vector<vector<T>>& A, const vector<vector<T>>& B){
+    // Проверка на совпадение размеров матриц
+    if (A.size() != B.size() || A[0].size() != B[0].size()) {
+        cout << "Error: size A != size B in addition matrix." << endl;
+        exit(1);
+    }
+
+    // Создание результирующей матрицы с теми же размерами
+    vector<vector<T>> result(A.size(), vector<T>(A[0].size(), 0));
+
+    // Поэлементное сложение
+    for (size_t i = 0; i < A.size(); ++i) {
+        for (size_t j = 0; j < A[0].size(); ++j) {
+            result[i][j] = A[i][j] + B[i][j];
+        }
+    }
+
+    return result;
+}
+
+/* Операция поэлементного вычитания матриц */
+template <typename T>
+vector<vector<T>> operator-(const vector<vector<T>>& A, const vector<vector<T>>& B){
+    // Проверка на совпадение размеров матриц
+    if (A.size() != B.size() || A[0].size() != B[0].size()) {
+        cout << "Error: size A != size B in substraction matrix." << endl;
+        exit(1);
+    }
+
+    // Создание результирующей матрицы с теми же размерами
+    vector<vector<T>> result(A.size(), vector<T>(A[0].size(), 0));
+
+    // Поэлементное сложение
+    for (size_t i = 0; i < A.size(); ++i) {
+        for (size_t j = 0; j < A[0].size(); ++j) {
+            result[i][j] = A[i][j] - B[i][j];
+        }
+    }
+    return result;
+}
+
+/* Операция умножения матрицы на вектор */
+template <typename T>
+vector<T> operator*(const vector<vector<T>>& matrix, const vector<T>& vec) {
+    // Проверка на возможность умножения
+    if (matrix[0].size() != vec.size()) {
+        cout << "Error: size A != size b in multiply Matrix By Vector." << endl;
+        exit(1);
+    }
+    // Создание результирующего вектора
+    vector<T> result(matrix.size(), 0);
+
+    // Умножение матрицы на вектор
+    for (int i = 0; i < matrix.size(); ++i) {
+        for (size_t j = 0; j < matrix[0].size(); ++j) {
+            result[i] += matrix[i][j] * vec[j];
+        }
+    }
+    return result;
+}
+
+
+/* Матричное умножение */
+template <typename T>
+vector<vector<T>> operator*(const vector<vector<T>>& A, const vector<vector<T>>& B){
+    int m = A.size();    // Количество строк в матрице A
+    int n = A[0].size(); // Количество столбцов в матрице A
+    int p = B[0].size(); // Количество столбцов в матрице B
+
+    if (n != B.size()) {
+        printf("Error: impossible multiply matrix");
+        exit(1);
+    }
+
+    vector<vector<T>> result(m, vector<T>(p, 0.0));
+
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < p; j++) {
+            for (int k = 0; k < n; k++) {
+                result[i][j] += A[i][k] * B[k][j];
+            }
+        }
+    }
+    return result;
+}
+
+// Определение оператора отрицания для матрицы
+template <typename T>
+vector<vector<T>> operator-(const vector<vector<T>>& matrix) {
+    int rows = matrix.size();
+    int cols = matrix[0].size();
+    vector<vector<T>> result(rows, vector<T>(cols, 0));
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            result[i][j] = -matrix[i][j];
+        }
+    }
+    return result;
+}
+
+// Определение оператора вычитания для вектора
+template <typename T>
+vector<T> operator-(const vector<T>& vec1, const vector<T>& vec2) {
+    int n = vec1.size();
+    vector<T> result(n, 0);
+    for (int i = 0; i < n; ++i) {
+            result[i] = vec1[i]-vec2[i];
+
+    }
+    return result;
+}
+
 
