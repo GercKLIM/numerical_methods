@@ -68,6 +68,16 @@ void print_short(const vector<T>& vec, const int& n){
     cout << "..." << endl;
 }
 
+/* Функция, которая красиво выводит вектор*/
+template<typename T>
+void print_vec(const vector<T>& vec){
+    cout << "(" << vec[0];
+    for (int i = 1; i < vec.size(); i++){
+        cout << ", " << vec[i];
+    }
+    cout << ")" << endl;
+}
+
 /* Функция вывода разделительной линии на экран */
 void printline(const int& n){
     for (int i = 0; i < n; i ++){
@@ -193,7 +203,7 @@ T dot(const vector<T>& vec1, const vector<T>& vec2){
     }
     T result;
     for (int i = 0; i < vec1.size(); i++){
-        result[i] += vec1[i] * vec2[i];
+        result += vec1[i] * vec2[i];
     }
     return result;
 }
@@ -253,6 +263,24 @@ vector<vector<T>> generateCombinations(const vector<T>& vec) {
     return combinations;
 }
 
+/* Функция, возвращает вектор модулей */
+template<typename T>
+vector<T> vec_abs(const vector<T> vec){
+    for (int i = 0; i < vec.size(); i++){
+        vec[i] = fabs(vec[i]);
+    }
+    return vec;
+}
+
+/* Функция, возращающая сумму элементов вектора */
+template<typename T>
+T sum(const vector<T>& vec){
+    T sum = 0;
+    for (int i = 0; i < vec.size(); i++){
+        sum += vec[i];
+    }
+    return sum;
+}
 
 /* *** Функции математики матриц *** */
 
@@ -592,4 +620,74 @@ vector<vector<T>> transpose(const vector<vector<T>>& A) {
     }
 
     return result;
+}
+
+// Функция обрезки матрицы снизу и справа
+template <typename T>
+vector<vector<T>> crop_matrix(const vector<vector<T>>& A, const int& k){
+
+    int n = A.size();
+    vector<vector<T>> A_crop(n - k, vector<T>(n - k, 0));
+    for (int i = 0; i < (n - k); i++){
+        for (int j = 0; j < (n - k); j++){
+            A_crop[i][j] = A[i][j];
+        }
+    }
+
+    return A_crop;
+}
+
+/* Функция, вычисляющая определитель матрицы 4х4 */
+template <typename T>
+double det(const vector<vector<T>>& matrix) {
+    return
+            matrix[0][0] * (
+                    matrix[1][1] * (matrix[2][2] * matrix[3][3] - matrix[2][3] * matrix[3][2]) -
+                    matrix[1][2] * (matrix[2][1] * matrix[3][3] - matrix[2][3] * matrix[3][1]) +
+                    matrix[1][3] * (matrix[2][1] * matrix[3][2] - matrix[2][2] * matrix[3][1])
+            ) -
+            matrix[0][1] * (
+                    matrix[1][0] * (matrix[2][2] * matrix[3][3] - matrix[2][3] * matrix[3][2]) -
+                    matrix[1][2] * (matrix[2][0] * matrix[3][3] - matrix[2][3] * matrix[3][0]) +
+                    matrix[1][3] * (matrix[2][0] * matrix[3][2] - matrix[2][2] * matrix[3][0])
+            ) +
+            matrix[0][2] * (
+                    matrix[1][0] * (matrix[2][1] * matrix[3][3] - matrix[2][3] * matrix[3][1]) -
+                    matrix[1][1] * (matrix[2][0] * matrix[3][3] - matrix[2][3] * matrix[3][0]) +
+                    matrix[1][3] * (matrix[2][0] * matrix[3][1] - matrix[2][1] * matrix[3][0])
+            ) -
+            matrix[0][3] * (
+                    matrix[1][0] * (matrix[2][1] * matrix[3][2] - matrix[2][2] * matrix[3][1]) -
+                    matrix[1][1] * (matrix[2][0] * matrix[3][2] - matrix[2][2] * matrix[3][0]) +
+                    matrix[1][2] * (matrix[2][0] * matrix[3][1] - matrix[2][1] * matrix[3][0]));
+}
+
+/* Функция, сортирующая вектор */
+template< typename T>
+vector<T> sorted(const vector<T>& vec_not_sort) {
+    vector<T> vec(vec_not_sort);
+    int n = vec.size();
+    for (int i = 0; i < n - 1; ++i) {
+        for (int j = 0; j < n - i - 1; ++j) {
+            if (vec[j] > vec[j + 1]) {
+                // Обмен элементов, если они не упорядочены
+                T temp = vec[j];
+                vec[j] = vec[j + 1];
+                vec[j + 1] = temp;
+            }
+        }
+    }
+    return vec;
+}
+
+/* Функция, возращающая максимальный по модулю элемент вектора */
+template<typename T>
+T vec_max(const vector<T>& vec){
+    int n = vec.size();
+    T max = 0;
+    for (int i = 0; i < n; i++) {
+        if (abs(vec[i]) > max)
+            max = abs(vec[i]);
+    }
+    return max;
 }

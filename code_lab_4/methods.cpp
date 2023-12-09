@@ -212,10 +212,14 @@ void QR_decomposition(const vector<vector<T>>& matrix, vector<vector<T>>& Q, vec
             swap(Q[k][m], Q[k][i]);
         }
 
-        if (fabs(R[i][i]) <= eps){
-            cout << "Error in QR_decomposition" << endl;
-            system("pause");
-            exit(1);
+//        if (abs(R[i][i]) <= eps){
+//            cout << "Error in QR_decomposition" << endl;
+//            system("pause");
+//            exit(1);
+//        }
+        if (abs(R[i][i]) < eps){
+            c = 1; // Тождественное преобразование, поворот на 0 градусов
+            s = 0; // Нет необходимости избавляться от этих переменных
         }
 
         for (int j = i + 1; j < n; ++j){
@@ -240,6 +244,37 @@ void QR_decomposition(const vector<vector<T>>& matrix, vector<vector<T>>& Q, vec
     }
 }
 
+/* Функция QR-разложения уменьшенной матрицы*/
+template <typename T>
+void QR_decomposition_with_crop(const vector<vector<T>>& A, vector<vector<T>>& Q, vector<vector<T>>& R, const int crop, const T& eps){
+    R = A;
+    Q = create_identity_matrix<T>(A.size());
+    T c, s; // Kоэффициенты матрицы поворота
+
+    for (int i = 0; i < crop; ++i){
+        for (int j = i + 1; j < crop; ++j){
+            if (abs(R[i][i]) < eps || abs(R[i][j]) < eps){
+                c = 1; // Поворот на 0 градусов
+                s = 0;
+            } else {
+                c = R[i][i] / (sqrt(R[i][i] * R[i][i] + R[j][i] * R[j][i]));
+                s = R[j][i] / (sqrt(R[i][i] * R[i][i] + R[j][i] * R[j][i]));
+
+                for (int k = 0; k < crop; ++k){
+                    T buf;
+                    buf = c * R[i][k] + s * R[j][k];
+                    R[j][k] = c * R[j][k] - s * R[i][k];
+                    R[i][k] = buf;
+
+                    buf = c * Q[i][k] + s * Q[j][k];
+                    Q[j][k] = c * Q[j][k] - s * Q[i][k];
+                    Q[i][k] = buf;
+                }
+            }
+        }
+    }
+    Q = transpose(Q);
+}
 
 /* Функция решения СЛАУ методом QR */
 template <typename T>
@@ -624,8 +659,8 @@ MyResult2<T> method_Relax(const vector<vector<T>>& A, const vector<T>& b, const 
 
 /* Функция решения СЛАУ методом Зейделя */
 template <typename T>
-Result<T> method_Zeidel(const vector<vector<T>>& A, const vector<T>& b, const vector<T>& x0, const T& eps, const int& p, const int& MaxIter){
-    Result<T> result = method_Relax<T>(A, b, x0, 1, eps, p, MaxIter);
+MyResult2<T> method_Zeidel(const vector<vector<T>>& A, const vector<T>& b, const vector<T>& x0, const T& eps, const int& p, const int& MaxIter){
+    MyResult2<T> result = method_Relax<T>(A, b, x0, 1, eps, p, MaxIter);
     return result;
 }
 
@@ -800,4 +835,288 @@ void aposter_eps(const vector<vector<T>>& C, T norm_delta, const int& p){
     cout << "Aposterior Eps <= " << abs((normC/ (1 - normC)) * norm_delta) << endl;
 }
 
+
+
+
+/* ### Функций лабы 4 ### */
+
+/* Функция приведения матрицы к форме Хессенберга методом вращений */
+template <typename T>
+vector<vector<T>> Hessenberg_decomposition(const vector<vector<T>>& matrix, const T& eps) {
+    vector<vector<T>> A = matrix; // Результирующая матрица
+
+    int m = A.size();
+
+    T c, s; // Коэффициенты матрицы поворота
+    T buf;  // Обменник
+
+    for (int i = 0; i < m - 2; ++i)
+    {
+        for (int j = i + 2; j < m; ++j)
+        {
+            if (abs(A[i + 1][i]) < eps || abs(A[j][i]) < eps)  // Если R[i + 1][i] = 0 или R[j][i + 1] = 0
+            {
+                c = 1; // Поворот на 0 градусов
+                s = 0;
+            }
+            else
+            {
+                c = A[i + 1][i] / (sqrt(A[i + 1][i] * A[i + 1][i] + A[j][i] * A[j][i]));
+                s = A[j][i] / (sqrt(A[i + 1][i] * A[i + 1][i] + A[j][i] * A[j][i]));
+                for (int k = i; k < m; ++k)
+                {
+                    buf = A[i + 1][k];
+                    A[i + 1][k] = c * A[i + 1][k] + s * A[j][k];
+                    A[j][k] = c * A[j][k] - s * buf;
+                }
+
+                for (int k = i; k < m; ++k)
+                {
+                    buf = A[k][i + 1];
+                    A[k][i + 1] = c * A[k][i + 1] + s * A[k][j];
+                    A[k][j] = c * A[k][j] - s * buf;
+                }
+            }
+        }
+    }
+
+    return A;
+}
+
+/* Функция нахождения собственных значений матрицы методом QR-разложения за одну итерацию */
+template <typename T>
+MyResult4<T> Eigen_method_QR(const vector<vector<T>>& matrix, const T& eps, const int& maxIterations){
+    MyResult4<T> result;
+    result.iterations = maxIterations;
+
+    int n = matrix.size();
+    vector<vector<T>> A(matrix);
+    vector<vector<T>> E = create_identity_matrix<T>(n);
+    T sigma = A[n-1][n-1];
+    vector<vector<T>> Q, R;
+    T max_elem = eps;
+
+    for (int iter = 0; iter < maxIterations; iter++){
+        for (int i = n - 1; i >= 0; --i)  {
+            max_elem = 0; // Обнуление максимального по модулю элемента текущей строки слева A[i][i]
+
+            // Алгоритм:
+            sigma = A[i][i];                                                // Выбор текущего сдвига
+            A = A - sigma * E;                                              // Сдвиг
+            QR_decomposition_with_crop(A, Q, R, i + 1, eps);    // QR-разложение
+            A = R * Q;                                                     // Обновление A
+            A = A + sigma * E;                                             // Обратный сдвиг
+
+            // Ищем максимальный по модулю элемент в строке слева A[i][i]
+            for (int j = 0; j < i; ++j) {
+                if (abs(A[i][j]) > max_elem)
+                    max_elem = abs(A[i][j]);
+            }
+
+            // Критерий останова максимальный по модулю элемент текущей строки слева A[i][i] меньше точности
+            if (max_elem <= eps){
+                result.iterations = iter+1;
+                // Вектор собственных чисел
+                vector<T> eigen(n, 0);
+                for (int i = 0; i < n; i++){
+                    eigen[i] = A[i][i];
+                }
+                result.eigen = sorted(eigen);
+                return result;
+            }
+        }
+    }
+
+    // Вектор собственных чисел
+    vector<T> eigen(n, 0);
+    for (int i = 0; i < n; i++){
+        eigen[i] = A[i][i];
+    }
+
+    result.eigen = sorted(eigen);
+    return result;
+}
+
+/* Функция нахождения собственных значений матрицы методом QR-разложения */
+template <typename T>
+MyResult4<T> Eigen_method_QR(const vector<vector<T>>& matrix, const T& sigma, const T& eps, const int& maxIterations){
+    MyResult4<T> result;
+    result.iterations = maxIterations;
+
+    int n = matrix.size();
+    vector<vector<T>> A(matrix);
+    vector<vector<T>> E = create_identity_matrix<T>(n);
+    vector<vector<T>> Q, R;
+    T max_elem = eps;
+    for (int i = n - 1; i >= 0; --i)  {
+        for (int iter = 0; iter < maxIterations; iter++){
+            max_elem = 0; // Обнуление максимального по модулю элемента текущей строки слева A[i][i]
+
+            // Алгоритм:
+            A = A - sigma * E;                                              // Сдвиг
+            QR_decomposition_with_crop(A, Q, R, i + 1, eps);    // QR-разложение
+            A = R * Q;                                                     // Обновление A
+            A = A + sigma * E;                                             // Обратный сдвиг
+
+            // Ищем максимальный по модулю элемент в строке слева A[i][i]
+            for (int j = 0; j < i; ++j) {
+                if (abs(A[i][j]) > max_elem)
+                    max_elem = abs(A[i][j]);
+            }
+            // Критерий останова максимальный по модулю элемент текущей строки слева A[i][i] меньше точности
+            if (max_elem < eps){
+                result.iterations = iter+1;
+                // Вектор собственных чисел
+                vector<T> eigen(n, 0);
+                for (int i = 0; i < n; i++){
+                    eigen[i] = A[i][i];
+                }
+                result.eigen = sorted(eigen);
+                return result;
+            }
+        }
+    }
+
+    // Вектор собственных чисел
+    vector<T> eigen(n, 0);
+    for (int i = 0; i < n; i++){
+        eigen[i] = A[i][i];
+    }
+
+    result.eigen = sorted(eigen);
+    return result;
+}
+
+/* Функция нахождения собственных векторов матрицы методом Обратных Итераций */
+// Сравнение значений двух двух векторов на приближённое равенство независимо от знака
+template <typename T>
+bool My_Cmp(const vector<T>& x, const vector<T>& y, const T eps)
+{
+    bool t = true;
+
+    const size_t n = x.size();
+
+    if (x[0] * y[0] < 0)
+        for (size_t i = 0; i < n; ++i)
+            t *= abs(x[i] + y[i]) < eps;
+    else
+        for (size_t i = 0; i < n; ++i)
+            t *= abs(x[i] - y[i]) < eps;
+
+    return t;
+};
+
+template<typename T>
+vector<vector<T>> reverse_iteration(const vector<vector<T>>& matrix, const vector<T>& lambda, const T& eps, const int& maxIteration) {
+    int n = matrix.size(); // Размер матрицы
+
+    vector<vector<T>> A = matrix; // Текущая матрица системы
+
+    vector<vector<T>> V; // Результирующая матрица собственных векторов
+
+    vector<T> x(n, 0);
+    vector<T> y(n, 0);
+
+    vector<T> bufX(n, 0); // Вектор-обменник
+
+    T buf = 0; // Переменная-обменник
+
+    int k = 0; // Номер итерации
+
+    for (size_t i = 0; i < n; ++i) {
+        x[i] = 1;
+
+        for (size_t j = 0; j < n; ++j)
+            A[j][j] -= lambda[i];
+
+        vector<T> delta = bufX - x;
+        while (!My_Cmp(x, bufX, eps)){
+            y = method_Gaussa(A, x, eps); // Решаем СЛАУ (A - lambda[i]*E)*y = x
+
+            buf = norm(y, 2); // Находим евклидову норму y
+
+            bufX = x;
+
+            x = y; // Обновляем вектор х
+
+            for (auto &w: x)
+                w /= buf; // Нормировка
+
+            ++k; // Увеличиваем число итераций на 1
+        }
+
+        A = matrix;
+
+        V.push_back(x);
+
+        for (T& w : x)
+            w = 0;
+
+        bufX = x;
+    }
+
+    return V;
+}
+
+/* Функция нахождения собственных значений и собственных векторов методом Обратных Итераций
+ * с использованием отношения Рэлея (Модификация метода Обратных Итераций) */
+
+template <typename T>
+MyResult4<T> reverse_iterator_with_reley(const vector<vector<T>>& matrix, const vector<vector<T>>& X0, const T eps, const int& maxIteration){
+
+    MyResult4<T> result;
+    int n = matrix.size();
+
+    vector<vector<T>> A(matrix);
+    vector<vector<T>> E = create_identity_matrix<T>(n);
+    vector<T> eigens(n, 0);                                     // Вектор собственных значений матрицы А
+    vector<vector<T>> vec_lamda(n, vector<T>(n, 0));                    // Матрица собственных векторов
+
+    vector<T> x(n, 0);
+    vector<T> y(n, 0);
+
+    vector<T> x_old(n, 0);
+
+    for (int i = 0; i < n; ++i){
+        x = X0[i];
+
+        vector<T> vec_buf = A * x;
+        eigens[i] = (dot(vec_buf, x));
+
+        A = A - eigens[i] * E;
+
+        for (int j = 0; j < maxIteration; j++){
+            y = method_Gaussa(A, x, eps); // (A - lamda[i] * E) * y = x
+
+
+            x_old = x;
+
+            x = y; // Обновляем вектор х
+
+            // Нормировка
+            T y_norm = norm(y, 2);
+            for (T& w : x)
+                w /= y_norm;
+
+            vector<T> delta = x - x_old;
+            if (norm(delta, 2) < eps){
+                result.iterations += j;
+                break;
+            }
+
+        }
+
+        A = matrix;
+        vec_lamda[i] = x;
+        x_old = x;
+
+    }
+
+    result.eigen = sorted(eigens);
+    result.eigens_vec = vec_lamda;
+
+    return result;
+}
+
+/* Функция вычисления определителя матрицы */
 

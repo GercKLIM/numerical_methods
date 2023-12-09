@@ -34,6 +34,10 @@ void print(const vector<T>& vec);
 template <typename T>
 void print_short(const vector<T>& vec, const int& n);
 
+/* Функция, которая красиво выводит вектор*/
+template<typename T>
+void print_vec(const vector<T>& vec);
+
 /* Функция вывода разделительной линии на экран */
 void printline(const int& n);
 
@@ -86,6 +90,18 @@ T dot(const vector<T>& vec1, const vector<T>& vec2);
 /* Функция для нормы вектора */
 template <typename T>
 T norm(const vector<T>& vec, const int& p = 2);
+
+/* Функция, возвращает вектор модулей */
+template<typename T>
+vector<T> vec_abs(const vector<T>& vec);
+
+
+
+/* Функция, возращающая сумму элементов вектора */
+template<typename T>
+T sum(const vector<T>& vec);
+
+
 
 
 /* *** Функции математики матриц *** */
@@ -175,3 +191,20 @@ vector<vector<T>> inverseMatrix(const vector<vector<T>>& A, const T& eps);
 // Функция для обратной матрицы с проверкой на вырожденность c определенной точностью
 template <typename T>
 vector<vector<T>> inverseMatrix(const vector<vector<T>>& A);
+
+// Функция обрезки матрицы снизу и справа
+template <typename T>
+vector<vector<T>> crop_matrix(const vector<vector<T>>& A, const int& k);
+
+/* Функция, вычисляющая определитель матрицы 4х4 */
+template <typename T>
+double det(const vector<vector<T>>& matrix);
+
+
+/* Функция, сортирующая вектор */
+template< typename T>
+vector<T> sorted(const vector<T>& vec_not_sort);
+
+/* Функция, возращающая максимальный элемент вектора */
+template<typename T>
+T vec_max(const vector<T>& vec);
