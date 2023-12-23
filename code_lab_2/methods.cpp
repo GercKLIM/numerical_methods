@@ -445,6 +445,7 @@ Result<T> method_SimpleIteration(const vector<vector<T>>& A, const vector<T>& b,
             result.solve = xk;
             result.iterations = i + 1;
             result.batch =  norm(delta_stop, p);
+
             return result;
         }
     }

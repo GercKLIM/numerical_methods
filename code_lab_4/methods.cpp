@@ -883,6 +883,45 @@ vector<vector<T>> Hessenberg_decomposition(const vector<vector<T>>& matrix, cons
     return A;
 }
 
+template<typename T>
+void transposemultiply(vector<vector<T>>& A, int k, int l, int M, T a, T b, int &buf) {
+    T tmp;
+    for (int i = k; i < M; i++) {
+        tmp = A[k+1][i];
+        A[k+1][i] = a * A[k+1][i] + b * A[l][i];
+        A[l][i] = -b * tmp + a * A[l][i];
+        buf += 4;
+    }
+    for (int i = k; i < M; i++) {
+        tmp = A[i][k+1];
+        A[i][k+1] = a * A[i][k+1] + b * A[i][l];
+        A[i][l] = -b * tmp + a * A[i][l];
+        buf += 4;
+    }
+}
+
+/* Функция приведения матрицы к форме Хессенберга методом вращений */
+template <typename T>
+vector<vector<T>> Hessenberg_decomposition2(const vector<vector<T>>& matrix, const T& eps) {
+    vector<vector<T>> A = matrix; // Результирующая матрица
+    int n = A.size();
+    double d;
+    double alpha;
+    double betha;
+    int mults = 0;
+
+    for (int i = 0; i < n - 2; i++) {
+        for (int j = i + 2; j < n; j++) {
+            mults += 4;
+            d = sqrt(A[i + 1][i] * A[i + 1][i] + A[j][i] * A[j][i]);
+            alpha = A[i + 1][i] / d;
+            betha = A[j][i] / d;
+            transposemultiply(A, i, j, n, alpha, betha, mults);
+        }
+    }
+    return A;
+}
+
 /* Функция нахождения собственных значений матрицы методом QR-разложения за одну итерацию */
 template <typename T>
 MyResult4<T> Eigen_method_QR(const vector<vector<T>>& matrix, const T& eps, const int& maxIterations){
@@ -1011,7 +1050,7 @@ vector<vector<T>> reverse_iteration(const vector<vector<T>>& matrix, const vecto
     int n = matrix.size(); // Размер матрицы
 
     vector<vector<T>> A = matrix; // Текущая матрица системы
-
+    vector<vector<T>> E = create_identity_matrix<T>(n);
     vector<vector<T>> V; // Результирующая матрица собственных векторов
 
     vector<T> x(n, 0);
@@ -1023,11 +1062,12 @@ vector<vector<T>> reverse_iteration(const vector<vector<T>>& matrix, const vecto
 
     int k = 0; // Номер итерации
 
-    for (size_t i = 0; i < n; ++i) {
+    for (int i = 0; i < n; ++i) {
         x[i] = 1;
 
-        for (size_t j = 0; j < n; ++j)
-            A[j][j] -= lambda[i];
+//        for (int j = 0; j < n; ++j)
+//            A[j][j] -= lambda[i];
+        A = A - lambda[i] * E;
 
         vector<T> delta = bufX - x;
         while (!My_Cmp(x, bufX, eps)){
@@ -1046,17 +1086,74 @@ vector<vector<T>> reverse_iteration(const vector<vector<T>>& matrix, const vecto
         }
 
         A = matrix;
-
         V.push_back(x);
-
         for (T& w : x)
             w = 0;
 
         bufX = x;
     }
-
     return V;
 }
+
+//template<typename T>
+//void reley(vector<vector<T>> A, vector<vector<T>> e0, T eps) {
+//    int N = A.size();
+//    vector<vector<T>> B;
+//    T tmp;
+//    T lambda0;
+//    vector<T> ek;
+//    ek.resize(N);
+//    vector<T> prevvec;
+//    prevvec.resize(N);
+//    vector<vector<T>> E = create_identity_matrix<T>(N);
+//    E.reserve(N);
+//
+//    std::vector<T> l;
+//    std::vector<T> r;
+//    std::vector<T> tmpvec;
+//    for (int j = 0; j < N; j++) {
+//        for (int i = 0; i < N; i++) {
+//            prevvec[i] = 0;
+//        }
+//        ek = e0[j];
+//        tmp = 1 / norm(ek, 2);
+//        ek = ek * tmp;
+//        l = ek - prevvec;
+//        r = ek + prevvec;
+//        while (true) {
+//            B = A;
+//            tmpvec = B * ek;
+//            lambda0 = tmpvec * ek;
+//            for (int i = 0; i < N; i++) {
+//                B[i][i] -= lambda0;
+//            }
+//            prevvec = ek;
+//            //ek = Gauss(B, ek, eps, false);
+//
+//            ek = method_Gaussa(B, ek, eps);
+//            tmp = 1 / norm(ek, 2);
+//            ek = ek * tmp;
+//            l = ek - prevvec;
+//            r = ek + prevvec;
+//            if (vector_norm(l) < eps || vector_norm(r) < eps) {
+//                break;
+//            }
+//            //printvector(l);
+//            //std::cout << vector_norm(l) << std::endl;
+//            /*printvector(ek);
+//            printvector(l);
+//            std::cout << vector_norm(l) << std::endl;
+//            printvector(r);
+//            std::cout << vector_norm(r) << std::endl;*/
+//        }
+//        ek = ek * (-1.0);
+//        std::cout << "eigen value number " << j + 1 << " " << lambda0 << std::endl;
+//        std::cout << "eigen vector number " << j + 1 << std::endl;
+//        printvector(ek);
+//        //this->input(str);
+//    }
+//}
+
 
 /* Функция нахождения собственных значений и собственных векторов методом Обратных Итераций
  * с использованием отношения Рэлея (Модификация метода Обратных Итераций) */

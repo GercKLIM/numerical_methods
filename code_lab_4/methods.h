@@ -171,3 +171,6 @@ vector<vector<T>> reverse_iteration(const vector<vector<T>>& matrix, const vecto
 
 template <typename T>
 MyResult4<T> reverse_iterator_with_reley(const vector<vector<T>>& matrix, const vector<vector<T>>& X0, const T eps, const int& maxIteration);
+
+template <typename T>
+vector<T> inverse_iteration_with_rayleigh(const vector<vector<T>>& A, const vector<T>& initial_guess, const T epsilon, const int max_iterations);
