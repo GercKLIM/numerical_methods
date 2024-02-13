@@ -16,7 +16,7 @@ using namespace std;
 
 
 // Тест 1
-vector<double> ODU_1(const vector<double>& U){
+vector<double> ODU_1(const double& t, const vector<double>& U){
     int n = U.size();
     vector<double> dU(n, 0);
 
@@ -27,7 +27,7 @@ vector<double> ODU_1(const vector<double>& U){
 }
 
 // Тест 2
-vector<double> ODU_2(const vector<double>& U){
+vector<double> ODU_2(const double& t, const vector<double>& U){
     int n = U.size();
     vector<double> dU(n, 0);
 
@@ -38,7 +38,7 @@ vector<double> ODU_2(const vector<double>& U){
 }
 
 // Тест 3
-vector<double> ODU_3(const vector<double>& U){
+vector<double> ODU_3(const double& t, const vector<double>& U){
     int n = U.size();
     vector<double> dU(n, 0);
 
@@ -50,8 +50,8 @@ vector<double> ODU_3(const vector<double>& U){
     return dU;
 }
 
-vector<double> ODU(const vector<double>& U){
-    return ODU_1(U);
+vector<double> ODU(const double& t, const vector<double>& U){
+    return ODU_1(1, U);
 }
 
 
@@ -75,25 +75,24 @@ vector<double> ODU(const vector<double>& U){
 //}
 
 // Явный Метод Эйлера
-//void Method_Euler(const vector<double>& u0, const vector<double>& diapazon, double h){
-//
-//    int n = u0.size();
-//    vector<double> u_old = u0, u_new = u0;
-//
-//    // Цикл по шагу
-//    for (int coord = diapazon[0]; coord < diapazon[1]; coord += h){
-//
-//
-//        // Цикл по компонентам
-//        for (int i = 1; i < n; i++){
-//            u_new = h * ODU(coord) + u_old;
-//
-//
-//
-//        }
-//    }
-//
-//}
+void Method_Euler(const vector<double>& u0, const vector<double>& diapazon, double h){
+
+    int n = u0.size();
+    vector<double> u_old = u0, u_new = u0;
+
+    // Цикл по шагу
+    for (int coord = diapazon[0]; coord < diapazon[1]; coord += h){
+
+
+        // Цикл по компонентам
+        for (int i = 1; i < n; i++){
+
+
+
+        }
+    }
+
+}
 
 
 
@@ -104,7 +103,7 @@ int main() {
 
 
     vector<double> u0 = {1, 2};
-    //cout << ODU(u0) << endl;
+    cout << ODU(0, u0) << endl;
 
     cout << "Complete!" << endl;
     return 0;
