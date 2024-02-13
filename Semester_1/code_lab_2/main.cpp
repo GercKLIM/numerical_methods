@@ -18,7 +18,7 @@ void test_programm() {
     vector<T> vec = SLAU_to_vec(SLAU);                           // Получение вектора из СЛАУ
 
     vector<T> x0(vec.size(), 0);                                 // Начальное приближение
-    T EPS = 1e-4;                                               // Погрешность
+    T EPS = 1e-7;                                               // Погрешность
     long int MaxIteration = 1000;                                 // Максимальное количество итераций метода
 
 
@@ -30,8 +30,14 @@ void test_programm() {
 
     int p1 = 0, p2 = 0, p3 = 0, p4 = 0; // Тип нормы
     /* 1) Метод простых итераций */
-    T tau = 0.055;//golden_section_search_tau<T>(matrix, 0.0, 10.0, p1,EPS); // Поиск тау методом золотого сечения
-    Result<T> result1 = method_SimpleIteration(matrix, vec, x0, tau, EPS, 0, MaxIteration);
+    T tau1 = 0.008; //golden_section_search_tau<T>(matrix, 0.0, 10.0, p1,EPS); // Поиск тау методом золотого сечения
+    Result<T> result11 = method_SimpleIteration(matrix, vec, x0, tau1, EPS, 0, MaxIteration);
+
+    T tau2 = 0.007; //golden_section_search_tau<T>(matrix, 0.0, 10.0, p1,EPS); // Поиск тау методом золотого сечения
+    Result<T> result12 = method_SimpleIteration(matrix, vec, x0, tau2, EPS, 0, MaxIteration);
+
+    T tau3 = 0.006; //golden_section_search_tau<T>(matrix, 0.0, 10.0, p1,EPS); // Поиск тау методом золотого сечения
+    Result<T> result13 = method_SimpleIteration(matrix, vec, x0, tau3, EPS, 0, MaxIteration);
 
     /* 2) Метод Якоби */
     Result<T> result2 = method_Yacobi(matrix, vec, x0, EPS, p2, MaxIteration);
@@ -40,26 +46,44 @@ void test_programm() {
     Result<T> result3 = method_Zeidel(matrix, vec, x0, EPS, p3,MaxIteration);
 
     /* 4) Метод Релаксации */
-    T W = 0.5; //golden_section_search_W(matrix, 0.0, 5.0, p4, EPS);
-    Result<T> result4 = method_Relax(matrix, vec, x0, W, EPS, p4, MaxIteration);
+    T W1 = 0.5; //golden_section_search_W(matrix, 0.0, 5.0, p4, EPS);
+    Result<T> result41 = method_Relax(matrix, vec, x0, W1, EPS, p4, MaxIteration);
+
+    T W2 = 0.9; //golden_section_search_W(matrix, 0.0, 5.0, p4, EPS);
+    Result<T> result42= method_Relax(matrix, vec, x0, W2, EPS, p4, MaxIteration);
+
+    T W3 = 1.2; //golden_section_search_W(matrix, 0.0, 5.0, p4, EPS);
+    Result<T> result43 = method_Relax(matrix, vec, x0, W3, EPS, p4, MaxIteration);
 
     vector<T> true_D1 = {5.0, -7.0, 12.0, 4.0};
     vector<T> true_D2 = {10.0, -10.0, 12.0, 4.0};
-    vector<T> eps_vec_1;
+    vector<T> eps_vec_11;
+    vector<T> eps_vec_12;
+    vector<T> eps_vec_13;
     vector<T> eps_vec_2;
     vector<T> eps_vec_3;
-    vector<T> eps_vec_4;
+    vector<T> eps_vec_41;
+    vector<T> eps_vec_42;
+    vector<T> eps_vec_43;
 
     if (filename[18] == '1') {
-        eps_vec_1 = true_D1 - result1.solve;
+        eps_vec_11 = true_D1 - result11.solve;
+        eps_vec_12 = true_D1 - result12.solve;
+        eps_vec_13 = true_D1 - result13.solve;
         eps_vec_2 = true_D1 - result2.solve;
         eps_vec_3 = true_D1 - result3.solve;
-        eps_vec_4 = true_D1 - result4.solve;
+        eps_vec_41 = true_D1 - result41.solve;
+        eps_vec_42 = true_D1 - result42.solve;
+        eps_vec_43 = true_D1 - result43.solve;
     } else if (filename[18] == '2') {
-        eps_vec_1 = true_D2 - result1.solve;
+        eps_vec_11 = true_D2 - result11.solve;
+        eps_vec_12 = true_D2 - result12.solve;
+        eps_vec_13 = true_D2 - result13.solve;
         eps_vec_2 = true_D2 - result2.solve;
         eps_vec_3 = true_D2 - result3.solve;
-        eps_vec_4 = true_D2 - result4.solve;
+        eps_vec_41 = true_D2 - result41.solve;
+        eps_vec_42 = true_D2 - result42.solve;
+        eps_vec_43 = true_D2 - result42.solve;
     }
 
     /* Вывод результатов */
@@ -67,19 +91,51 @@ void test_programm() {
     // Метод Простой Итерации
     printline(30);
     cout << "Method Simple Iteration:\n" << endl;
-    cout << "Tau = " << tau << endl;
+    cout << "Tau = " << tau1 << endl;
     cout << "x = ";
-    print(result1.solve);
-    cout << "Converge on iterations = " << result1.iterations << endl;
-    cout << "C = " << endl;
-    print(result1.C);
-    cout << "norm_" << p1 << "(C) = " << norm(result1.C, p1) << endl;
-    cout << "norm_" << p1 << "(b - b1) = " << norm_vector_nevazki(matrix, vec, result1.solve, p1) << endl;
+    print(result11.solve);
+    cout << "Converge on iterations = " << result11.iterations << endl;
+    //cout << "C = " << endl;
+    //print(result1.C);
+    cout << "norm_" << p1 << "(C) = " << norm(result11.C, p1) << endl;
+    cout << "norm_" << p1 << "(b - b1) = " << norm_vector_nevazki(matrix, vec, result11.solve, p1) << endl;
     cout << endl;
-    aprior_eps(result1.C, result1.y, x0, p1);
-    aposter_eps(result1.C, result1.batch, p1);
-    cout << "EPS = " << norm(eps_vec_1, p1) << endl;
-    cout << "Len_step = " << result1.batch << endl;
+    aprior_eps(result11.C, result11.y, x0, p1);
+    aposter_eps(result11.C, result11.batch, p1);
+    cout << "EPS = " << norm(eps_vec_11, p1) << endl;
+    cout << "Len_step = " << result11.batch << endl;
+    printline(30);
+
+    cout << "Method Simple Iteration:\n" << endl;
+    cout << "Tau = " << tau2 << endl;
+    cout << "x = ";
+    print(result12.solve);
+    cout << "Converge on iterations = " << result12.iterations << endl;
+    //cout << "C = " << endl;
+    //print(result1.C);
+    cout << "norm_" << p1 << "(C) = " << norm(result12.C, p1) << endl;
+    cout << "norm_" << p1 << "(b - b1) = " << norm_vector_nevazki(matrix, vec, result12.solve, p1) << endl;
+    cout << endl;
+    aprior_eps(result12.C, result12.y, x0, p1);
+    aposter_eps(result12.C, result12.batch, p1);
+    cout << "EPS = " << norm(eps_vec_12, p1) << endl;
+    cout << "Len_step = " << result12.batch << endl;
+    printline(30);
+
+    cout << "Method Simple Iteration:\n" << endl;
+    cout << "Tau = " << tau3 << endl;
+    cout << "x = ";
+    print(result13.solve);
+    cout << "Converge on iterations = " << result13.iterations << endl;
+    //cout << "C = " << endl;
+    //print(result1.C);
+    cout << "norm_" << p1 << "(C) = " << norm(result13.C, p1) << endl;
+    cout << "norm_" << p1 << "(b - b1) = " << norm_vector_nevazki(matrix, vec, result13.solve, p1) << endl;
+    cout << endl;
+    aprior_eps(result13.C, result13.y, x0, p1);
+    aposter_eps(result13.C, result13.batch, p1);
+    cout << "EPS = " << norm(eps_vec_13, p1) << endl;
+    cout << "Len_step = " << result13.batch << endl;
     printline(30);
 
     // Метод Якоби
@@ -87,15 +143,15 @@ void test_programm() {
     cout << "x = ";
     print(result2.solve);
     cout << "Converge on iterations = " << result2.iterations << endl;
-    cout << "C = " << endl;
-    print(result2.C);
+    //cout << "C = " << endl;
+    //print(result2.C);
     cout << "norm_" << p2 << "(C) = " << norm(result2.C, p2) << endl;
     cout << "norm_" << p2 << "(b - b1) = " << norm_vector_nevazki(matrix, vec, result2.solve, p2) << endl;
     cout << endl;
     aprior_eps(result2.C, result2.y, x0, p2);
     aposter_eps(result2.C, result2.batch, p1);
     cout << "EPS = " << norm(eps_vec_2, p2) << endl;
-    cout << "Len_step = " << result1.batch << endl;
+    cout << "Len_step = " << result2.batch << endl;
     printline(30);
 
     // Надо править - сделать по феншую
@@ -104,32 +160,65 @@ void test_programm() {
     cout << "x = ";
     print(result3.solve);
     cout << "Converge on iterations = " << result3.iterations << endl;
-    cout << "C = " << endl;
-    print(result3.C);
+    //cout << "C = " << endl;
+    //print(result3.C);
     cout << "norm_" << p3 << "(C) = " << norm(result3.C, p3) << endl;
     cout << "norm_" << p3 << "(b - b1) = " << norm_vector_nevazki(matrix, vec, result3.solve, p3) << endl;
     cout << endl;
     aprior_eps(result3.C, result3.y, x0, p3);
     aposter_eps(result3.C, result3.batch, p3);
     cout << "EPS = " << norm(eps_vec_3, p3) << endl;
-    cout << "Len_step = " << result1.batch << endl;
+    cout << "Len_step = " << result3.batch << endl;
     printline(30);
 
     // Метод Релаксации
     cout << "Method Relaxation:" << endl;
-    cout << "W = " << W << endl << endl;
+    cout << "W = " << W1 << endl << endl;
     cout << "x = ";
-    print(result4.solve);
-    cout << "Converge on iterations = " << result4.iterations << endl;
-    cout << "C = " << endl;
-    print(result4.C);
-    cout << "norm_" << p4 << "(C) = " << norm(result4.C, p4) << endl;
-    cout << "norm_" << p4 << "(b - b1) = " << norm_vector_nevazki(matrix, vec, result4.solve, p4) << endl;
+    print(result41.solve);
+    cout << "Converge on iterations = " << result41.iterations << endl;
+    //cout << "C = " << endl;
+    //print(result4.C);
+    cout << "norm_" << p4 << "(C) = " << norm(result41.C, p4) << endl;
+    cout << "norm_" << p4 << "(b - b1) = " << norm_vector_nevazki(matrix, vec, result41.solve, p4) << endl;
     cout << endl;
-    aprior_eps(result4.C, result4.y, x0, p3);
-    aposter_eps(result4.C, result4.batch, p3);
-    cout << "EPS = " << norm(eps_vec_4, p4) << endl;
-    cout << "Len_step = " << result4.batch;
+    aprior_eps(result41.C, result41.y, x0, p4);
+    aposter_eps(result41.C, result41.batch, p4);
+    cout << "EPS = " << norm(eps_vec_41, p4) << endl;
+    cout << "Len_step = " << result41.batch << endl;
+    printline(30);
+
+    // Метод Релаксации
+    cout << "Method Relaxation:" << endl;
+    cout << "W = " << W2 << endl << endl;
+    cout << "x = ";
+    print(result42.solve);
+    cout << "Converge on iterations = " << result42.iterations << endl;
+    //cout << "C = " << endl;
+    //print(result4.C);
+    cout << "norm_" << p4 << "(C) = " << norm(result42.C, p4) << endl;
+    cout << "norm_" << p4 << "(b - b1) = " << norm_vector_nevazki(matrix, vec, result42.solve, p4) << endl;
+    cout << endl;
+    aprior_eps(result42.C, result42.y, x0, p4);
+    aposter_eps(result42.C, result42.batch, p4);
+    cout << "EPS = " << norm(eps_vec_42, p4) << endl;
+    cout << "Len_step = " << result42.batch << endl;
+    printline(30);
+
+    cout << "Method Relaxation:" << endl;
+    cout << "W = " << W3 << endl << endl;
+    cout << "x = ";
+    print(result43.solve);
+    cout << "Converge on iterations = " << result43.iterations << endl;
+    //cout << "C = " << endl;
+    //print(result4.C);
+    cout << "norm_" << p4 << "(C) = " << norm(result43.C, p4) << endl;
+    cout << "norm_" << p4 << "(b - b1) = " << norm_vector_nevazki(matrix, vec, result43.solve, p4) << endl;
+    cout << endl;
+    aprior_eps(result43.C, result43.y, x0, p4);
+    aposter_eps(result43.C, result43.batch, p4);
+    cout << "EPS = " << norm(eps_vec_43, p4) << endl;
+    cout << "Len_step = " << result43.batch << endl;
     printline(30);
 
     // Функция представления матрицы С в виде: C = C_l + C_d + D_u

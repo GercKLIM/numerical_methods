@@ -20,6 +20,10 @@ using namespace std;
 template <typename T>
 vector<vector<T>> importSLAU(const string& filename);
 
+/* Функция импорта матрицы из текстового файла*/
+template <typename T>
+vector<vector<T>> importMatrix(const string& filename);
+
 /* Функция вывода матрицы на экран */
 template <typename T>
 void print(const vector<vector<T>>& matrix);
@@ -143,6 +147,8 @@ vector<vector<T>> transpose(const vector<vector<T>>& A);
 template <typename T>
 vector<vector<T>> create_identity_matrix(const int& n);
 
+template <typename T>
+vector<vector<T>> E(const int& n);
 
 /* Функция для поэлементного умножения матриц */
 template <typename T>
@@ -208,3 +214,23 @@ vector<T> sorted(const vector<T>& vec_not_sort);
 /* Функция, возращающая максимальный элемент вектора */
 template<typename T>
 T vec_max(const vector<T>& vec);
+
+/* Функция, возращающая det(A - lambda * E) */
+template<typename T>
+T test_eigen(const vector<vector<T>>& matrix, const vector<T>& lambda);
+
+/* Функция, возращающая норму разницы решений */
+template<typename T>
+T testeps(const vector<T>& x, const vector<T>& true_x, const int p);
+
+template<typename T>
+T test_eigen_vec(const vector<vector<T>>& matrix, vector<vector<T>> eigen_vec, const vector<T>& lambda);
+
+template<typename T>
+T test_eigen_vec2(const vector<vector<T>>& matrix, vector<T> eigen_vec, const T lambda);
+
+template<typename T>
+T cos_vec(const vector<T> x1, const vector<T> x2);
+
+template<typename T>
+vector<vector<T>> uncrop(vector<vector<T>> A, vector<vector<T>>A1, int crop);

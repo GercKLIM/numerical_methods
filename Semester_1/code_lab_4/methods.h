@@ -31,7 +31,8 @@ T norm_vector_nevazki(const vector<vector<T>>& A, const vector<T>& b, const vect
 /* Функция для решения СЛАУ прямым методом Гаусса */
 template <typename T>
 vector<T> method_Gaussa(const vector<vector<T>>& matrix, const vector<T>& vec, const T& eps);
-
+template <typename T>
+vector<T> method_Gaussa2(const vector<vector<T>>& matrix, const vector<T>& vec, const T& eps);
 
 /* Функция QR-разложения матрицы методом вращений */
 template<typename T>
@@ -58,6 +59,7 @@ struct MyResult2 {
     vector<vector<T>> C;
     vector<T> y;
     T batch;
+
 };
 
 
@@ -143,8 +145,10 @@ void aposter_eps(const vector<vector<T>>& C, T norm_delta, const int& p);
 template <typename T>
 struct MyResult4{
     vector<T>  eigen;
-    int iterations;
+    int iterations = 0;
     vector<vector<T>> eigens_vec;
+    vector<vector<T>> R;
+    vector<vector<vector<T>>> A_iter;
 };
 
 /* Функция приведения матрицы к форме Хессенберга методом вращений */
@@ -156,21 +160,27 @@ vector<vector<T>> Hessenberg_decomposition(const vector<vector<T>>& matrix);
 template <typename T>
 MyResult4<T> Eigen_method_QR(const vector<vector<T>>& A, const T& eps, const int& maxIterations);
 
-
 /* Функция нахождения собственных значений матрицы методом QR-разложения */
 template <typename T>
 MyResult4<T> Eigen_method_QR(const vector<vector<T>>& matrix, const T& sigma, const T& eps, const int& maxIterations);
 
+template <typename T>
+MyResult4<T> Eigen_method_QR2(const vector<vector<T>>& matrix, const T& eps, const int& maxIterations);
+
+template <typename T>
+MyResult4<T> Eigen_method_QR3(const vector<vector<T>>& matrix, const T& eps, const int& maxIterations);
+template <typename T>
+MyResult4<T> Eigen_method_QR3(const vector<vector<T>>& matrix, const T&sigma,const T& eps, const int& maxIterations);
 
 /* Функция нахождения собственных векторов матрицы методом Обратных Итераций */
 template<typename T>
-vector<vector<T>> reverse_iteration(const vector<vector<T>>& matrix, const vector<T>& lambda, const T& eps, const int& maxIteration);
+MyResult4<T> reverse_iteration(const vector<vector<T>>& matrix, const vector<T>& lambda, const T& eps, const int& maxIteration);
 
 /* Функция нахождения собственных значений и собственных векторов методом Обратных Итераций
  * с использованием отношения Рэлея (Модификация метода Обратных Итераций) */
 
-template <typename T>
-MyResult4<T> reverse_iterator_with_reley(const vector<vector<T>>& matrix, const vector<vector<T>>& X0, const T eps, const int& maxIteration);
+//template <typename T>
+//MyResult4<T> reverse_iterator_with_reley(const vector<vector<T>>& matrix, const vector<vector<T>>& X0, const T eps, const int& maxIteration);
 
 template <typename T>
-vector<T> inverse_iteration_with_rayleigh(const vector<vector<T>>& A, const vector<T>& initial_guess, const T epsilon, const int max_iterations);
+MyResult4<T> reverse_iterator_with_reley(const vector<vector<T>>& matrix, const vector<vector<T>>& X0, const T eps, const int& maxIteration);

@@ -5,7 +5,7 @@ using namespace std;
 
 /* *** Начальные функции для испорта/экспорта данных *** */
 
-/* Функция импорта матрицы из текстового файла*/
+/* Функция импорта матрицы СЛАУ из текстового файла*/
 template <typename T>
 vector<vector<T>> importSLAU(const string& filename) {
     vector<vector<T>> matrix;
@@ -35,6 +35,34 @@ vector<vector<T>> importSLAU(const string& filename) {
     return matrix;
 };
 
+/* Функция импорта матрицы из текстового файла*/
+template <typename T>
+vector<vector<T>> importMatrix(const string& filename) {
+    vector<vector<T>> matrix;
+    ifstream file(filename);
+
+    if (!file.is_open()) {
+        printf("Error: not open file \n" );
+        exit(1);
+    }
+
+    int size;
+    file >> size;
+
+    matrix.resize(size, vector<T>(size));
+
+    for (int i = 0; i < size; ++i) {
+        for (int j = 0; j < size; ++j) {
+            T value;
+            if (file >> value) {
+                matrix[i][j] = value;
+            }
+        }
+    }
+
+    file.close();
+    return matrix;
+};
 
 
 /* Функция вывода матрицы на экран */
@@ -539,6 +567,15 @@ vector<vector<T>> create_identity_matrix(const int& n) {
     return identity;
 }
 
+template <typename T>
+vector<vector<T>> E(const int& n) {
+    vector<vector<T>> identity(n, vector<T>(n, 0));
+    for (int i = 0; i < n; i++) {
+        identity[i][i] = 1;
+    }
+    return identity;
+}
+
 // Функция для обратной матрицы с проверкой на вырожденность
 template <typename T>
 vector<vector<T>> inverseMatrix(const vector<vector<T>>& A, const T& eps) {
@@ -690,6 +727,86 @@ T vec_max(const vector<T>& vec){
             max = abs(vec[i]);
     }
     return max;
+}
+
+template<typename T>
+T test_eigen(const vector<vector<T>>& matrix, const vector<T>& lambda){
+    int n = matrix.size();
+    vector<vector<T>> A(matrix);
+    vector<vector<T>> E = create_identity_matrix<T>(n);
+
+    T max_error = 0;
+    T min_error = 0;
+    for (int i = 0; i < n; i++){
+        vector<vector<T>> A_test = A - lambda[i] * E;
+        T error = det(A_test);
+        max_error = (max_error >= error) ? max_error : error;
+        min_error = (min_error <= error) ? min_error : error;
+    }
+    return max_error;
+}
+
+/* Функция, возращающая норму разницы решений */
+template<typename T>
+T testeps(const vector<T>& x, const vector<T>& true_x, const int p){
+    vector<T> delta = x - true_x;
+    return norm(delta, p);
+}
+
+template<typename T>
+T test_eigen_vec(const vector<vector<T>>& matrix, vector<vector<T>> eigen_vec, const vector<T>& lambda){
+    int n = matrix.size();
+    vector<vector<T>> A(matrix);
+    vector<vector<T>> E = create_identity_matrix<T>(n);
+
+    T max_error = 0;
+    T min_error = 10e10;
+    for (int i = 0; i < n; i++){
+        vector<T> A_test = A * eigen_vec[i];
+        A_test = A_test - lambda[i] * eigen_vec[i];
+        T error = norm(A_test, 2);
+        max_error = (max_error >= error) ? max_error : error;
+        min_error = (min_error <= error) ? min_error : error;
+    }
+
+    return max_error;
+}
+
+template<typename T>
+T test_eigen_vec2(const vector<vector<T>>& matrix, vector<T> eigen_vec, const T lambda){
+    int n = matrix.size();
+    vector<vector<T>> A(matrix);
+    vector<vector<T>> E = create_identity_matrix<T>(n);
+
+    vector<T> A_test = A * eigen_vec;
+    A_test = A_test - lambda * eigen_vec;
+    T error = norm(A_test, 2);
+
+
+    return error;
+}
+
+
+template<typename T>
+T cos_vec(const vector<T> x1, const vector<T> x2){
+
+    T scalar = dot(x1, x2);
+    T norm1 = norm(x1, 2);
+    T norm2 = norm(x2, 2);
+
+    return scalar / (norm1 * norm2);
+
+}
+
+template<typename T>
+vector<vector<T>> uncrop(vector<vector<T>> A, vector<vector<T>>A1, int crop) {
+    int n = A1.size();
+    for (int i = 0; i < n; i++){
+        for (int j = 0; j < n; j++){
+            A[i][j] = A1[i][j];
+        }
+    }
+    return A;
 }
 
 
