@@ -1,0 +1,6 @@
+# ninja log v5
+1	114	7295383876988146	build.ninja	841f87ce87caa781
+4	537	7295383882545109	CMakeFiles/Code_lab_1.dir/methods.cpp.obj	8f812a12e014c4d5
+1	543	7295383882615152	CMakeFiles/Code_lab_1.dir/algebra.cpp.obj	b654b37827833846
+8	625	7295383883421916	CMakeFiles/Code_lab_1.dir/main.cpp.obj	baad7fbe16a67652
+625	766	7295383884810581	Code_lab_1.exe	4bcd89f73c219ba2
