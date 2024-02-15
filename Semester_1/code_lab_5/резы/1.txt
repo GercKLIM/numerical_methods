@@ -1,0 +1,75 @@
+"C:\Users\gerce\Documents\WORK DIRECTORY\Методы вычислений\Лабы\code_lab5\main.exe"
+
+1) Locale roots
+Number of line: 5
+0.0666667 0.133333
+0.2 0.266667
+0.533333 0.6
+0.666667 0.733333
+0.733333 0.8
+
+
+2) Method Bisection
+Iterations: 1
+x = 0.1
+f(x) = 0
+Iterations: 20
+x = 0.22
+f(x) = -1.28101e-10
+Iterations: 20
+x = 0.566667
+f(x) = 6.59092e-05
+Iterations: 1
+x = 0.7
+f(x) = -0
+Iterations: 20
+x = 0.766667
+f(x) = 8.77362e-05
+
+3) Method Newton
+
+Iterations: 1
+x = 0.1
+f(x) = 0
+
+Iterations: 3
+x = 0.22
+f(x) = -0
+
+Iterations: 4
+x = 0.55
+f(x) = -2.96763e-18
+
+Iterations: 1
+x = 0.7
+f(x) = -0
+
+Iterations: 5
+x = 0.75
+f(x) = 3.82472e-19
+
+
+4) Method Newton modificate
+Iterations: 4
+x = 0.1
+f(x) = -1.0553e-13
+
+Iterations: 2
+x = 0.22
+f(x) = 1.29121e-14
+
+Iterations: 4
+x = 0.55
+f(x) = 0
+
+Iterations: 4
+x = 0.7
+f(x) = -1.89659e-14
+
+Iterations: 5
+x = 0.75
+f(x) = 1.14348e-14
+
+Complete!
+
+Process finished with exit code 0
