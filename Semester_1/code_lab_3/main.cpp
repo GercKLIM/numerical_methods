@@ -3,11 +3,12 @@
 #include <vector>
 #include <cmath>
 
-#define T double
 
 using namespace std;
 
-#include "Header.h"
+#include "source.cpp"
+
+template <typename T>
 void test(){
 	int n = 20; //число узлов
 	int N = 200; //число точек на графике
@@ -129,5 +130,5 @@ void test(){
 }
 
 int main(){
-    cout << ("Hello, World!");
+    test<double>();
 }

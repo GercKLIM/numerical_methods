@@ -1,0 +1,8 @@
+"C:\Users\gerce\Documents\WORK DIRECTORY\Методы вычислений\Лабы\code_lab5\main.exe"
+Iterations: 6
+(x, y) = 4 -1
+f1(x, y) = 2.66454e-14
+f2(x, y) = 9.81437e-14
+Complete!
+
+Process finished with exit code 0
