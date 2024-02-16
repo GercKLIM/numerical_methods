@@ -7,4 +7,5 @@ add_executable(Code_lab_1 main.cpp
         algebra.h
         algebra.cpp
         methods.h
-        methods.cpp)
+        methods.cpp
+        tests.cpp)

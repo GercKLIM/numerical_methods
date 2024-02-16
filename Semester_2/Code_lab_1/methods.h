@@ -8,9 +8,13 @@
 
 using namespace std;
 
-/* Переопределение вывода для vector */
-template<typename T>
-ostream& operator<<(ostream& os, const vector<T>& vec);
+
+
+/* Метод Эйлера явный */
+void Method_Euler(const double t, const vector<double> u0, const vector<double>& diapazon, double h);
+
+/* Метод Эйлера неявный */
+void Method_Euler_implicit(const double t, const vector<double> u0, const vector<double>& diapazon, double h);
 
 /* Метод Рунге-Кутты 4-го порядка точности */
 

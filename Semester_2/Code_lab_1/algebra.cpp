@@ -3,7 +3,11 @@
 
 using namespace std;
 
+
+
 /* *** Начальные функции для испорта/экспорта данных *** */
+
+
 
 /* Функция импорта матрицы из текстового файла*/
 template <typename T>
@@ -36,7 +40,6 @@ vector<vector<T>> importSLAU(const string& filename) {
 };
 
 
-
 /* Функция вывода матрицы на экран */
 template <typename T>
 void print(const vector<vector<T>>& matrix) {
@@ -49,6 +52,7 @@ void print(const vector<vector<T>>& matrix) {
     cout << endl;
 }
 
+
 /* Функция вывода вектора на экран */
 template <typename T>
 void print(const vector<T>& vec) {
@@ -57,6 +61,7 @@ void print(const vector<T>& vec) {
     }
     cout << endl;
 }
+
 
 /* Функция вывода обрезанного вектора на экран */
 template <typename T>
@@ -68,6 +73,7 @@ void print_short(const vector<T>& vec, const int& n){
     cout << "..." << endl;
 }
 
+
 /* Функция, которая красиво выводит вектор*/
 template<typename T>
 void print_vec(const vector<T>& vec){
@@ -78,6 +84,7 @@ void print_vec(const vector<T>& vec){
     cout << ")" << endl;
 }
 
+
 /* Функция вывода разделительной линии на экран */
 void printline(const int& n){
     for (int i = 0; i < n; i ++){
@@ -85,6 +92,7 @@ void printline(const int& n){
     }
     cout << endl;
 }
+
 
 /* Функция для получения матрицы из СЛАУ */
 template <typename T>
@@ -114,7 +122,10 @@ vector<T> SLAU_to_vec(const vector<vector<T>>& SLAU){
 }
 
 
+
 /* *** Функции математики векторов *** */
+
+
 
 /* Функция для сложения векторов */
 template <typename T>
@@ -146,6 +157,7 @@ vector<T> operator-(const vector<T>& a, const vector<T>& b){
 
 }
 
+
 /* Операция почленного умножения векторов */
 template <typename T>
 vector<T> operator*(const vector<T>& vec1, const vector<T>& vec2){
@@ -160,6 +172,7 @@ vector<T> operator*(const vector<T>& vec1, const vector<T>& vec2){
     return result;
 }
 
+
 /* Операция умножения вектора на число */
 template <typename T>
 vector<T> operator*(const T& c, const vector<T>& vec){
@@ -169,6 +182,7 @@ vector<T> operator*(const T& c, const vector<T>& vec){
     }
     return result;
 }
+
 
 template <typename T>
 vector<T> operator*(const vector<T>& vec, const T& c){
@@ -194,6 +208,7 @@ vector<T> operator/(const vector<T>& vec1, const vector<T>& vec2){
     return result;
 }
 
+
 /* Функция для скалярного умножения векторов */
 template <typename T>
 T dot(const vector<T>& vec1, const vector<T>& vec2){
@@ -207,6 +222,7 @@ T dot(const vector<T>& vec1, const vector<T>& vec2){
     }
     return result;
 }
+
 
 /* Функция для нормы вектора */
 template <typename T>
@@ -239,7 +255,8 @@ T norm(const vector<T>& vec, const int& p){
     return result;
 }
 
-/* Функция, которая возращает матрицу комбинаций жлементов вектора */
+
+/* Функция, которая возращает матрицу комбинаций элементов вектора */
 template<typename T>
 vector<vector<T>> generateCombinations(const vector<T>& vec) {
     int n = vec.size();
@@ -263,14 +280,16 @@ vector<vector<T>> generateCombinations(const vector<T>& vec) {
     return combinations;
 }
 
+
 /* Функция, возвращает вектор модулей */
 template<typename T>
-vector<T> vec_abs(const vector<T> vec){
+vector<T> vec_abs(const vector<T>& vec){
     for (int i = 0; i < vec.size(); i++){
         vec[i] = fabs(vec[i]);
     }
     return vec;
 }
+
 
 /* Функция, возращающая сумму элементов вектора */
 template<typename T>
@@ -282,7 +301,11 @@ T sum(const vector<T>& vec){
     return sum;
 }
 
+
+
 /* *** Функции математики матриц *** */
+
+
 
 /* Операция для умножения матрицы на число */
 template <typename T>
@@ -300,6 +323,7 @@ vector<vector<T>> operator*(const vector<vector<T>>& A, const T& scalar){
     return result;
 }
 
+
 /* Операция для умножения  числа на матрицу */
 template <typename T>
 vector<vector<T>> operator*(const T& scalar, const vector<vector<T>>& A){
@@ -315,6 +339,7 @@ vector<vector<T>> operator*(const T& scalar, const vector<vector<T>>& A){
 
     return result;
 }
+
 
 /* Операция поэлементного сложения матриц */
 template <typename T>
@@ -338,6 +363,7 @@ vector<vector<T>> operator+(const vector<vector<T>>& A, const vector<vector<T>>&
     return result;
 }
 
+
 /* Операция поэлементного вычитания матриц */
 template <typename T>
 vector<vector<T>> operator-(const vector<vector<T>>& A, const vector<vector<T>>& B){
@@ -358,6 +384,7 @@ vector<vector<T>> operator-(const vector<vector<T>>& A, const vector<vector<T>>&
     }
     return result;
 }
+
 
 /* Операция умножения матрицы на вектор */
 template <typename T>
@@ -404,6 +431,7 @@ vector<vector<T>> operator*(const vector<vector<T>>& A, const vector<vector<T>>&
     return result;
 }
 
+
 // Определение оператора отрицания для матрицы
 template <typename T>
 vector<vector<T>> operator-(const vector<vector<T>>& matrix) {
@@ -417,6 +445,7 @@ vector<vector<T>> operator-(const vector<vector<T>>& matrix) {
     }
     return result;
 }
+
 
 /* Функция для поэлементного умножения матриц */
 template <typename T>
@@ -514,6 +543,7 @@ vector<vector<T>> RotateRight(const vector<vector<T>>& A){
 
 }
 
+
 /* Функция поворота матрицы влево */
 template <typename T>
 vector<vector<T>> RotateLeft(const vector<vector<T>>& A){
@@ -529,6 +559,7 @@ vector<vector<T>> RotateLeft(const vector<vector<T>>& A){
     return A_rotate;
 }
 
+
 // Функция для создания единичной матрицы размера n x n
 template <typename T>
 vector<vector<T>> create_identity_matrix(const int& n) {
@@ -538,6 +569,7 @@ vector<vector<T>> create_identity_matrix(const int& n) {
     }
     return identity;
 }
+
 
 // Функция для обратной матрицы с проверкой на вырожденность
 template <typename T>
@@ -557,12 +589,14 @@ vector<vector<T>> inverseMatrix(const vector<vector<T>>& A, const T& eps) {
     return A_inv;
 }
 
+
 // Функция для обратной матрицы с проверкой на вырожденность с максимальной точностью
 template <typename T>
 vector<vector<T>> inverseMatrix(const vector<vector<T>>& A){
     T eps = numeric_limits<T>::epsilon();
     return inverseMatrix(A, eps);
 }
+
 
 /* Функция для вычисления числа обусловленности матрицы c нормой 1*/
 template <typename T>
@@ -578,6 +612,7 @@ T cond_1(const vector<vector<T>>& matrix){
     return cond;
 }
 
+
 /* Функция для вычисления числа обусловленности матрицы c нормой 2*/
 template <typename T>
 T cond_2(const vector<vector<T>>& matrix){
@@ -591,6 +626,7 @@ T cond_2(const vector<vector<T>>& matrix){
     T cond = n_1 * n_2;
     return cond;
 }
+
 
 /* Функция для вычисления числа обусловленности матрицы с нормой oo*/
 template <typename T>
@@ -621,6 +657,7 @@ vector<vector<T>> transpose(const vector<vector<T>>& A) {
 
     return result;
 }
+
 
 // Функция обрезки матрицы снизу и справа
 template <typename T>
@@ -662,6 +699,7 @@ double det(const vector<vector<T>>& matrix) {
                     matrix[1][2] * (matrix[2][0] * matrix[3][1] - matrix[2][1] * matrix[3][0]));
 }
 
+
 /* Функция, сортирующая вектор */
 template< typename T>
 vector<T> sorted(const vector<T>& vec_not_sort) {
@@ -680,6 +718,7 @@ vector<T> sorted(const vector<T>& vec_not_sort) {
     return vec;
 }
 
+
 /* Функция, возращающая максимальный по модулю элемент вектора */
 template<typename T>
 T vec_max(const vector<T>& vec){
@@ -693,3 +732,17 @@ T vec_max(const vector<T>& vec){
 }
 
 
+/* ### Переопределение потока вывода для vector ### */
+
+template<typename T>
+ostream& operator<<(ostream& os, const vector<T>& vec) {
+    os << "[";
+    for (int i = 0; i < vec.size(); ++i) {
+        os << vec[i];
+        if (i != vec.size() - 1) {
+            os << ", ";
+        }
+    }
+    os << "]";
+    return os;
+}
