@@ -25,7 +25,8 @@ int main() {
     double t = 0;
     vector<double> u0 = {0, 1};
 
-    Method_Euler(t, u0, Diapazon, h);
+    Method_Euler_implicit(*ODU_0, u0, Diapazon, h);
+    //Method_Euler(*ODU_0, u0, Diapazon, h);
 
 
     //cout << ODU(0, u0) << endl;

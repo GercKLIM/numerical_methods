@@ -9,7 +9,7 @@ using namespace std;
 
 
 // Тест 0 (Маятник)
-vector<double> ODU_0(const double& t, const vector<double>& U){
+vector<double> ODU_0(const vector<double>& U){
     int n = U.size();
     vector<double> dU(n, 0);
 
@@ -22,7 +22,7 @@ vector<double> ODU_0(const double& t, const vector<double>& U){
 }
 
 // Тест 1
-vector<double> ODU_1(const double& t, const vector<double>& U){
+vector<double> ODU_1(const vector<double>& U){
     int n = U.size();
     vector<double> dU(n, 0);
 
@@ -33,7 +33,7 @@ vector<double> ODU_1(const double& t, const vector<double>& U){
 }
 
 // Тест 2
-vector<double> ODU_2(const double& t, const vector<double>& U){
+vector<double> ODU_2(const vector<double>& U){
     int n = U.size();
     vector<double> dU(n, 0);
 
@@ -44,7 +44,7 @@ vector<double> ODU_2(const double& t, const vector<double>& U){
 }
 
 // Тест 3
-vector<double> ODU_3(const double& t, const vector<double>& U){
+vector<double> ODU_3(const vector<double>& U){
     int n = U.size();
     vector<double> dU(n, 0);
 
@@ -54,8 +54,4 @@ vector<double> ODU_3(const double& t, const vector<double>& U){
     dU[2] = U[0] * U[1] - b * U[2];
 
     return dU;
-}
-
-vector<double> ODU(const double& t, const vector<double>& U){
-    return ODU_0(1, U);
 }

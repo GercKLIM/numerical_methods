@@ -136,14 +136,14 @@ vector<vector<T>> operator*(const vector<vector<T>>& A, const vector<vector<T>>&
 
 
 /* Операция для умножения матрицы на число */
-template <typename T>
-vector<vector<T>> operator*(const vector<vector<T>>& A,  const T& scalar);
+//template <typename T>
+//vector<vector<T>> operator*(const vector<vector<T>>& A,  const T& scalar);
 
-template <typename T>
-vector<vector<T>> operator*(const T& scalar, const vector<vector<T>>& A);
+//template <typename T>
+//vector<vector<T>> operator*(const T& scalar, const vector<vector<T>>& A);
 
-template <typename T>
-vector<vector<T>> operator*(const vector<vector<T>>& A,  const T& scalar);
+//template <typename T>
+//vector<vector<T>> operator*(const vector<vector<T>>& A,  const T& scalar);
 
 
 /* Функция поэлементного сложения матриц */
@@ -239,3 +239,14 @@ vector<T> sorted(const vector<T>& vec_not_sort);
 /* Функция, возращающая максимальный элемент вектора */
 template<typename T>
 T vec_max(const vector<T>& vec);
+
+
+/* Функция, вычисляющая норму разности векторов */
+double sqr(vector<double> vec1, vector<double> vec2);
+
+
+/* Функция, численно вычисляющая произвоную в точке point по i переменной */
+double Differential(vector<double> (*F)(const vector<double>&), const vector<double>& point, const int& i, const double& eps);
+
+/* Функция, вычисляющая градиент функции в точке point */
+vector<double> Gradient(vector<double> (*F)(const vector<double>&), const vector<double>& point, const double& eps);

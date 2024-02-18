@@ -308,37 +308,37 @@ T sum(const vector<T>& vec){
 
 
 /* Операция для умножения матрицы на число */
-template <typename T>
-vector<vector<T>> operator*(const vector<vector<T>>& A, const T& scalar){
-    // Создание результирующей матрицы с теми же размерами
-    vector<vector<T>> result(A.size(), vector<T>(A[0].size(), 0));
-
-    // Умножение каждого элемента матрицы на число
-    for (size_t i = 0; i < A.size(); ++i) {
-        for (size_t j = 0; j < A[0].size(); ++j) {
-            result[i][j] = A[i][j] * scalar;
-        }
-    }
-
-    return result;
-}
+//template <typename T>
+//vector<vector<T>> operator*(const vector<vector<T>>& A, const T& scalar){
+//    // Создание результирующей матрицы с теми же размерами
+//    vector<vector<T>> result(A.size(), vector<T>(A[0].size(), 0));
+//
+//    // Умножение каждого элемента матрицы на число
+//    for (size_t i = 0; i < A.size(); ++i) {
+//        for (size_t j = 0; j < A[0].size(); ++j) {
+//            result[i][j] = A[i][j] * scalar;
+//        }
+//    }
+//
+//    return result;
+//}
 
 
 /* Операция для умножения  числа на матрицу */
-template <typename T>
-vector<vector<T>> operator*(const T& scalar, const vector<vector<T>>& A){
-    // Создание результирующей матрицы с теми же размерами
-    vector<vector<T>> result(A.size(), vector<T>(A[0].size(), 0));
-
-    // Умножение каждого элемента матрицы на число
-    for (size_t i = 0; i < A.size(); ++i) {
-        for (size_t j = 0; j < A[0].size(); ++j) {
-            result[i][j] = A[i][j] * scalar;
-        }
-    }
-
-    return result;
-}
+//template <typename T>
+//vector<vector<T>> operator*(const T& scalar, const vector<vector<T>>& A){
+//    // Создание результирующей матрицы с теми же размерами
+//    vector<vector<T>> result(A.size(), vector<T>(A[0].size(), 0));
+//
+//    // Умножение каждого элемента матрицы на число
+//    for (size_t i = 0; i < A.size(); ++i) {
+//        for (size_t j = 0; j < A[0].size(); ++j) {
+//            result[i][j] = A[i][j] * scalar;
+//        }
+//    }
+//
+//    return result;
+//}
 
 
 /* Операция поэлементного сложения матриц */
@@ -745,4 +745,39 @@ ostream& operator<<(ostream& os, const vector<T>& vec) {
     }
     os << "]";
     return os;
+}
+
+
+/* Функция, вычисляющая норму разности векторов */
+double sqr(vector<double> vec1, vector<double> vec2) {
+    int m = vec1.size();
+    double sum;
+    for (int i = 0; i < m; i++) {
+        sum = (vec1[i] - vec2[i]) * (vec1[i] - vec2[i]);
+    }
+    return sum;
+}
+
+
+/* Функция, численно вычисляющая произвоную в точке point по i переменной */
+double Differential(vector<double> (*F)(const vector<double>&), const vector<double>& point, const int& i, const double& eps){
+
+    vector<double> left_point(point);
+    left_point[i] -= eps;
+    vector<double> right_point(point);
+    right_point[i] += eps;
+
+    return (F(right_point)[i] - F(left_point)[i]) / (2 * eps);
+}
+
+/* Функция, вычисляющая градиент функции в точке point */
+vector<double> Gradient(vector<double> (*F)(const vector<double>&), const vector<double>& point, const double& eps){
+
+    int N = point.size();
+    vector<double> grad(N, 0);
+
+    for (int i = 0; i < N; i++){
+        grad[i] = Differential(F, point, i, eps);
+    }
+    return grad;
 }

@@ -1,0 +1,77 @@
+#include <iostream>
+#include <cmath>
+#include <vector>
+
+// Пример функции, для которой мы хотим найти корень
+double function(const std::vector<double>& x) {
+    // Пример функции f(x, y) = x^2 + y^2 - 25
+    return pow(x[0], 2) + pow(x[1], 2) - 25;
+}
+
+// Производная функции по i-той переменной
+double derivative(const std::vector<double>& x, int i) {
+    // Производные для примера f(x, y) = x^2 + y^2 - 25
+    if (i == 0) {
+        return 2 * x[0];
+    } else {
+        return 2 * x[1];
+    }
+}
+
+// Метод Ньютона для поиска корня функции от n переменных
+std::vector<double> newtonMethod(const std::vector<double>& initialGuess, double epsilon) {
+    std::vector<double> x = initialGuess;
+    std::vector<double> deltaX(initialGuess.size());
+
+    // Повторяем итерации до достижения необходимой точности
+    do {
+        // Вычисляем градиент функции (вектор частных производных)
+        std::vector<double> gradient;
+        for (int i = 0; i < x.size(); ++i) {
+            gradient.push_back(derivative(x, i));
+        }
+
+        // Вычисляем матрицу Якоби
+        // (это может потребовать вычисления производных второго порядка для общего случая)
+        // Мы опустим эту часть в данном примере для упрощения
+        // Вместо этого будем использовать приближение единичной матрицы
+
+        // Обновляем x с использованием метода Ньютона
+        for (int i = 0; i < x.size(); ++i) {
+            double sum = 0;
+            for (int j = 0; j < x.size(); ++j) {
+                sum += (i == j) ? 1 : 0;
+            }
+            deltaX[i] = -function(x) / gradient[i];
+        }
+
+        // Обновляем приближение
+        for (int i = 0; i < x.size(); ++i) {
+            x[i] += deltaX[i];
+        }
+
+        // Проверяем условие остановки
+    } while (std::sqrt(std::inner_product(deltaX.begin(), deltaX.end(), deltaX.begin(), 0.0)) > epsilon);
+
+    return x;
+}
+
+int main() {
+    // Начальное приближение
+    std::vector<double> initialGuess = {1.0, 1.0};
+
+    // Задаем желаемую точность
+    double epsilon = 0.0001;
+
+    // Вызываем метод Ньютона
+    std::vector<double> root = newtonMethod(initialGuess, epsilon);
+
+    // Выводим результат
+    std::cout << "Корень функции: ";
+    for (double value : root) {
+        std::cout << value << " ";
+    }
+    std::cout << std::endl;
+
+    return 0;
+}
