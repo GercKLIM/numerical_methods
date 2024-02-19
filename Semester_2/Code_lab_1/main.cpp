@@ -25,8 +25,14 @@ int main() {
     double t = 0;
     vector<double> u0 = {0, 1};
 
+    // Метод Эйлера явный
     Method_Euler_implicit(*ODU_0, u0, Diapazon, h);
-    //Method_Euler(*ODU_0, u0, Diapazon, h);
+
+    // Метод Эйлера неявный
+    Method_Euler_explicit(*ODU_0, u0, Diapazon, h);
+
+    // Метод симметричной схемы
+    Method_symmetric_scheme(*ODU_0, u0, Diapazon, h);
 
 
     //cout << ODU(0, u0) << endl;
