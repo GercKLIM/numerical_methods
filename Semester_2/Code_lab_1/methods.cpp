@@ -68,6 +68,7 @@ vector<double> Method_Newton_for_Euler(vector<double> (*F)(const vector<double>&
         // Обновляем компоненты
         z_old = z;
         z = z - equation(z) / grad;
+
         //cout << sqr(z_old, z)<< endl;
         // Проверяем условие остановки
     } while ((abs(sqr(z_old, z)) > eps) and iterations < 50);
