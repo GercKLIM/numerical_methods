@@ -87,6 +87,10 @@ vector<T> operator*(const T& c, const vector<T>& vec2);
 template <typename T>
 vector<T> operator*(const vector<T>& vec2, const T& c);
 
+/* Операция деления вектора на число */
+template<typename T>
+vector<T> operator/(const vector<T>& vec, const T& c);
+
 
 /* Операция почленного деления векторов */
 template <typename T>
@@ -250,3 +254,7 @@ double Differential(vector<double> (*F)(const vector<double>&), const vector<dou
 
 /* Функция, вычисляющая градиент функции в точке point */
 vector<double> Gradient(vector<double> (*F)(const vector<double>&), const vector<double>& point, const double& eps);
+
+/* Функция для сдвига вектора на n элементов */
+template<typename T>
+vector<T> shift(const vector<T>& vec, int n);

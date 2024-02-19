@@ -193,6 +193,16 @@ vector<T> operator*(const vector<T>& vec, const T& c){
     return result;
 }
 
+/* Операция деления вектора на число */
+template<typename T>
+vector<T> operator/(const vector<T>& vec, const T& c) {
+    vector<T> result(vec.size(), 0);
+    for (int i = 0; i < vec.size(); i++) {
+        result[i] = vec[i] / c;
+    }
+    return result;
+}
+
 
 /* Операция почленного деления векторов */
 template <typename T>
@@ -780,4 +790,30 @@ vector<double> Gradient(vector<double> (*F)(const vector<double>&), const vector
         grad[i] = Differential(F, point, i, eps);
     }
     return grad;
+}
+
+
+/* Функция для сдвига вектора на n элементов */
+template<typename T>
+vector<T> shift(const vector<T>& vec, int n) {
+    vector<T> shiftedVec(vec.size()); // Создаем вектор той же длины
+    int size = vec.size();
+
+    // Если сдвиг больше длины вектора, находим остаток от деления
+    n = n % size;
+
+    // Перемещаем элементы вправо
+    if (n >= 0) {
+        for (int i = 0; i < size; ++i) {
+            shiftedVec[(i + n) % size] = vec[i];
+        }
+    }
+        // Перемещаем элементы влево
+    else {
+        for (int i = 0; i < size; ++i) {
+            shiftedVec[(size + i + n) % size] = vec[i];
+        }
+    }
+
+    return shiftedVec;
 }

@@ -32,7 +32,19 @@ int main() {
     Method_Euler_explicit(*ODU_0, u0, Diapazon, h);
 
     // Метод симметричной схемы
-    Method_symmetric_scheme(*ODU_0, u0, Diapazon, h);
+    Method_Symmetric_scheme(*ODU_0, u0, Diapazon, h);
+
+    // Метод Рунге-Кутты 2-x-стадийный
+    Method_Runge_Kutta_2ord(*ODU_0, u0, Diapazon, h);
+
+    // Метод Рунге-Кутты 4-x-стадийный
+    Method_Runge_Kutta_4ord(*ODU_0, u0, Diapazon, h);
+
+    // Метод Адамса_Башфорта 4-го порядка
+    Method_Adamsa_bashforma(*ODU_0, u0, Diapazon, h);
+
+    // Метод Прогноз-Коррекция
+    Method_Predictor_corrector(*ODU_0, u0, Diapazon, h);
 
 
     //cout << ODU(0, u0) << endl;
