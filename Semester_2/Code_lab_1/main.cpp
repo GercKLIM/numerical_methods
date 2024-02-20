@@ -46,8 +46,6 @@ int main() {
     // Метод Прогноз-Коррекция
     Method_Predictor_corrector(*ODU_0, u0, Diapazon, h);
 
-
-    //cout << ODU(0, u0) << endl;
     cout << "Complete!" << endl;
     return 0;
 }
