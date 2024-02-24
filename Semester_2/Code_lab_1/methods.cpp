@@ -17,7 +17,7 @@ void Method_Euler_explicit(vector<double> (*ODU)(const double& t, const vector<d
 
 
     // Цикл по шагу
-    for (int i = 0; i < n; i++){
+    for (int i = 1; i < n; i++){
         u_old = u_new;
 
         // Сдадийный процесс
@@ -50,8 +50,8 @@ vector<double> Method_Newton_for_Euler(vector<double> (*F)(const double& t, cons
     double eps = h * 1e-5;
     int iterations = 0;
     int N = y_n.size(); // Размерность задачи
-    vector<double> z0(N, 0); // Начальный вектор
-    vector<double> z_old(N, 0), z(N, 1);
+    vector<double> z0(y_n); // Начальный вектор
+    vector<double> z_old(z0), z(N, 1);
 
 
     do {
@@ -59,6 +59,7 @@ vector<double> Method_Newton_for_Euler(vector<double> (*F)(const double& t, cons
         iterations += 1;
         // Вычисляем градиент функции
         vector<double> grad(N, 0);
+
         for (int i = 0; i < N; i++){
             vector<double> left_point(z);
             left_point[i] -= eps;
@@ -322,15 +323,8 @@ void Method_Adamsa_bashforma(vector<double> (*ODU)(const double& t, const vector
     // Цикл по шагу
     for (int i = 3; i < n; i++) {
 
-        // Вычисляем прогноз
-        predict = u_old + (h / 24.) * (55. * ODU_olds[3] + 59. * ODU_olds[2] + 37. * ODU_olds[1] - 9. * ODU_olds[0]);
-
-        // Вычисляем коррекцию
-        correction = (h / 24.) * (9. * ODU(i * h + h, predict) + 19. * ODU_olds[3] - 5. * ODU_olds[3] + ODU_olds[1]);
-
-        // Сдадийный процесс
-        u_old = u_new;
-        u_new = u_old + correction;
+        // Стадийный процесс
+       u_new = u_old + (h / 24.) * (55. * ODU_olds[3] + 59. * ODU_olds[2] + 37. * ODU_olds[1] - 9. * ODU_olds[0]);
 
         // Запись шага в файл
         data << i * h << " ";
