@@ -56,10 +56,10 @@ RM = C:\Users\gerce\AppData\Local\Programs\CLion\bin\cmake\win\x64\bin\cmake.exe
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "C:\Users\gerce\Documents\WORK DIRECTORY\Численные методы\Лабораторные работы\numerical_methods_-5-semester-\Semester_2\Code_lab_1"
+CMAKE_SOURCE_DIR = "C:\Users\gerce\Documents\WORK DIRECTORY\Численные методы\Лабораторные работы\numerical_methods\Semester_2\Code_lab_1"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "C:\Users\gerce\Documents\WORK DIRECTORY\Численные методы\Лабораторные работы\numerical_methods_-5-semester-\Semester_2\Code_lab_1\cmake-build-debug"
+CMAKE_BINARY_DIR = "C:\Users\gerce\Documents\WORK DIRECTORY\Численные методы\Лабораторные работы\numerical_methods\Semester_2\Code_lab_1\cmake-build-debug"
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -86,9 +86,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "C:\Users\gerce\Documents\WORK DIRECTORY\Численные методы\Лабораторные работы\numerical_methods_-5-semester-\Semester_2\Code_lab_1\cmake-build-debug\CMakeFiles" "C:\Users\gerce\Documents\WORK DIRECTORY\Численные методы\Лабораторные работы\numerical_methods_-5-semester-\Semester_2\Code_lab_1\cmake-build-debug\\CMakeFiles\progress.marks"
+	$(CMAKE_COMMAND) -E cmake_progress_start "C:\Users\gerce\Documents\WORK DIRECTORY\Численные методы\Лабораторные работы\numerical_methods\Semester_2\Code_lab_1\cmake-build-debug\CMakeFiles" "C:\Users\gerce\Documents\WORK DIRECTORY\Численные методы\Лабораторные работы\numerical_methods\Semester_2\Code_lab_1\cmake-build-debug\\CMakeFiles\progress.marks"
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start "C:\Users\gerce\Documents\WORK DIRECTORY\Численные методы\Лабораторные работы\numerical_methods_-5-semester-\Semester_2\Code_lab_1\cmake-build-debug\CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "C:\Users\gerce\Documents\WORK DIRECTORY\Численные методы\Лабораторные работы\numerical_methods\Semester_2\Code_lab_1\cmake-build-debug\CMakeFiles" 0
 .PHONY : all
 
 # The main clean target
@@ -200,6 +200,30 @@ methods.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Code_lab_1.dir\build.make CMakeFiles/Code_lab_1.dir/methods.cpp.s
 .PHONY : methods.cpp.s
 
+tests.obj: tests.cpp.obj
+.PHONY : tests.obj
+
+# target to build an object file
+tests.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Code_lab_1.dir\build.make CMakeFiles/Code_lab_1.dir/tests.cpp.obj
+.PHONY : tests.cpp.obj
+
+tests.i: tests.cpp.i
+.PHONY : tests.i
+
+# target to preprocess a source file
+tests.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Code_lab_1.dir\build.make CMakeFiles/Code_lab_1.dir/tests.cpp.i
+.PHONY : tests.cpp.i
+
+tests.s: tests.cpp.s
+.PHONY : tests.s
+
+# target to generate assembly for a file
+tests.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Code_lab_1.dir\build.make CMakeFiles/Code_lab_1.dir/tests.cpp.s
+.PHONY : tests.cpp.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -218,6 +242,9 @@ help:
 	@echo ... methods.obj
 	@echo ... methods.i
 	@echo ... methods.s
+	@echo ... tests.obj
+	@echo ... tests.i
+	@echo ... tests.s
 .PHONY : help
 
 

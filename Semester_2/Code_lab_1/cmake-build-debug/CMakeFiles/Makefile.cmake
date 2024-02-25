@@ -110,7 +110,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "C:/Users/gerce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-3.27/Modules/Platform/Windows.cmake"
   "C:/Users/gerce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-3.27/Modules/Platform/WindowsPaths.cmake"
   "C:/Users/gerce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-3.27/Modules/ProcessorCount.cmake"
-  "C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods_-5-semester-/Semester_2/Code_lab_1/CMakeLists.txt"
+  "C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/CMakeLists.txt"
   "CMakeFiles/3.27.0/CMakeCCompiler.cmake"
   "CMakeFiles/3.27.0/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.27.0/CMakeRCCompiler.cmake"

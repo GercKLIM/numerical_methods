@@ -37,7 +37,7 @@ void Method_Euler_explicit(vector<double> (*ODU)(const double& t, const vector<d
     data.close();
 }
 
-/* Метод Ньтона для решения системы нелинейных уравнений для неявного метода Эйлера */
+/* Метод Ньютона для решения системы нелинейных уравнений для неявного метода Эйлера */
 vector<double> Method_Newton_for_Euler(vector<double> (*F)(const double& t, const vector<double>&), const double& t, vector<double> y_n, double h){
 
     // Объявление нелинейного уравнения
@@ -117,7 +117,7 @@ void Method_Euler_implicit(vector<double> (*ODU)(const double& t, const vector<d
     data.close();
 }
 
-/* Метод Ньтона для решения системы нелинейных уравнений для неявного метода Эйлера */
+/* Метод Ньтона для решения системы нелинейных уравнений для Метода Симметричной схемы */
 vector<double> Method_Newton_for_symmetric_scheme(vector<double> (*F)(const double& t, const vector<double>&), const double& t, vector<double> y_n, double h){
 
     // Объявление нелинейного уравнения
@@ -230,6 +230,70 @@ void Method_Runge_Kutta_2ord(vector<double> (*ODU)(const double& t, const vector
     data.close();
 }
 
+
+/* Метод Рунге-Кутты 2-го порядка с Автоматическим выбором шага */
+void Method_Runge_Kutta_2ord_auto(vector<double> (*ODU)(const double& t, const vector<double>&), const vector<double> u0, const vector<double>& diapazon, double h0) {
+    // Открытие файла для записи
+    ofstream data("data/data4_auto.txt");
+
+    int RANG = u0.size();
+    int n = (diapazon[1] - diapazon[0]) / h0; // Количество разбиений отрезка
+    vector<double> u_old = u0, u_new = u0, u_new_1 = u0, u_new_2 = u0, u_new_3 = u0;
+    vector<double> k1(RANG, 0), k2(RANG, 0);
+
+    double h_eps;
+    double h = h0;             // Переменный шаг
+
+    // Цикл по шагу
+    for (double time = diapazon[0]; time < diapazon[1]; time += h) {
+        u_old = u_new;
+
+        // Вычисляем следующую точку по половинному, целому и двойному шагу
+
+        // Вычисляем компоненты k при половинном шаге
+        k1 = ODU(time + h / 2, u_old);
+        k2 = ODU(time + h / 2, u_old + h / 2 * k1);
+        u_new_1 = u_old + h / 2 * (k1 + k2) / 2. ;
+
+        // Вычисляем компоненты k при целом шаге
+        k1 = ODU(time + h, u_old);
+        k2 = ODU(time + h, u_old + h * k1);
+        u_new_2 = u_old + h * (k1 + k2) / 2. ;
+
+        // Вычисляем компоненты k при двойном шаге
+        k1 = ODU(time + 2 * h, u_old);
+        k2 = ODU(time + 2 * h, u_old + 2 * h * k1);
+        u_new_3 = u_old + 2 * h * (k1 + k2) ;
+
+
+        // Выбираем следующий используемый шаг
+        if (norm((1. / 3) * (u_new_1 - u_new_2)) < h0){
+            h = 2 * h;
+            //u_new = u_new_3;
+        } else {
+            h = 0.5 * h;
+            //u_new = u_new_1;
+        }
+
+        // Стадийный процесс
+        k1 = ODU(time + h, u_old);
+        k2 = ODU(time + h, u_old + h * k1);
+        u_new = u_old + h * (k1 + k2) / 2. ;
+
+        // Запись шага в файл
+        data << time << " ";
+        for (int elem = 0; elem < RANG; elem++) {
+            data << u_new[elem] << " ";
+        }
+
+        data << endl;
+    }
+
+    // Закрытие файла для записи
+    data.close();
+}
+
+
 /* Метод Рунге-Кутты 4-го порядка точности */
 void Method_Runge_Kutta_4ord(vector<double> (*ODU)(const double& t, const vector<double>&), const vector<double> u0, const vector<double>& diapazon, double h) {
     // Открытие файла для записи
@@ -258,6 +322,82 @@ void Method_Runge_Kutta_4ord(vector<double> (*ODU)(const double& t, const vector
 
         // Запись шага в файл
         data << i * h << " ";
+        for (int elem = 0; elem < RANG; elem++) {
+            data << u_new[elem] << " ";
+        }
+
+        data << endl;
+
+    }
+
+    // Закрытие файла для записи
+    data.close();
+}
+
+
+/* Метод Рунге-Кутты 4-го порядка точности c Автоматическим выбором шага*/
+void Method_Runge_Kutta_4ord_auto(vector<double> (*ODU)(const double& t, const vector<double>&), const vector<double> u0, const vector<double>& diapazon, double h0) {
+    // Открытие файла для записи
+    ofstream data("data/data5_auto.txt");
+
+    int RANG = u0.size();
+    int n = (diapazon[1] - diapazon[0]) / h0; // Количество разбиений отрезка
+    vector<double> u_old = u0, u_new = u0, u_new_1 = u0, u_new_2 = u0, u_new_3 = u0;
+    vector<double> k1(RANG, 0), k2(RANG, 0), k3(RANG, 0), k4(RANG, 0), K(RANG, 0);;
+
+    double h = h0;
+
+    // Цикл по шагу
+    for (double time = diapazon[0]; time < diapazon[1]; time += h) {
+        u_old = u_new;
+
+        // Вычисляем следующую точку по половинному, целому и двойному шагу
+
+        // Вычисляем компоненты k при половинном шаге
+        k1 = ODU(time + h, u_old);
+        k2 = ODU((time + h / 4), u_old + (h / 4) * k1);
+        k3 = ODU((time + h / 4), u_old + (h / 4) * k2);
+        k4 = ODU((time + h / 2), u_old + (h / 2) * k3);
+        K = (1. / 6.) * (k1 + 2. * k2 + 2. * k3 + k4);
+        u_new_1 = u_old + h / 2 * K;
+
+        // Вычисляем компоненты k при целом шаге
+        k1 = ODU(time + h, u_old);
+        k2 = ODU((time + h / 2), u_old + (h / 2) * k1);
+        k3 = ODU((time + h / 2), u_old + (h / 2) * k2);
+        k4 = ODU((time + h), u_old + h * k3);
+        K = (1. / 6.) * (k1 + 2. * k2 + 2. * k3 + k4);
+        u_new_2 = u_old + h * K;
+
+        // Вычисляем компоненты k при двойном шаге
+        k1 = ODU(time + 2 * h, u_old);
+        k2 = ODU((time + h), u_old + h * k1);
+        k3 = ODU((time + h), u_old + h * k2);
+        k4 = ODU((time + h * 2), u_old + 2 * h * k3);
+        K = (1. / 6.) * (k1 + 2. * k2 + 2. * k3 + k4);
+        u_new_3 = u_old + 2 * h * K;
+
+
+        // Выбираем следующий используемый шаг
+        // Выбираем следующий используемый шаг
+        if (norm((1. / 15) * (u_new_1 - u_new_2)) < h0){
+            h = 2 * h;
+            //u_new = u_new_3;
+        } else {
+            h = 0.5 * h;
+            //u_new = u_new_1;
+        }
+
+        // Стадийный процесс
+        k1 = ODU(time, u_old);
+        k2 = ODU((time + h / 2), u_old + (h / 2) * k1);
+        k3 = ODU((time + h / 2), u_old + (h / 2) * k2);
+        k4 = ODU((time + h), u_old + h * k3);
+        K = (1. / 6.) * (k1 + 2. * k2 + 2. * k3 + k4);
+        u_new = u_old + h * K;
+
+        // Запись шага в файл
+        data << time << " ";
         for (int elem = 0; elem < RANG; elem++) {
             data << u_new[elem] << " ";
         }
@@ -391,7 +531,7 @@ void Method_Predictor_corrector(vector<double> (*ODU)(const double& t, const vec
 
     }
 
-    // Начало метода Адамса
+    // Начало метода Прогноз-Корректор
     u_old = u_new;
 
 

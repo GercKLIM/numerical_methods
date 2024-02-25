@@ -8,18 +8,18 @@
 		<Option virtualFolders="CMake Files\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods_-5-semester-/Semester_2/Code_lab_1/cmake-build-debug"/>
+				<Option working_dir="C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods_-5-semester-/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods_-5-semester-/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods_-5-semester-/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods_-5-semester-/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="Code_lab_1">
-				<Option output="C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods_-5-semester-/Semester_2/Code_lab_1/cmake-build-debug/Code_lab_1.exe" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods_-5-semester-/Semester_2/Code_lab_1/cmake-build-debug"/>
+				<Option output="C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug/Code_lab_1.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -33,15 +33,15 @@
 					<Add directory="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods_-5-semester-/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 Code_lab_1"/>
-					<CompileFile command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods_-5-semester-/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods_-5-semester-/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods_-5-semester-/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 Code_lab_1"/>
+					<CompileFile command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="Code_lab_1/fast">
-				<Option output="C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods_-5-semester-/Semester_2/Code_lab_1/cmake-build-debug/Code_lab_1.exe" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods_-5-semester-/Semester_2/Code_lab_1/cmake-build-debug"/>
+				<Option output="C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug/Code_lab_1.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -55,49 +55,52 @@
 					<Add directory="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods_-5-semester-/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 Code_lab_1/fast"/>
-					<CompileFile command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods_-5-semester-/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods_-5-semester-/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods_-5-semester-/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 Code_lab_1/fast"/>
+					<CompileFile command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="edit_cache">
-				<Option working_dir="C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods_-5-semester-/Semester_2/Code_lab_1/cmake-build-debug"/>
+				<Option working_dir="C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods_-5-semester-/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods_-5-semester-/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods_-5-semester-/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods_-5-semester-/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="rebuild_cache">
-				<Option working_dir="C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods_-5-semester-/Semester_2/Code_lab_1/cmake-build-debug"/>
+				<Option working_dir="C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods_-5-semester-/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods_-5-semester-/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods_-5-semester-/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods_-5-semester-/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods_-5-semester-/Semester_2/Code_lab_1/algebra.cpp">
+		<Unit filename="C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/algebra.cpp">
 			<Option target="Code_lab_1"/>
 		</Unit>
-		<Unit filename="C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods_-5-semester-/Semester_2/Code_lab_1/algebra.h">
+		<Unit filename="C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/algebra.h">
 			<Option target="Code_lab_1"/>
 		</Unit>
-		<Unit filename="C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods_-5-semester-/Semester_2/Code_lab_1/main.cpp">
+		<Unit filename="C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/main.cpp">
 			<Option target="Code_lab_1"/>
 		</Unit>
-		<Unit filename="C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods_-5-semester-/Semester_2/Code_lab_1/methods.cpp">
+		<Unit filename="C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/methods.cpp">
 			<Option target="Code_lab_1"/>
 		</Unit>
-		<Unit filename="C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods_-5-semester-/Semester_2/Code_lab_1/methods.h">
+		<Unit filename="C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/methods.h">
 			<Option target="Code_lab_1"/>
 		</Unit>
-		<Unit filename="C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods_-5-semester-/Semester_2/Code_lab_1/CMakeLists.txt">
+		<Unit filename="C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/tests.cpp">
+			<Option target="Code_lab_1"/>
+		</Unit>
+		<Unit filename="C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
 	</Project>

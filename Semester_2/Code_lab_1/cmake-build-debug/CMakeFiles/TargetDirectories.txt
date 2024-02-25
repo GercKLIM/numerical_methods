@@ -1,3 +1,3 @@
-C:/Users/gerce/WORK DIRECTORY/NumericalMethods/Semester_2/Code_lab_1/cmake-build-debug/CMakeFiles/Code_lab_1.dir
-C:/Users/gerce/WORK DIRECTORY/NumericalMethods/Semester_2/Code_lab_1/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/gerce/WORK DIRECTORY/NumericalMethods/Semester_2/Code_lab_1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug/CMakeFiles/Code_lab_1.dir
+C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug/CMakeFiles/rebuild_cache.dir

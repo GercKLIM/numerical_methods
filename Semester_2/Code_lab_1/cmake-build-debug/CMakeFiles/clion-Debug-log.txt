@@ -1,4 +1,53 @@
-C:\Users\gerce\AppData\Local\Programs\CLion\bin\cmake\win\x64\bin\cmake.exe -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=C:/Users/gerce/AppData/Local/Programs/CLion/bin/ninja/win/x64/ninja.exe -G Ninja -S "C:\Users\gerce\WORK DIRECTORY\NumericalMethods\Semester_2\Code_lab_1" -B "C:\Users\gerce\WORK DIRECTORY\NumericalMethods\Semester_2\Code_lab_1\cmake-build-debug"
--- Configuring done (0.4s)
+C:\Users\gerce\AppData\Local\Programs\CLion\bin\cmake\win\x64\bin\cmake.exe -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - MinGW Makefiles" -S "C:\Users\gerce\Documents\WORK DIRECTORY\Численные методы\Лабораторные работы\numerical_methods\Semester_2\Code_lab_1" -B "C:\Users\gerce\Documents\WORK DIRECTORY\Численные методы\Лабораторные работы\numerical_methods\Semester_2\Code_lab_1\cmake-build-debug"
+CMake Deprecation Warning:
+  Support for "Extra Generators" like
+
+    CodeBlocks
+
+  is deprecated and will be removed from a future version of CMake.  IDEs may
+  use the cmake-file-api(7) to view CMake-generated project build trees.
+
+
+-- The C compiler identification is GNU 13.1.0
+-- The CXX compiler identification is GNU 13.1.0
+-- Detecting C compiler ABI info
+CMake Warning in C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-vvwtvf/CMakeLists.txt:
+  The object file directory
+
+    C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-vvwtvf/CMakeFiles/cmTC_0b009.dir/
+
+  has 236 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    CMakeCCompilerABI.c.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/gcc.exe - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+CMake Warning in C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-ziilyp/CMakeLists.txt:
+  The object file directory
+
+    C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-ziilyp/CMakeFiles/cmTC_fc469.dir/
+
+  has 236 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    CMakeCXXCompilerABI.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: C:/Users/gerce/AppData/Local/Programs/CLion/bin/mingw/bin/g++.exe - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done (4.4s)
 -- Generating done (0.0s)
--- Build files have been written to: C:/Users/gerce/WORK DIRECTORY/NumericalMethods/Semester_2/Code_lab_1/cmake-build-debug
+-- Build files have been written to: C:/Users/gerce/Documents/WORK DIRECTORY/Численные методы/Лабораторные работы/numerical_methods/Semester_2/Code_lab_1/cmake-build-debug

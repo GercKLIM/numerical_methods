@@ -37,8 +37,14 @@ int main() {
     // Метод Рунге-Кутты 2-x-стадийный
     Method_Runge_Kutta_2ord(*ODU_0, u0, Diapazon, h);
 
+    // Метод Рунге-Кутты 2-x-стадийный c автоматическим шагом
+    Method_Runge_Kutta_2ord_auto(*ODU_0, u0, Diapazon, h);
+
     // Метод Рунге-Кутты 4-x-стадийный
     Method_Runge_Kutta_4ord(*ODU_0, u0, Diapazon, h);
+
+    // Метод Рунге-Кутты 4-x-стадийный c автоматическим шагом
+    Method_Runge_Kutta_4ord_auto(*ODU_0, u0, Diapazon, h);
 
     // Метод Адамса_Башфорта 4-го порядка
     Method_Adamsa_bashforma(*ODU_0, u0, Diapazon, h);
