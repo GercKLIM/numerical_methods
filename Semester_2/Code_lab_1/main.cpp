@@ -4,7 +4,6 @@
  * */
 
 #include <iostream>
-#include <iostream>
 #include <vector>
 #include <iomanip>
 #include <fstream>
@@ -18,18 +17,22 @@ using namespace std;
 int main() {
 
     // Равномерная сетка
-    double h = 0.01;            // Шаг
-    vector<double> Diapazon = {0, 10}; // Отрезок
+    double h = 1e-1;            // Шаг
+    vector<double> Diapazon = {0, 1}; // Отрезок
 
     // Начальное условие
     double t = 0;
     vector<double> u0 = {0, 1};
 
+
+
+    /* ### Методы ### */
+
     // Метод Эйлера явный
-    Method_Euler_implicit(*ODU_0, u0, Diapazon, h);
+    Method_Euler_explicit(*ODU_0, u0, Diapazon, h);
 
     // Метод Эйлера неявный
-    Method_Euler_explicit(*ODU_0, u0, Diapazon, h);
+    Method_Euler_implicit(*ODU_0, u0, Diapazon, h);
 
     // Метод симметричной схемы
     Method_Symmetric_scheme(*ODU_0, u0, Diapazon, h);
