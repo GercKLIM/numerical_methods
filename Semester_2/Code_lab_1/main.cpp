@@ -5,8 +5,7 @@
 
 #include <iostream>
 #include <vector>
-#include <iomanip>
-#include <fstream>
+#include <chrono>
 
 #include "algebra.cpp"
 #include "methods.cpp"
@@ -29,7 +28,12 @@ int main() {
     /* ### Методы ### */
 
     // Метод Эйлера явный
+    //auto start_time = chrono::high_resolution_clock::now();
     Method_Euler_explicit(*ODU_0, u0, Diapazon, h);
+    //auto end_time = chrono::high_resolution_clock::now();
+    //chrono::duration<double> execution_time = end_time - start_time;
+
+    //cout << "Time: " << execution_time.count() << " seconds" << endl;
 
     // Метод Эйлера неявный
     Method_Euler_implicit(*ODU_0, u0, Diapazon, h);

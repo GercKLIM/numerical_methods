@@ -503,7 +503,8 @@ void Method_Adamsa_bashforma(vector<double> (*ODU)(const double& t, const vector
 
         // Стадийный процесс
         u_old = u_new;
-        u_new = u_old + (h / 24.) * (55. * ODU_olds[3] + 59. * ODU_olds[2] + 37. * ODU_olds[1] - 9. * ODU_olds[0]);
+        u_new = u_old + (h / 24.) * (55. * ODU_olds[3] - 59. * ODU_olds[2] + 37. * ODU_olds[1] - 9. * ODU_olds[0]);
+
 
         // Обновляем последовательность предыдущих итераций
         ODU_olds = shift(ODU_olds, -1);
@@ -580,7 +581,7 @@ void Method_Predictor_corrector(vector<double> (*ODU)(const double& t, const vec
     for (double time = diapazon[0] + 4 * h; time < diapazon[1]; time += h) {
 
         // Вычисляем прогноз
-        predict = u_old + (h / 24.) * (55. * ODU_olds[3] + 59. * ODU_olds[2] + 37. * ODU_olds[1] - 9. * ODU_olds[0]);
+        predict = u_old + (h / 24.) * (55. * ODU_olds[3] - 59. * ODU_olds[2] + 37. * ODU_olds[1] - 9. * ODU_olds[0]);
 
         // Вычисляем коррекцию
         correction = (h / 24.) * (9. * ODU(time, predict) + 19. * ODU_olds[3] - 5. * ODU_olds[3] + ODU_olds[1]);
@@ -603,5 +604,14 @@ void Method_Predictor_corrector(vector<double> (*ODU)(const double& t, const vec
 
     // Закрытие файла для записи
     data.close();
+}
+
+
+/* Функция, для получения данных для таблицы с правилом Эиткена */
+// Создает что-то
+void testing_Eitken(){
+
+
+
 }
 
